@@ -1,4 +1,4 @@
 kkscope
 =======
 
-a modification of kscope using qt4
+a port of kscope 1.6.2 using qt4 and KDE4
