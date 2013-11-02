@@ -6,6 +6,9 @@ set (husky_SRCS
     main.cpp 
     kscope.cpp 
     kscopeconfig.cpp 
+    kscopeactions.cpp
+    searchlist.cpp
+    editorpage.cpp
     projectbase.cpp)
 kde4_add_executable (husky ${husky_SRCS})
 target_link_libraries (husky ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS})

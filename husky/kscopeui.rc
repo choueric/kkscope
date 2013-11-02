@@ -1,7 +1,8 @@
-<!DOCTYPE kpartgui>
-<kpartgui name="kscope">
+<?xml version="1.0" encoding="UTF-8"?>
+<gui>
 <MenuBar>
-	<Menu name="file"><text>&amp;File</text>
+	<Menu name="file">
+        <text>&amp;File<text/>
 		<Merge/>
 	</Menu>
 	<Menu name="edit"><text>&amp;Edit</text>
@@ -138,4 +139,4 @@
 	<Action name="view_toggle_query_dock"/>
     <Action name="view_toggle_filelist_dock"/>
 </ToolBar>
-</kpartgui>
+</gui>

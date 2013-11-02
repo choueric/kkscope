@@ -32,9 +32,9 @@ public:
 
     void load();
     void loadDefault();
-    void loadWorkspace(KParts::MainWindow *);
+    void loadWorkspace(KMainWindow *);
     void store();
-    void storeWorkspace(KParts::MainWindow *);
+    void storeWorkspace(KMainWindow *);
     bool isFirstTime();
     bool showWelcomeDlg();
 

@@ -205,7 +205,7 @@ void KScopeConfig::loadDefault()
  * Loads the layout of the main window.
  * @param	pMainWindow	Pointer to the main docking window
  */
-void KScopeConfig::loadWorkspace(KParts::MainWindow* pMainWindow)
+void KScopeConfig::loadWorkspace(KMainWindow* pMainWindow)
 {
     // TODO
 	//pMainWindow->readDockConfig(, "Workspace");
@@ -274,7 +274,7 @@ void KScopeConfig::store()
  * Stores the layout of the main window.
  * @param	pMainWindow	Pointer to the main docking window
  */
-void KScopeConfig::storeWorkspace(KParts::MainWindow* pMainWindow)
+void KScopeConfig::storeWorkspace(KMainWindow* pMainWindow)
 {
     // TODO
 	//pMainWindow->writeDockConfig(kapp->config(), "Workspace");
