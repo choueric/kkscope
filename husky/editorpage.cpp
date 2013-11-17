@@ -38,6 +38,12 @@
 #endif
 #include "editorpage.h"
 
+EditorPage::EditorPage()
+{
+}
+EditorPage::~EditorPage()
+{
+}
 #if 0
 /**
  * Class constructor.
@@ -721,4 +727,4 @@ void EditorPage::slotCursorPosChange()
 }
 
 #endif
-#include "editorpage.moc"
+//#include "editorpage.moc"

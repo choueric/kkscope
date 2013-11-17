@@ -55,16 +55,21 @@
  * @author Elad Lahav
  */
 
-class EditorPage : public QHBox, SymbolCompletion::Interface
+//class EditorPage : public QHBox, SymbolCompletion::Interface
+class EditorPage// : public QHBox, SymbolCompletion::Interface
 {
-   Q_OBJECT
+   //Q_OBJECT
 
-#if 0
 public:
+#if 0
 	EditorPage(KTextEditor::Document*, QPopupMenu*, QTabWidget* pParent = 0,
 		const char* szName = 0);
+#else
+	EditorPage();
+#endif
 	~EditorPage();
 
+#if 0
 	void open(const QString&);
 	void setNewFile();
 	void save();

@@ -9,6 +9,10 @@ set (husky_SRCS
     kscopeactions.cpp
     searchlist.cpp
     editorpage.cpp
+    frontend.cpp
+    ctagsfrontend.cpp
+    ctagslist.cpp
+    kscopepixmaps.cpp
     projectbase.cpp)
 kde4_add_executable (husky ${husky_SRCS})
 target_link_libraries (husky ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS})
