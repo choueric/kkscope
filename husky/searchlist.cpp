@@ -57,7 +57,7 @@ void SearchLineEdit::keyPressEvent(QKeyEvent* pKey)
  * @param	szName		The widget's name
  */
 SearchList::SearchList(int nSearchCol, QWidget* pParent, const char* szName) :
-	QWidget(pParent),
+    QWidget(pParent),
 	m_nSearchCol(nSearchCol)
 {
 	// Create the child widgets

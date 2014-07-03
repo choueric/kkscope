@@ -25,6 +25,8 @@
  *
  ***************************************************************************/
 
+#include <QListView>
+
 #include <QHeaderView>
 #include <KLocale>
 #include "ctagslist.h"

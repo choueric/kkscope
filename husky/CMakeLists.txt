@@ -10,8 +10,8 @@ set (husky_SRCS
     searchlist.cpp
     editorpage.cpp
     frontend.cpp
-    ctagsfrontend.cpp
-    ctagslist.cpp
+    #ctagsfrontend.cpp
+    #ctagslist.cpp
     kscopepixmaps.cpp
     projectbase.cpp)
 kde4_add_executable (husky ${husky_SRCS})

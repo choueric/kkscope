@@ -69,7 +69,7 @@ private:
  * set to point to the first item that matches the new text.
  * @author Elad Lahav
  */
-class SearchList : QWidget
+class SearchList : public QWidget 
 {
    Q_OBJECT
 
