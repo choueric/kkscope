@@ -1,0 +1,16 @@
+class EditorPage : public QHBox, SymbolCompletion::Interface
+{
+    CtagsList *m_pCtagsList;
+    CtagsFrontend m_ctags;
+}
+
+class CtagsList : public SearchList
+{
+    QMemArray<CtagsListItem *> m_arrrLines;
+}
+
+class SearchList : QWidget
+class CtagsListItem : public QListViewItem
+
+
+
