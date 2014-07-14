@@ -3,3 +3,4 @@ husky/build/
 husky/test.rc
 *.swp
 *.o
+build
