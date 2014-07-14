@@ -2,8 +2,18 @@
 #include <qfileinfo.h>
 #include <klocale.h>
 #include "filelist.h"
+
+#include <QtDebug>
+
+#ifndef TESTCASE
 #include "kscope.h"
 #include "kscopeconfig.h"
+#endif
+
+#define FILE_LIST_COL_NUM 3
+#define FILE_LIST_TYPE_COL 0
+#define FILE_LIST_NAME_COL 1
+#define FILE_LIST_PATH_COL 2
 
 /**
  * Class constructor.
@@ -15,15 +25,21 @@ FileList::FileList(QWidget* pParent, const char* szName) :
 	m_sRoot("/")
 {
 	// Set the list's columns
-	m_pList->addColumn("");
-	m_pList->addColumn(i18n("File"));
-	m_pList->addColumn(i18n("Path"));
+    m_pList->setColumnCount(FILE_LIST_COL_NUM);
+    QStringList strList;
+    strList << i18n("Type") << i18n("File") << i18n("Path");
+    m_pList->setHeaderLabels(strList);
+    m_pList->setRootIsDecorated(false);
 	
+#ifndef TESTCASE
 	// Sort only when asked to by the user
 	if (Config().getAutoSortFiles())
 		m_pList->setSortColumn(1);
 	else
 		m_pList->setSortColumn(m_pList->columns() + 1);
+#else
+    m_pList->setSortingEnabled(true);
+#endif
 	
 	m_pList->setAllColumnsShowFocus(true);
 	
@@ -53,11 +69,12 @@ void FileList::addItem(const QString& sFilePath)
 	int nTypePos;
 
     // Extract the file name
-    sFileName = sFilePath.mid(sFilePath.findRev('/') + 1);
-		
+    sFileName = sFilePath.mid(sFilePath.lastIndexOf('/') + 1);
+    qDebug() << sFileName;
+
 	// Get the file's extension (empty string for file names without an
 	// extension)
-	nTypePos = sFileName.findRev('.');
+	nTypePos = sFileName.lastIndexOf('.');
 	if (nTypePos > -1)
 		sFileType = sFileName.mid(nTypePos + 1);
 	
@@ -68,7 +85,9 @@ void FileList::addItem(const QString& sFilePath)
 		sPath.replace(m_sRoot, "$");
 	
 	// Create the list item
-	new QListViewItem(m_pList, sFileType, sFileName, sPath);
+    QStringList strList;
+    strList << sFileType << sFileName << sPath;
+	new QTreeWidgetItem(m_pList, strList);
 }
 
 /**
@@ -79,11 +98,15 @@ void FileList::addItem(const QString& sFilePath)
 bool FileList::findFile(const QString& sPath)
 {
 	QString sFindPath(sPath);
+    QList<QTreeWidgetItem *> list;
 	
 	if (m_sRoot != "/")
 		sFindPath.replace(m_sRoot, "$");
+
 	
-	return (m_pList->findItem(sFindPath, 2) != NULL);
+	list = m_pList->findItems(sFindPath, Qt::MatchExactly, FILE_LIST_PATH_COL);
+
+	return !list.isEmpty();
 }
 
 /**
@@ -99,7 +122,7 @@ void FileList::clear()
  * Opens a file for editing when its entry is clicked in the file list.
  * @param	pItem	The clicked list item
  */
-void FileList::processItemSelected(QListViewItem* pItem)
+void FileList::processItemSelected(QTreeWidgetItem* pItem)
 {
 	QString sPath;
 
@@ -117,12 +140,15 @@ void FileList::processItemSelected(QListViewItem* pItem)
  */
 void FileList::applyPrefs()
 {
+    qDebug() << "TODO: " << __FUNCTION__;
+#if 0
 	// Apply colour settings
 	m_pList->setPaletteBackgroundColor(Config().getColor(
 		KScopeConfig::FileListBack));
 	m_pList->setPaletteForegroundColor(Config().getColor(
 		KScopeConfig::FileListFore));
 	m_pList->setFont(Config().getFont(KScopeConfig::FileList));
+#endif
 }
 
 /**
@@ -133,12 +159,13 @@ void FileList::applyPrefs()
  */
 void FileList::setRoot(const QString& sRoot)
 {
-	QListViewItem* pItem;
+	QTreeWidgetItem* pItem;
+    QTreeWidgetItemIterator it(m_pList);
 	QString sPath;
 	
 	// Update all items in the list
-	for (pItem = m_pList->firstChild(); pItem != NULL; 
-		pItem = pItem->nextSibling()) {
+    while (*it) {
+        pItem = *it;
 		sPath = pItem->text(2);
 		
 		// Restore the full path
@@ -149,6 +176,7 @@ void FileList::setRoot(const QString& sRoot)
 			sPath.replace(sRoot, "$");
 		
 		pItem->setText(2, sPath);
+        ++it;
 	}
 	
 	// Store the new root
@@ -161,7 +189,7 @@ void FileList::setRoot(const QString& sRoot)
  * @param	sTip	The constructed tip string (on return)
  * @return	Always true
  */
-bool FileList::getTip(QListViewItem* pItem, QString& sTip)
+bool FileList::getTip(QTreeWidgetItem* pItem, QString& sTip)
 {
 	sTip = pItem->text(2);
 	return true;

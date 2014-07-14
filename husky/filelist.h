@@ -1,9 +1,37 @@
 #ifndef FILELIST_H
 #define FILELIST_H
 
-#include <qwidget.h>
 #include "searchlist.h"
-#include "projectmanager.h"
+//#include "projectmanager.h"
+
+/**
+ * Abstract base class for classes that need the list of project files.
+ * Objects of classes derived from this one are used as a parameter to
+ * ProjectManager::fillList(), which reads all file entries in the project,
+ * and calls addItem() for each.
+ * Any class that wishes to retrieve the project's file list, should inherit
+ * from this class, and implement addItem().
+ */
+class FileListTarget
+{
+public:
+	/**
+	 * Class constructor.
+	 */
+	FileListTarget() {}
+
+	/**
+	 * Class destructor.
+	 */
+	virtual ~FileListTarget() {}
+
+	/**
+	 * Appends a file to the list.
+	 * @param	sFilePath	The full path of the file to add
+	 */
+	virtual void addItem(const QString& sFilePath) = 0;
+};
+
 
 /**
  * Implements a searchable list of files.
@@ -26,7 +54,7 @@ public:
 	void clear();
 	void applyPrefs();
 	void setRoot(const QString&);
-	virtual bool getTip(QListViewItem*, QString&);
+	virtual bool getTip(QTreeWidgetItem*, QString&);
 	
 signals:
 	/**
@@ -38,7 +66,7 @@ signals:
 	void fileRequested(const QString& sPath, uint nLine);
 
 protected:
-	virtual void processItemSelected(QListViewItem*);
+	virtual void processItemSelected(QTreeWidgetItem*);
 	
 private:
 	/** A common root path for all items in the list. */
