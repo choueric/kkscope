@@ -10,7 +10,12 @@ class CtagsList : public SearchList
 }
 
 class SearchList : QWidget
+{
+    class SearchLineEdit;
+}
+
 class CtagsListItem : public QListViewItem
 
+class FileList : public SearchList, public FileListTarget
 
 
