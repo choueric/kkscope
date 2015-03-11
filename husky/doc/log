@@ -1,0 +1,3 @@
+[X] FileList, SearchList --> test/filelist
+[ ] CtagsFrontend, Frontend, CtagsList, CtagsListItem, SearchList --> test/ctagslist
+[ ] CtagsFrontend, CtagsList, Frontend, SearchList, KscopeConfig, KscopePixmaps --> test/ctagsfrontend
