@@ -36,7 +36,18 @@ void Mainwin::exit()
 
 void Mainwin::open()
 {
-    pFileList->addItem("test 1.cpp");
+    static int i = 0;
+    if (i == 0)
+        pFileList->addItem("/home/zhs/test1.cpp");
+    else if (i == 1)
+        pFileList->addItem("/home/zhs/test2.cpp");
+    else if (i == 2)
+        pFileList->addItem("/home/zhs/make.cpp");
+    else if (i == 3)
+        pFileList->addItem("/home/zhs/make.h");
+    else
+        pFileList->addItem("/home/zhs/default.cpp");
+    i++;
 }
 
 void Mainwin::save()

@@ -1,33 +1,7 @@
-/***************************************************************************
- *
- * Copyright (C) 2005 Elad Lahav (elad_lahav@users.sourceforge.net)
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- ***************************************************************************/
-
 #ifndef CTAGSLIST_H
 #define CTAGSLIST_H
 
+#include <QTreeView>
 #include <QWidget>
 #include <QPixmap>
 #include <QVector>
@@ -35,7 +9,7 @@
 #include "frontend.h"
 
 class CtagsListItem;
-class CtagsToolTip;
+//class CtagsToolTip;
 
 /**
  * Displays a list of tags for a source file.
@@ -58,7 +32,7 @@ public:
 	void gotoLine(uint);
 	void clear();
 	
-	virtual bool getTip(QListViewItem*, QString&);
+	virtual bool getTip(QTreeWidgetItem*, QString&);
 	
 public slots:
 	void slotDataReady(FrontendToken*);
@@ -79,18 +53,18 @@ signals:
 	
 protected:
 	virtual void resizeEvent(QResizeEvent*);
-	virtual void processItemSelected(QListViewItem*);
+	virtual void processItemSelected(QTreeWidgetItem*);
 	
 private:
 	/** An array of pointers to the tag list items, sorted by the line
 		number. */
-	QMemArray<CtagsListItem*> m_arrLines;
+	QVector<CtagsListItem*> m_arrLines;
 	
 	/** The number of items in the tag list. */
-	uint m_nItems;
+	int m_nItems;
 	
 	/** The last item selected by gotoLine(). */
-	uint m_nCurItem;
+	int m_nCurItem;
 	
 	/** This value is set to 'false' while the Ctags process is running. */
 	bool m_bReady;

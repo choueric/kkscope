@@ -1,1 +1,61 @@
 QListView -> QListWidget  / QListView QStandardItemModel
+QMemArray -> QVector
+QValueList(T> -> QList<T> / QLinkedList<T>
+KProcess  -> K3Process
+
+
+--------------------------------------------------------------------------------
+KParts::PartManager
+KParts::DockMainwindow
+
+--------------------------------------------------------------------------------
+KTextEditor::
+
+line/column -> KTextEditor::Cursor
+cursor -> KTextEditor::Range
+
+
+Add New:
+KTextEditro::Factory
+
+Removed:
+- all DCOP interfaces
+- ClipboardInterface
+- CursorInterface
+- DynWordWrapInterface
+- PrintInterface
+- SelectionExtDCOPInterface
+- UndoInterface
+- ViewStatusMsgInterface
+- WordWrapInterface
+
+Merged:
+- BlockSelectionInterface, SelectionInterface and SelectionInterfaceExt were
+  merged into the KTextEditor::View, so that a KTextEditor::Document itself
+  does not provide any selection methods anymore.
+- ConfigInterface was partly merged into the KTextEditor::Editor and now only
+  contains very basic functions to set/get properties. Session related config
+  options can be configured in a new interface called 
+  KTextEditor::SessionConfigInterface
+- DocumentInfoInterface was merged into the KTextEditor::Document
+- EditInterface was merged into the KTextEditor::Document
+- EditInterfaceExt was merged into the KTextEditor::Document
+- EncodingInterface was merged into the KTextEditor::Document
+- HighlightingInterface was merged into the KTextEditor::Document
+- MarkInterfaceExtension was merged into the KTextEditor::MarkInterface
+- PluginViewInterface was merged into the KTextEditor::Plugin
+- PopupMenuInterface was merged into the KTextEditor::View
+- ViewCursorInterface was merged into the KTextEditor::View
+
+Changed:
+- KTextEditor::CodeCompletionInterface was changed to support several clients
+  at once. A client registers a so-called KTextEditor::CompletionProvider that
+  provides its own completion and argument hint da.
+- CompletionEntry was renamed to KTextEditor::CompletionItem
+- signal modifiedOnDisc() was renamed to 
+  KTextEditor::ModificationInterface::modifiedOnDisk()
+
+
+
+
+--------------------------------------------------------------------------------

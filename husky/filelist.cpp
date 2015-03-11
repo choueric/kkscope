@@ -10,10 +10,10 @@
 #include "kscopeconfig.h"
 #endif
 
-#define FILE_LIST_COL_NUM 3
 #define FILE_LIST_TYPE_COL 0
 #define FILE_LIST_NAME_COL 1
 #define FILE_LIST_PATH_COL 2
+#define FILE_LIST_COL_NUM 3
 
 /**
  * Class constructor.
@@ -21,7 +21,7 @@
  * @param	szName	The widget's name
  */
 FileList::FileList(QWidget* pParent, const char* szName) :
-	SearchList(1, pParent, szName),
+	SearchList(FILE_LIST_NAME_COL, pParent, szName),
 	m_sRoot("/")
 {
 	// Set the list's columns
@@ -34,7 +34,7 @@ FileList::FileList(QWidget* pParent, const char* szName) :
 #ifndef TESTCASE
 	// Sort only when asked to by the user
 	if (Config().getAutoSortFiles())
-		m_pList->setSortColumn(1);
+		m_pList->setSortColumn(FILE_LIST_NAME_COL);
 	else
 		m_pList->setSortColumn(m_pList->columns() + 1);
 #else
@@ -127,7 +127,7 @@ void FileList::processItemSelected(QTreeWidgetItem* pItem)
 	QString sPath;
 
 	// Get the file path (replace the root symbol, if required)
-	sPath = pItem->text(2);
+	sPath = pItem->text(FILE_LIST_PATH_COL);
 	if (sPath.startsWith("$"))
 		sPath.replace("$", m_sRoot);
 		
@@ -166,7 +166,7 @@ void FileList::setRoot(const QString& sRoot)
 	// Update all items in the list
     while (*it) {
         pItem = *it;
-		sPath = pItem->text(2);
+		sPath = pItem->text(FILE_LIST_PATH_COL);
 		
 		// Restore the full path
 		sPath.replace("$", m_sRoot);
@@ -175,7 +175,7 @@ void FileList::setRoot(const QString& sRoot)
 		if (sRoot != "/")
 			sPath.replace(sRoot, "$");
 		
-		pItem->setText(2, sPath);
+		pItem->setText(FILE_LIST_PATH_COL, sPath);
         ++it;
 	}
 	
@@ -191,7 +191,7 @@ void FileList::setRoot(const QString& sRoot)
  */
 bool FileList::getTip(QTreeWidgetItem* pItem, QString& sTip)
 {
-	sTip = pItem->text(2);
+	sTip = pItem->text(FILE_LIST_PATH_COL);
 	return true;
 }
 

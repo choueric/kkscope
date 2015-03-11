@@ -2,12 +2,19 @@ class EditorPage : public QHBox, SymbolCompletion::Interface
 {
     CtagsList *m_pCtagsList;
     CtagsFrontend m_ctags;
+
+    QTabWidget* m_pParentTab;
+    QSplitter* m_pSplit;
+    KTextEditor::Document* m_pDoc;
+    KTextEditor::View* m_pView;
+
 }
 
-class CtagsList : public SearchList
-{
-    QMemArray<CtagsListItem *> m_arrrLines;
-}
+
+
+
+DONE
+--------------------------------------------------------------------------------
 
 class SearchList : QWidget
 {
@@ -15,6 +22,11 @@ class SearchList : QWidget
 }
 
 class CtagsListItem : public QListViewItem
+
+class CtagsList : public SearchList
+{
+    QMemArray<CtagsListItem *> m_arrrLines;
+}
 
 class FileList : public SearchList, public FileListTarget
 

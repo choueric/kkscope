@@ -1,34 +1,15 @@
-/***************************************************************************
- *
- * Copyright (C) 2005 Elad Lahav (elad_lahav@users.sourceforge.net)
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- ***************************************************************************/
-
+#include <iostream>
 #include <qfileinfo.h>
 #include <qdir.h>
 #include <klocale.h>
 #include "frontend.h"
+
+static void printStringList(const QStringList &list)
+{
+    for (int i = 0; i < list.size(); i++)
+        std::cout << list.at(i).toLocal8Bit().constData() << " ";
+    std::cout << std::endl;
+}
 
 /**
  * Class constructor.
@@ -45,17 +26,24 @@ Frontend::Frontend(uint nRecordSize, bool bAutoDelete) : KProcess(),
 	m_bInToken(false),
 	m_nRecordSize(nRecordSize)
 {
+    setOutputChannelMode(SeparateChannels);
 	// Parse data on the standard output
-	connect(this, SIGNAL(receivedStdout(KProcess*, char*, int)), this,
-		SLOT(slotReadStdout(KProcess*, char*, int)));
+	//connect(this, SIGNAL(receivedStdout(KProcess*, char*, int)), this,
+		//SLOT(slotReadStdout(KProcess*, char*, int)));
+    connect(this, SIGNAL(readyReadStandardOutput()), this,
+                SLOT(slotReadStdout2()));
 
 	// Parse data on the standard error
-	connect(this, SIGNAL(receivedStderr(KProcess*, char*, int)), this,
-		SLOT(slotReadStderr(KProcess*, char*, int)));
+	//connect(this, SIGNAL(receivedStderr(KProcess*, char*, int)), this,
+		//SLOT(slotReadStderr(KProcess*, char*, int)));
+    connect(this, SIGNAL(readyReadStandardError()), this,
+            SLOT(slotReadStderr2()));
 		
 	// Delete the process object when the process exits
-	connect(this, SIGNAL(processExited(KProcess*)), this,
-		SLOT(slotProcessExit(KProcess*)));
+	//connect(this, SIGNAL(processExited(KProcess*)), this,
+		//SLOT(slotProcessExit(KProcess*)));
+    connect(this, SIGNAL(finished(int, QProcess::ExitStatus)), this,
+        SLOT(slotFinished(int, QProcess::ExitStatus)));
 }
 
 /**
@@ -94,6 +82,8 @@ bool Frontend::run(const QString& sName, const QStringList& slArgs,
 	// Setup the command-line arguments
 	clearProgram();
 	*this << slArgs;
+
+    printStringList(slArgs);
 	
 	// Set the working directory, if requested
 	if (!sWorkDir.isEmpty())
@@ -278,6 +268,13 @@ void Frontend::slotProcessExit(KProcess*)
 		delete this;
 }
 
+
+void Frontend::slotFinished(int exitCode, ExitStatus exitStatus)
+{
+    printf("%s()\n", __FUNCTION__);
+    slotProcessExit(this);
+}
+
 /**
  * Reads data written on the standard output by the controlled process.
  * This is a private slot called attached to the readyReadStdout() signal of
@@ -292,7 +289,7 @@ void Frontend::slotReadStdout(KProcess*, char* pBuffer, int nSize)
 	QString sToken;
 	bool bTokenEnded;
 	ParserDelim delim;
-	
+
 	// Do nothing if waiting for process to die
 	if (m_bKilled)
 		return;
@@ -349,6 +346,14 @@ void Frontend::slotReadStdout(KProcess*, char* pBuffer, int nSize)
 	}
 }
 
+void Frontend::slotReadStdout2()
+{
+    QByteArray output = this->readAllStandardOutput();
+    printf("---- Stdout ---\n");
+    std::cout << output.constData() << std::endl;
+    slotReadStdout(this, output.data(), output.size());
+}
+
 /**
  * Reads data written on the standard error by the controlled process.
  * This is a private slot called attached to the readyReadStderr() signal of
@@ -367,6 +372,11 @@ void Frontend::slotReadStderr(KProcess*, char* pBuffer, int nSize)
 
 	sBuf.fromLatin1(pBuffer, nSize);
 	parseStderr(sBuf);
+}
+
+void Frontend::slotReadStderr2()
+{
+    printf("%s()\n", __FUNCTION__);
 }
 
 #include "frontend.moc"

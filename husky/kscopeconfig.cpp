@@ -1,12 +1,9 @@
-#include <kglobalsettings.h>
-
-#include <KComponentData>
 #include <KConfig>
 #include <KGlobal>
-#include <KSharedConfig>
-#include <QString>
-#include <QByteArray>
 #include <KConfigGroup>
+
+#include <kapplication.h>
+#include <kglobalsettings.h>
 
 #include "kscopeconfig.h"
 
@@ -25,7 +22,6 @@ struct ElementInfo
 {
 	/** The display name of the element. */
 	const char* szName;
-	
 	/** The configuration file entry. */
 	const char* szEntry;
 };
@@ -68,15 +64,15 @@ KScopeConfig::ConfParams KScopeConfig::s_cpDef = {
 	true, // Show the tag list
 	SPLIT_SIZES(), // Tag list width
 	{
-		QColor(Qt::black), // File list foreground
-		QColor(Qt::white), // File list background
-		QColor(Qt::black), // Tag list foreground
-		QColor(Qt::white), // Tag list background
-		QColor(Qt::black), // Query page foreground
-		QColor(Qt::white), // Query page background
+		QColor("black"), // File list foreground
+		QColor("white"), // File list background
+		QColor("black"), // Tag list foreground
+		QColor("white"), // Tag list background
+		QColor("black"), // Query page foreground
+		QColor("white"), // Query page background
 		QColor("#c0c0c0"), // Call graph background
 		QColor("#c0ff80"), // Call graph nodes
-		QColor(Qt::black), // Call graph text
+		QColor("black"), // Call graph text
 		QColor("#ff8000")
 	},
 	{
@@ -105,6 +101,8 @@ KScopeConfig::ConfParams KScopeConfig::s_cpDef = {
  */
 KScopeConfig::KScopeConfig() : m_bFontsChanged(false)
 {
+    // TODO:
+    loadDefault();
 }
 
 /**
@@ -121,7 +119,7 @@ void KScopeConfig::load()
 {
 	uint i;
 	
-    KConfig* pConf = KGlobal::config().data();
+    KSharedConfig::Ptr pConf = KGlobal::config();
 
 	// Need a working instance to get the system's default font (cannot be
 	// initialised statically)
@@ -132,64 +130,52 @@ void KScopeConfig::load()
 	
 	// Read the paths to required executables
     KConfigGroup groupProgram = pConf->group("Programs");
-	m_cp.sCscopePath = groupProgram.readEntry("CScope", QString());
-	m_cp.sCtagsPath = groupProgram.readEntry("CTags", QString());
-	m_cp.sDotPath = groupProgram.readEntry("Dot", QString());
+	m_cp.sCscopePath = groupProgram.readEntry("CScope");
+	m_cp.sCtagsPath = groupProgram.readEntry("CTags");
+	m_cp.sDotPath = groupProgram.readEntry("Dot");
 
 	// Read size and position parameters
-    KConfigGroup geometryGroup = pConf->group("Geometry");
-	m_cp.bShowTagList = geometryGroup.readEntry("ShowTagList", 
+    KConfigGroup groupGeometry = pConf->group("Geometry");
+	m_cp.bShowTagList = groupGeometry.readEntry("ShowTagList", 
 		s_cpDef.bShowTagList);
-	m_cp.siEditor = geometryGroup.readEntry("Editor", SPLIT_SIZES());
+    SPLIT_SIZES defV;
+	m_cp.siEditor = groupGeometry.readEntry("Editor", defV);
 	if (m_cp.siEditor.empty())
 		m_cp.siEditor << 200 << 800;
 
 	// Read the recent projects list
-    KConfigGroup projectGroup = pConf->group("Projects");
-	m_slProjects = projectGroup.readEntry("Recent", QStringList());
+    KConfigGroup groupProjects = pConf->group("Projects");
+	m_slProjects = groupProjects.readEntry("Recent", QStringList());
 
 	// Read colour settings
-    KConfigGroup colorGroup = pConf->group("Colors");
+    KConfigGroup groupColors = pConf->group("Colors");
 	for (i = 0; i <= LAST_COLOR; i++) {
-		m_cp.clrs[i] = colorGroup.readEntry(COLOR_ENTRY(i),
+		m_cp.clrs[i] = groupColors.readEntry(COLOR_ENTRY(i),
 			s_cpDef.clrs[i]);
 	}
 
 	// Read font settings
-    KConfigGroup fontGroup = pConf->group("Fonts");
+    KConfigGroup groupFonts = pConf->group("Fonts");
 	for (i = 0; i <= LAST_FONT; i++) {
-		m_cp.fonts[i] = fontGroup.readEntry(FONT_ENTRY(i),
+		m_cp.fonts[i] = groupFonts.readEntry(FONT_ENTRY(i),
 			s_cpDef.fonts[i]);
 	}
 	
 	// Other options
-    KConfigGroup optionsGroup = pConf->group("Options");
-	m_cp.ctagSortOrder = 
-		(CtagSort)optionsGroup.readEntry("CtagSortOrder",
-		(uint)s_cpDef.ctagSortOrder);
-	m_cp.bReadOnlyMode = optionsGroup.readEntry("ReadOnlyMode", 
-		s_cpDef.bReadOnlyMode);
-	m_cp.bLoadLastProj = optionsGroup.readEntry("LoadLastProj", 
-		s_cpDef.bLoadLastProj);
-	m_cp.bAutoTagHl = optionsGroup.readEntry("AutoTagHl", 
-		s_cpDef.bAutoTagHl);
-	m_cp.bBriefQueryCaptions = optionsGroup.readEntry("BriefQueryCaptions", 
-		s_cpDef.bBriefQueryCaptions);
-	m_cp.bWarnModifiedOnDisk = optionsGroup.readEntry("WarnModifiedOnDisk", 
-		s_cpDef.bWarnModifiedOnDisk);
-	m_cp.bAutoSortFiles = optionsGroup.readEntry("AutoSortFiles",
-		s_cpDef.bAutoSortFiles);
-	m_cp.sExtEditor = optionsGroup.readEntry("ExternalEditor", s_cpDef.sExtEditor);
-	m_cp.profile = (SysProfile)optionsGroup.readEntry("SystemProfile",
-		(uint)s_cpDef.profile);
-	m_cp.popup = (EditorPopup)optionsGroup.readEntry("EditorPopup",
-		(uint)s_cpDef.popup);
-	m_cp.sGraphOrient = optionsGroup.readEntry("GraphOrientation",
-		s_cpDef.sGraphOrient);
-	m_cp.nGraphMaxNodeDegree = optionsGroup.readEntry("GraphMaxNodeDegree",
-		s_cpDef.nGraphMaxNodeDegree);
-	m_cp.nDefGraphView = optionsGroup.readEntry("DefGraphView",
-		s_cpDef.nDefGraphView);
+    KConfigGroup gOpt = pConf->group("Options");
+	m_cp.ctagSortOrder = (CtagSort)gOpt.readEntry("CtagSortOrder", (int)s_cpDef.ctagSortOrder);
+	m_cp.bReadOnlyMode = gOpt.readEntry("ReadOnlyMode", s_cpDef.bReadOnlyMode);
+	m_cp.bLoadLastProj = gOpt.readEntry("LoadLastProj", s_cpDef.bLoadLastProj);
+	m_cp.bAutoTagHl = gOpt.readEntry("AutoTagHl", s_cpDef.bAutoTagHl);
+	m_cp.bBriefQueryCaptions = gOpt.readEntry("BriefQueryCaptions", s_cpDef.bBriefQueryCaptions);
+	m_cp.bWarnModifiedOnDisk = gOpt.readEntry("WarnModifiedOnDisk", s_cpDef.bWarnModifiedOnDisk);
+	m_cp.bAutoSortFiles = gOpt.readEntry("AutoSortFiles", s_cpDef.bAutoSortFiles);
+	m_cp.sExtEditor = gOpt.readEntry("ExternalEditor", s_cpDef.sExtEditor);
+	m_cp.profile = (SysProfile)gOpt.readEntry("SystemProfile", (int)s_cpDef.profile);
+	m_cp.popup = (EditorPopup)gOpt.readEntry("EditorPopup", (int)s_cpDef.popup);
+	m_cp.sGraphOrient = gOpt.readEntry("GraphOrientation", s_cpDef.sGraphOrient);
+	m_cp.nGraphMaxNodeDegree = gOpt.readEntry("GraphMaxNodeDegree", s_cpDef.nGraphMaxNodeDegree);
+	m_cp.nDefGraphView = gOpt.readEntry("DefGraphView", s_cpDef.nDefGraphView);
 }
 
 /**
@@ -201,15 +187,16 @@ void KScopeConfig::loadDefault()
 	m_cp = s_cpDef;
 }
 
+#if 0 // TODO
 /**
  * Loads the layout of the main window.
  * @param	pMainWindow	Pointer to the main docking window
  */
-void KScopeConfig::loadWorkspace(KMainWindow* pMainWindow)
+void KScopeConfig::loadWorkspace(KDockMainWindow* pMainWindow)
 {
-    // TODO
-	//pMainWindow->readDockConfig(, "Workspace");
+	pMainWindow->readDockConfig(kapp->config(), "Workspace");
 }
+#endif
  
 /**
  * Writes KScope's parameters from the standard configuration file.
@@ -217,8 +204,9 @@ void KScopeConfig::loadWorkspace(KMainWindow* pMainWindow)
 void KScopeConfig::store()
 {
 	uint i;
-    KConfig* pConf = KGlobal::config().data();
 	
+    KSharedConfig::Ptr pConf = KGlobal::config();
+
 	// Write the paths to required executables
     KConfigGroup groupProgram = pConf->group("Programs");
 	groupProgram.writeEntry("CScope", m_cp.sCscopePath);
@@ -226,59 +214,60 @@ void KScopeConfig::store()
 	groupProgram.writeEntry("Dot", m_cp.sDotPath);
 
 	// Write size and position parameters
-    KConfigGroup geometryGroup = pConf->group("Geometry");
-	geometryGroup.writeEntry("ShowTagList", m_cp.bShowTagList);
-	geometryGroup.writeEntry("Editor", m_cp.siEditor);
+    KConfigGroup groupGeometry = pConf->group("Geometry");
+	groupGeometry.writeEntry("ShowTagList", m_cp.bShowTagList);
+	groupGeometry.writeEntry("Editor", m_cp.siEditor);
 
 	// Write the recent projects list
-    KConfigGroup projectGroup = pConf->group("Projects");
-	projectGroup.writeEntry("Recent", m_slProjects);
+    KConfigGroup groupProjects = pConf->group("Projects");
+	groupProjects.writeEntry("Recent", m_slProjects);
 
 	// Write colour settings
-    KConfigGroup colorGroup = pConf->group("Colors");
+    KConfigGroup groupColors = pConf->group("Colors");
 	for (i = 0; i <= LAST_COLOR; i++)
-		colorGroup.writeEntry(COLOR_ENTRY(i), m_cp.clrs[i]);
+		groupColors.writeEntry(COLOR_ENTRY(i), m_cp.clrs[i]);
 
 	// Write font settings
 	if (m_bFontsChanged) {
-        KConfigGroup fontGroup = pConf->group("Fonts");
+        KConfigGroup groupFonts = pConf->group("Fonts");
 		for (i = 0; i <= LAST_FONT; i++)
-			fontGroup.writeEntry(FONT_ENTRY(i), m_cp.fonts[i]);
+			groupFonts.writeEntry(FONT_ENTRY(i), m_cp.fonts[i]);
 		
 		m_bFontsChanged = false;
 	}
 		
 	// Other options
-    KConfigGroup optionsGroup = pConf->group("Options");
-	optionsGroup.writeEntry("CtagSortOrder", (uint)m_cp.ctagSortOrder);
-	optionsGroup.writeEntry("ReadOnlyMode", m_cp.bReadOnlyMode);
-	optionsGroup.writeEntry("LoadLastProj", m_cp.bLoadLastProj);
-	optionsGroup.writeEntry("AutoTagHl", m_cp.bAutoTagHl);
-	optionsGroup.writeEntry("BriefQueryCaptions", m_cp.bBriefQueryCaptions);
-	optionsGroup.writeEntry("WarnModifiedOnDisk", m_cp.bWarnModifiedOnDisk);
-	optionsGroup.writeEntry("AutoSortFiles", m_cp.bAutoSortFiles);
-	optionsGroup.writeEntry("ExternalEditor", m_cp.sExtEditor);
-	optionsGroup.writeEntry("SystemProfile", (uint)m_cp.profile);
-	optionsGroup.writeEntry("EditorPopup", (uint)m_cp.popup);
-	optionsGroup.writeEntry("GraphOrientation", m_cp.sGraphOrient);
-	optionsGroup.writeEntry("GraphMaxNodeDegree", m_cp.nGraphMaxNodeDegree);
-	optionsGroup.writeEntry("DefGraphView", m_cp.nDefGraphView);
+    KConfigGroup groupOptions = pConf->group("Options");
+	groupOptions.writeEntry("CtagSortOrder", (uint)m_cp.ctagSortOrder);
+	groupOptions.writeEntry("ReadOnlyMode", m_cp.bReadOnlyMode);
+	groupOptions.writeEntry("LoadLastProj", m_cp.bLoadLastProj);
+	groupOptions.writeEntry("AutoTagHl", m_cp.bAutoTagHl);
+	groupOptions.writeEntry("BriefQueryCaptions", m_cp.bBriefQueryCaptions);
+	groupOptions.writeEntry("WarnModifiedOnDisk", m_cp.bWarnModifiedOnDisk);
+	groupOptions.writeEntry("AutoSortFiles", m_cp.bAutoSortFiles);
+	groupOptions.writeEntry("ExternalEditor", m_cp.sExtEditor);
+	groupOptions.writeEntry("SystemProfile", (uint)m_cp.profile);
+	groupOptions.writeEntry("EditorPopup", (uint)m_cp.popup);
+	groupOptions.writeEntry("GraphOrientation", m_cp.sGraphOrient);
+	groupOptions.writeEntry("GraphMaxNodeDegree", m_cp.nGraphMaxNodeDegree);
+	groupOptions.writeEntry("DefGraphView", m_cp.nDefGraphView);
 	
 	// Do not report it's the first time on the next run
-    KConfigGroup generalGroup = pConf->group("General");
-	generalGroup.writeEntry("FirstTime", false);
-	generalGroup.writeEntry(SHOW_WELCOME_ENTRY, false);
+    KConfigGroup groupGeneral = pConf->group("General");
+	groupGeneral.writeEntry("FirstTime", false);
+	groupGeneral.writeEntry(SHOW_WELCOME_ENTRY, false);
 }
 
+#if 0 // TODO
 /**
  * Stores the layout of the main window.
  * @param	pMainWindow	Pointer to the main docking window
  */
-void KScopeConfig::storeWorkspace(KMainWindow* pMainWindow)
+void KScopeConfig::storeWorkspace(KDockMainWindow* pMainWindow)
 {
-    // TODO
-	//pMainWindow->writeDockConfig(kapp->config(), "Workspace");
+	pMainWindow->writeDockConfig(kapp->config(), "Workspace");
 }
+#endif
 
 /**
  * Determines if this is the first time KScope was launched by the current
@@ -287,10 +276,10 @@ void KScopeConfig::storeWorkspace(KMainWindow* pMainWindow)
  */
 bool KScopeConfig::isFirstTime()
 {
-    KConfig* pConf = KGlobal::config().data();
+    KSharedConfig::Ptr pConf = KGlobal::config();
 
-    KConfigGroup generalGroup = pConf->group("General");
-	return generalGroup.readEntry("FirstTime", true);
+    KConfigGroup groupGeneral = pConf->group("General");
+	return groupGeneral.readEntry("FirstTime", true);
 }
 
 /**
@@ -302,10 +291,10 @@ bool KScopeConfig::isFirstTime()
  */
 bool KScopeConfig::showWelcomeDlg()
 {
-    KConfig* pConf = KGlobal::config().data();
+    KSharedConfig::Ptr pConf = KGlobal::config();
 
-    KConfigGroup generalGroup = pConf->group("General");
-	return generalGroup.readEntry(SHOW_WELCOME_ENTRY, true);
+    KConfigGroup groupGeneral = pConf->group("General");
+	return groupGeneral.readEntry(SHOW_WELCOME_ENTRY, true);
 }
 
 /**
@@ -359,7 +348,7 @@ void KScopeConfig::setDotPath(const QString& sPath)
 /**
  * @return	A sorted list of recently used project paths.
  */
-const QList<QString> &KScopeConfig::getRecentProjects() const
+const QStringList& KScopeConfig::getRecentProjects() const
 {
 	return m_slProjects;
 }
@@ -371,10 +360,12 @@ const QList<QString> &KScopeConfig::getRecentProjects() const
  */
 void KScopeConfig::addRecentProject(const QString& sProjPath)
 {
-    int i = m_slProjects.indexOf(sProjPath);
-    if (i != -1)
-        m_slProjects.removeAt(i);
-
+    int index;
+	
+	index = m_slProjects.indexOf(sProjPath);
+	if (index != -1)
+		m_slProjects.removeAll(sProjPath);
+			
 	m_slProjects.prepend(sProjPath);
 }
 
@@ -384,7 +375,7 @@ void KScopeConfig::addRecentProject(const QString& sProjPath)
  */
 void KScopeConfig::removeRecentProject(const QString& sProjPath)
 {
-	m_slProjects.removeOne(sProjPath);
+    m_slProjects.removeAll(sProjPath);
 }
 
 /**

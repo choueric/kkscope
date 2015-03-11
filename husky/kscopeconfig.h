@@ -1,56 +1,74 @@
 #ifndef KSCOPECONFIG_H
 #define KSCOPECONFIG_H
 
-#include <qobject.h>
-#include <qstringlist.h>
-#include <qcolor.h>
-#include <kparts/mainwindow.h>
+#include <QObject>
+#include <QStringList>
+#include <QColor>
+#include <QFont>
+
+//#include <kdockwidget.h> // TODO
 
 typedef QList<int> SPLIT_SIZES;
 
+/**
+ * Loads and stores global configuration parameters.
+ * @author Elad Lahav
+ */
+
 class KScopeConfig : public QObject
 {
-    Q_OBJECT
-
+	Q_OBJECT
+	
 public:
-    KScopeConfig();
-    ~KScopeConfig();
+	KScopeConfig();
+	~KScopeConfig();
 
-    enum ColorElement { FileListFore = 0, FileListBack, TagListFore,
-        TagListBack, QueryWindowFore, QueryWindowBack, GraphBack,
-        GraphNode, GraphText, GraphMultiCall, LAST_COLOR = GraphMultiCall };
-
-    enum FontElement { FileList = 0, TagList, QueryWindow, Graph,
-        LAST_FONT = Graph };
-
-    enum CtagSort { NameAsc = 0, NameDes, LineAsc, LineDes, TypeAsc,
-        TypeDes };
-
-    enum SysProfile { Fast, Slow };
-
-    enum EditorPopup { Embedded, KScopeOnly };
-
-    void load();
-    void loadDefault();
-    void loadWorkspace(KMainWindow *);
-    void store();
-    void storeWorkspace(KMainWindow *);
-    bool isFirstTime();
-    bool showWelcomeDlg();
-
-    const QString &getCscopePath() const;
-    void setCscopePath(const QString &);
-    const QString &getCtagsPath() const;
-    void setCtagsPath(const QString &);
-    const QString &getDotPath() const;
-    void setDotPath(const QString &);
-    const QList<QString> &getRecentProjects() const;
-    void addRecentProject(const QString &);
-    void removeRecentProject(const QString &);
-    bool getShowTagList() const;
-    void setShowTagList(bool);
-    const SPLIT_SIZES &getEditorSizes() const;
-    void setEditorSizes(const SPLIT_SIZES &);
+	/** GUI elements whose colours can be set. */
+	enum ColorElement { FileListFore = 0, FileListBack, TagListFore, 
+		TagListBack, QueryWindowFore, QueryWindowBack, GraphBack,
+		GraphNode, GraphText, GraphMultiCall, LAST_COLOR = GraphMultiCall };
+	
+	/** GUI elements whose fonts can be set. */
+	enum FontElement { FileList = 0, TagList, QueryWindow, Graph,
+		LAST_FONT = Graph };
+	
+	/** Sort order values for the tags list. */
+	enum CtagSort { NameAsc = 0, NameDes, LineAsc, LineDes, TypeAsc,
+		TypeDes };
+	
+	/** Types of systems that determine certain aspects in KScope's
+		behaviour. 
+		For fast systems, certain time-consuming operations, such as
+		rebuilding the database, may be performed automatically. Such
+		behaviour, however, is not desired on slow systems, in which the user
+		should handle such operations manually. */
+	enum SysProfile { Fast, Slow };	
+		
+	/** The different options for a popup menu to be installed in the editor
+		parts. */
+	enum EditorPopup { Embedded, KScopeOnly };	
+	
+	void load();
+	void loadDefault();
+	//void loadWorkspace(KDockMainWindow*); // TODO
+	void store();
+	//void storeWorkspace(KDockMainWindow*); // TODO
+	bool isFirstTime();
+	bool showWelcomeDlg();
+	
+	const QString& getCscopePath() const;
+	void setCscopePath(const QString&);
+	const QString& getCtagsPath() const;
+	void setCtagsPath(const QString&);
+	const QString& getDotPath() const;
+	void setDotPath(const QString&);
+	const QStringList& getRecentProjects() const;
+	void addRecentProject(const QString&);
+	void removeRecentProject(const QString&);
+	bool getShowTagList() const;
+	void setShowTagList(bool);
+	const SPLIT_SIZES& getEditorSizes() const;
+	void setEditorSizes(const SPLIT_SIZES&);
 	const QColor& getColor(ColorElement) const;
 	QString getColorName(ColorElement) const;
 	void setColor(ColorElement, const QColor&);
@@ -85,10 +103,10 @@ public:
 	void setGraphMaxNodeDegree(int);
 	int getDefGraphView() const;
 	void setDefGraphView(int);
-
+	
 private:
 	/** A list of previously loaded projects. */
-	QList<QString> m_slProjects;
+	QStringList m_slProjects;
 
 	/** Defines the list of all configurable parameters in KScope.
 		The use of a structure helps define default values (@see s_cpDef) */
@@ -170,6 +188,6 @@ private:
 	bool m_bFontsChanged;
 };
 
-extern KScopeConfig &Config();
+extern KScopeConfig& Config();
 
 #endif

@@ -1,37 +1,17 @@
-/***************************************************************************
- *
- * Copyright (C) 2005 Elad Lahav (elad_lahav@users.sourceforge.net)
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- ***************************************************************************/
-
-#include <QListView>
+#include <QTreeWidget>
+#include <iostream>
 
 #include <QHeaderView>
 #include <KLocale>
 #include "ctagslist.h"
 #include "kscopeconfig.h"
 #include "kscopepixmaps.h"
+
+#define HEADER_COUNT 4
+#define HEADER_ICON 0
+#define HEADER_NAME 1
+#define HEADER_LINE 2
+#define HEADER_TYPE 3
 
 /**
  * Defines a special list item for the tag list.
@@ -42,7 +22,7 @@
  * correct sorting.
  * @author Elad Lahav
  */
-class CtagsListItem : public QListViewItem
+class CtagsListItem : public QTreeWidgetItem
 {
 public:
 	/**
@@ -52,9 +32,13 @@ public:
 	 * @param	sLine	The line in which the tag is defined
 	 * @param	sType	The type of the tag
 	 */
-	CtagsListItem(QListView* pParent, QString sName, QString sLine,
-		QString sType) : QListViewItem(pParent, sName, sLine, sType),
-		m_nPendLine (sLine.toUInt()) {}
+	CtagsListItem(QTreeWidget* pParent, QString sName, QString sLine, QString sType) :
+        QTreeWidgetItem(pParent), m_nPendLine (sLine.toUInt()) {
+        setText(HEADER_ICON, "Icon"); // Type Icon
+        setText(HEADER_NAME, sName);  // Symbol Name
+        setText(HEADER_LINE, sLine);  // Line Number
+        setText(HEADER_TYPE, sType);  // Symbol Type
+    }
 
 	/**
 	 * Compares two tag list items, and determines their order.
@@ -67,14 +51,14 @@ public:
 	 * @return	0 if the items are equal, 1 if the local item is greater, -1
 	 * 			if the local item is lesser
 	 */
-	virtual int compare(QListViewItem* pItem, int nCol, bool bAscend) const {
-		if (nCol == 1) {
+	virtual int compare(QTreeWidgetItem* pItem, int nCol, bool bAscend) const {
+		if (nCol == HEADER_NAME) {
 			uint nLineCur, nLineOther;
 			int nResult;
 
 			// Get the line numbers of each item
-			nLineCur = text(1).toUInt();
-			nLineOther = pItem->text(1).toUInt();
+			nLineCur = text(HEADER_NAME).toUInt();
+			nLineOther = pItem->text(HEADER_NAME).toUInt();
 
 			// Compare the line numbers
 			nResult = nLineCur - nLineOther;
@@ -86,8 +70,9 @@ public:
 				return -1; // The second item is greater
 		}
 
-		// Use default comparison for text columns
-		return QListViewItem::compare(pItem, nCol, bAscend);
+        QString self = text(nCol);
+        QString other = pItem->text(nCol);
+        return bAscend ? QString::compare(self, other): QString::compare(other, self);
 	}
 
 	/**
@@ -114,42 +99,44 @@ CtagsList::CtagsList(QWidget* pParent, const char* szName) :
 	m_nCurLine(0),
 	m_nPendLine(0)
 {
-	m_pList->setShowSortIndicator(true);
 	connect(m_pList->header(), SIGNAL(clicked(int)), this,
 		SLOT(slotSortChanged(int)));
 	
 	// Determine the default sorting order
 	switch (Config().getCtagSortOrder()) {
 	case KScopeConfig::NameAsc:
-		m_pList->setSorting(0, true);
+		m_pList->sortItems(HEADER_NAME, Qt::AscendingOrder);
 		break;
 		
 	case KScopeConfig::NameDes:
-		m_pList->setSorting(0, false);
+		m_pList->sortItems(HEADER_NAME, Qt::DescendingOrder);
 		break;
 		
 	case KScopeConfig::LineAsc:
-		m_pList->setSorting(1, true);
+		m_pList->sortItems(HEADER_LINE, Qt::AscendingOrder);
 		break;
 		
 	case KScopeConfig::LineDes:
-		m_pList->setSorting(1, false);
+		m_pList->sortItems(HEADER_LINE, Qt::DescendingOrder);
 		break;
 		
 	case KScopeConfig::TypeAsc:
-		m_pList->setSorting(2, true);
+		m_pList->sortItems(HEADER_TYPE, Qt::AscendingOrder);
 		break;
 		
 	case KScopeConfig::TypeDes:
-		m_pList->setSorting(2, false);
+		m_pList->sortItems(HEADER_TYPE, Qt::DescendingOrder);
 		break;
 	}
 				
 	// Add the list columns
-	m_pList->addColumn(i18n("Name"));
-	m_pList->addColumn(i18n("Line"));
-	m_pList->addColumn(i18n("Type"));
-	m_pList->setColumnAlignment(1, Qt::AlignRight);
+    m_pList->setColumnCount(HEADER_COUNT);
+    QStringList strList;
+    strList << i18n("Icon") << i18n("Name") << i18n("Line") << i18n("Type");
+    m_pList->setHeaderLabels(strList);
+
+    // TODO: to complicated to do so, so don't set it right now.
+	//m_pList->setColumnAlignment(1, Qt::AlignRight);
 
 	// Set colours and font
 	applyPrefs();
@@ -172,7 +159,7 @@ void CtagsList::slotDataReady(FrontendToken* pToken)
 	QString sName, sType, sLine;
 	CtagsListItem* pItem;
 	KScopePixmaps::PixName pix;
-	
+
 	// Get the name of the symbol
 	sName = pToken->getData();
 	pToken = pToken->getNext();
@@ -186,7 +173,8 @@ void CtagsList::slotDataReady(FrontendToken* pToken)
 	pToken = pToken->getNext();
 
 	// Set the appropriate pixmap
-	switch (sType[0].latin1()) {
+	//switch (sType[0].latin1()) {
+	switch (sType.toAscii()[0]) {
 	case 'f':
 		sType = i18n("Function");
 		pix = KScopePixmaps::SymFunc;
@@ -244,12 +232,16 @@ void CtagsList::slotDataReady(FrontendToken* pToken)
 
 	// Add a new item to the list
 	pItem = new CtagsListItem(m_pList, sName, sLine, sType);
-	pItem->setPixmap(0, Pixmaps().getPixmap(pix));
+
+#if 0
+    QIcon icon(Pixmaps().getPixmap(pix));
+	pItem->setIcon(HEADER_ICON, icon);
+#endif
 	m_nItems++;
 	
 	// Resize the line array, if required
 	if (m_arrLines.size() < m_nItems)
-		m_arrLines.resize(m_nItems, QGArray::SpeedOptim);
+		m_arrLines.resize(m_nItems);
 	
 	// Add the new item to the line array
 	m_arrLines[m_nItems - 1] = pItem;
@@ -272,11 +264,11 @@ void CtagsList::resizeEvent(QResizeEvent* pEvent)
  * highlighted and the ENTER key is pressed.
  * @param	pItem	The selected list item
  */
-void CtagsList::processItemSelected(QListViewItem* pItem)
+void CtagsList::processItemSelected(QTreeWidgetItem* pItem)
 {
 	QString sLine;
 
-	sLine = pItem->text(1);
+	sLine = pItem->text(HEADER_LINE);
 	emit lineRequested(sLine.toUInt());
 }
 
@@ -286,10 +278,10 @@ void CtagsList::processItemSelected(QListViewItem* pItem)
  * @param	sTip	The constructed tip string (on return)
  * @return	Always true
  */
-bool CtagsList::getTip(QListViewItem* pItem, QString& sTip)
+bool CtagsList::getTip(QTreeWidgetItem* pItem, QString& sTip)
 {
 	sTip = QString("Type: <b>%1</b><br>Name: <b>%2</b><br>Line: <b>%3</b>").
-		arg(pItem->text(2)).arg(pItem->text(0)).arg(pItem->text(1));
+		arg(pItem->text(HEADER_TYPE)).arg(pItem->text(HEADER_NAME)).arg(pItem->text(HEADER_LINE));
 	return true;
 }
 
@@ -299,11 +291,13 @@ bool CtagsList::getTip(QListViewItem* pItem, QString& sTip)
 void CtagsList::applyPrefs()
 {
 	// Apply colour settings
+#if 0 // TODO
 	m_pList->setPaletteBackgroundColor(Config().getColor(
 		KScopeConfig::TagListBack));
 	m_pList->setPaletteForegroundColor(Config().getColor(
 		KScopeConfig::TagListFore));
 	m_pList->setFont(Config().getFont(KScopeConfig::TagList));
+#endif
 }
 
 /**
@@ -378,8 +372,7 @@ void CtagsList::gotoLine(uint nLine)
 		
 	// Mark the selected item
 	pItem = m_arrLines[m_nCurItem];
-	m_pList->setSelected(pItem, true);
-	m_pList->ensureItemVisible(pItem);
+	m_pList->setCurrentItem(pItem);
 	
 	m_nPendLine = 0;
 }
@@ -404,6 +397,7 @@ void CtagsList::clear()
  */
 void CtagsList::slotCtagsFinished(uint nRecords)
 {
+    std::cout << __FUNCTION__ << std::endl;
 	if (nRecords) {
 		m_bReady = true;
 		if (m_nPendLine)
@@ -418,6 +412,7 @@ void CtagsList::slotCtagsFinished(uint nRecords)
  */
 void CtagsList::slotSortChanged(int nSection)
 {
+#if 0   // TODO
 	Qt::SortOrder order;
 	
 	// Determine whether the new order is ascending or descending
@@ -425,24 +420,25 @@ void CtagsList::slotSortChanged(int nSection)
 	
 	// Translate the section number into the order constant
 	switch (nSection) {
-	case 0:
+	case HEADER_NAME:
 		// Sort by name
 		Config().setCtagSortOrder(order == Qt::Ascending ?
 			KScopeConfig::NameAsc : KScopeConfig::NameDes);
 		break;
 		
-	case 1:
+	case HEADER_LINE:
 		// Sort by line
 		Config().setCtagSortOrder(order == Qt::Ascending ?
 			KScopeConfig::LineAsc : KScopeConfig::LineDes);
 		break;
 		
-	case 2:
+	case HEADER_TYPE:
 		// Sort by type
 		Config().setCtagSortOrder(order == Qt::Ascending ?
 			KScopeConfig::TypeAsc : KScopeConfig::TypeDes);
 		break;
 	}
+#endif
 }
 
 #include "ctagslist.moc"

@@ -1,50 +1,21 @@
-/***************************************************************************
- *
- * Copyright (C) 2005 Elad Lahav (elad_lahav@users.sourceforge.net)
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- ***************************************************************************/
+#include <QHBoxLayout>
 
-#if 0
 #include <qfileinfo.h>
 #include <kdeversion.h>
-#include <ktexteditor/selectioninterface.h>
-#include <ktexteditor/viewcursorinterface.h>
-#include <ktexteditor/popupmenuinterface.h>
-#include <ktexteditor/editinterface.h>
-#include <kate/document.h>
-#include <kate/view.h>
+//#include <ktexteditor/selectioninterface.h>
+//#include <ktexteditor/viewcursorinterface.h>
+//#include <ktexteditor/popupmenuinterface.h>
+//#include <ktexteditor/editinterface.h>
+//#include <kate/document.h>
+//#include <kate/view.h>
+
 #include "kscopeconfig.h"
-#endif
 #include "editorpage.h"
 
-EditorPage::EditorPage()
-{
-}
 EditorPage::~EditorPage()
 {
 }
-#if 0
+
 /**
  * Class constructor.
  * @param	pDoc	The document object associated with this page
@@ -53,8 +24,8 @@ EditorPage::~EditorPage()
  * @param	szName	The widget's name
  */
 EditorPage::EditorPage(KTextEditor::Document* pDoc, QPopupMenu* pMenu,
-	QTabWidget* pParent, const char* szName) : QHBox(pParent, szName),
-	m_pParentTab(pParent),
+	QTabWidget* pParent, const char* szName) : 
+    m_pParentTab(pParent),
 	m_pDoc(pDoc),
 	m_bOpen(false),
 	m_bNewFile(false),
@@ -66,6 +37,8 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QPopupMenu* pMenu,
 {
 	KTextEditor::PopupMenuInterface* pMenuIf;
 	KTextEditor::ViewCursorInterface* pCursorIf;
+
+    QHBoxLayout *layout = new QHBoxLayout(pParent);
 	
 	// Create code-completion objects (will be deleted by QObject destructor)
 	m_pCompletion = new SymbolCompletion(this, this);
@@ -726,5 +699,4 @@ void EditorPage::slotCursorPosChange()
 	m_pCompletion->abort();
 }
 
-#endif
-//#include "editorpage.moc"
+#include "editorpage.moc"
