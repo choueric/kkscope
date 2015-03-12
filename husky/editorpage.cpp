@@ -25,7 +25,7 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu,
 	m_nLine(0),
 	m_bSaveNewSizes(false)
 {
-    QHBoxLayout *layout = new QHBoxLayout(pParent);
+    //QHBoxLayout *layout = new QHBoxLayout(pParent);
 	
 	// Create code-completion objects (will be deleted by QObject destructor)
 	//m_pCompletion = new SymbolCompletion(this, this);
@@ -35,10 +35,19 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu,
 		m_pDoc->setReadWrite(false);
 	
 	// Create the child widgets
-	m_pSplit = new QSplitter(Qt::Vertical, this);
+	m_pSplit = new QSplitter(Qt::Horizontal, this);
 	m_pCtagsList = new CtagsList(m_pSplit);
 	m_pView = m_pDoc->createView(m_pSplit);
+
+    m_pSplit->addWidget(m_pCtagsList);
+    m_pSplit->addWidget(m_pView);
 	//m_pSplit->setResizeMode(m_pCtagsList, QSplitter::KeepSize);
+
+    //layout->addWidget(m_pCtagsList);
+    //layout->addWidget(m_pSplit);
+    //layout->addWidget(m_pView);
+    //QWidget *w = this;
+    //w->setLayout(layout);
 	
 	// Perform tasks only when the document has been loaded completely
 	connect(m_pDoc, SIGNAL(completed()), this, SLOT(slotFileOpened()));
