@@ -1,10 +1,16 @@
 #ifndef PROJECTBASE_H
 #define PROJECTBASE_H
 
+#include <iostream>
+
 #include <QStringList>
+#include <QTextStream>
+#include <QList>
 #include <qdir.h>
 #include <qfile.h>
 #include <kconfig.h>
+
+#define dbg_print() std::count << __FUNCTION__ << ":" << __LINE << std::endl
 
 #define DEF_IS_KERNEL		false
 #define DEF_INV_INDEX		true
@@ -118,7 +124,7 @@ struct FileLocation
 /**
  * A list of file locations used for restoring a session.
  */
-typedef QPtrList<FileLocation> FileLocationList;
+typedef QList<FileLocation *> FileLocationList;
 
 class FileSemaphore;
 
@@ -206,7 +212,7 @@ public:
 	/**
 	 * @return	The full path of the project's directory
 	 */
-	QString getPath() const { return m_dir.absPath(); }
+	QString getPath() const { return m_dir.path(); }
 	
 	/**
 	 * @return	Command-line arguments to pass to a Cscope object, based on

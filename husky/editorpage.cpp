@@ -2,19 +2,9 @@
 
 #include <qfileinfo.h>
 #include <kdeversion.h>
-//#include <ktexteditor/selectioninterface.h>
-//#include <ktexteditor/viewcursorinterface.h>
-//#include <ktexteditor/popupmenuinterface.h>
-//#include <ktexteditor/editinterface.h>
-//#include <kate/document.h>
-//#include <kate/view.h>
 
 #include "kscopeconfig.h"
 #include "editorpage.h"
-
-EditorPage::~EditorPage()
-{
-}
 
 /**
  * Class constructor.
@@ -23,7 +13,7 @@ EditorPage::~EditorPage()
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-EditorPage::EditorPage(KTextEditor::Document* pDoc, QPopupMenu* pMenu,
+EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu,
 	QTabWidget* pParent, const char* szName) : 
     m_pParentTab(pParent),
 	m_pDoc(pDoc),
@@ -35,23 +25,20 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QPopupMenu* pMenu,
 	m_nLine(0),
 	m_bSaveNewSizes(false)
 {
-	KTextEditor::PopupMenuInterface* pMenuIf;
-	KTextEditor::ViewCursorInterface* pCursorIf;
-
     QHBoxLayout *layout = new QHBoxLayout(pParent);
 	
 	// Create code-completion objects (will be deleted by QObject destructor)
-	m_pCompletion = new SymbolCompletion(this, this);
+	//m_pCompletion = new SymbolCompletion(this, this);
 	
 	// Set read-only mode, if required
 	if (Config().getReadOnlyMode())
 		m_pDoc->setReadWrite(false);
 	
 	// Create the child widgets
-	m_pSplit = new QSplitter(this);
+	m_pSplit = new QSplitter(Qt::Vertical, this);
 	m_pCtagsList = new CtagsList(m_pSplit);
 	m_pView = m_pDoc->createView(m_pSplit);
-	m_pSplit->setResizeMode(m_pCtagsList, QSplitter::KeepSize);
+	//m_pSplit->setResizeMode(m_pCtagsList, QSplitter::KeepSize);
 	
 	// Perform tasks only when the document has been loaded completely
 	connect(m_pDoc, SIGNAL(completed()), this, SLOT(slotFileOpened()));
@@ -77,16 +64,11 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QPopupMenu* pMenu,
 		SLOT(slotCtagsFinished(uint)));
 		
 	// Set the context menu
-	pMenuIf = dynamic_cast<KTextEditor::PopupMenuInterface*>(m_pView);
-	if (pMenuIf)
-		pMenuIf->installPopup(pMenu);
+    m_pView->setContextMenu(pMenu);
 
 	// Emit a signal whenever the cursor's position changes
-	pCursorIf = dynamic_cast<KTextEditor::ViewCursorInterface*>(m_pView);
-	if (pCursorIf) {
-		connect(m_pView, SIGNAL(cursorPositionChanged()), this,
-			SLOT(slotCursorPosChange()));
-	}
+    connect(m_pView, SIGNAL(cursorPositionChanged(KTextEditor::View *view, const KTextEditor::Cursor &newPosition)), 
+                this, SLOT(slotCursorPosChange(KTextEditor::View *view, const KTextEditor::Cursor &newPosition)));
 }
 
 /**
@@ -167,7 +149,8 @@ void EditorPage::open(const QString& sFileName)
 {
 	// Open the given file
 	m_bOpen = false;
-	m_pDoc->openURL(sFileName);
+    KUrl file(sFileName);
+	m_pDoc->openUrl(file);
 }
 
 /**
@@ -205,7 +188,7 @@ bool EditorPage::close(bool bForce)
 	
 	// Close the file, unless the user aborts the action
 	sPath = m_pDoc->url().path();
-	if (!m_pDoc->closeURL())
+	if (!m_pDoc->closeUrl())
 		return false;
 		
 	emit fileClosed(sPath);
@@ -233,7 +216,8 @@ void EditorPage::applyPrefs()
 void EditorPage::setEditorFocus()
 {
 	m_pView->setFocus();
-	slotCursorPosChange();
+	const KTextEditor::Cursor c = m_pView->cursorPosition();
+	slotCursorPosChange(m_pView, c);
 }
 
 /**
@@ -251,9 +235,8 @@ void EditorPage::setTagListFocus()
  */
 void EditorPage::addBookmark(uint nLine)
 {
-	KTextEditor::MarkInterface* pMarkIf;
-	
-	pMarkIf = dynamic_cast<KTextEditor::MarkInterface*>(m_pDoc);
+	KTextEditor::MarkInterface *pMarkIf = 
+        qobject_cast<KTextEditor::MarkInterface *>(m_pDoc);
 	if (pMarkIf)
 		pMarkIf->setMark(nLine, KTextEditor::MarkInterface::markType01);
 }
@@ -264,20 +247,24 @@ void EditorPage::addBookmark(uint nLine)
 void EditorPage::getBookmarks(FileLocationList& fll)
 {
 	KTextEditor::MarkInterface* pMarkIf;
-	QPtrList<KTextEditor::Mark> plMarks;
+	QList<KTextEditor::Mark *> plMarks;
 	KTextEditor::Mark* pMark;
 	
 	// Get the marks interface
-	pMarkIf = dynamic_cast<KTextEditor::MarkInterface*>(m_pDoc);
+	pMarkIf = qobject_cast<KTextEditor::MarkInterface*>(m_pDoc);
 	if (!pMarkIf)
 		return;
-	
+
 	// Find all bookmarks
-	plMarks = pMarkIf->marks();
-	for (pMark = plMarks.first(); pMark; pMark = plMarks.next()) {
+    const QHash<int, KTextEditor::Mark *> marks = pMarkIf->marks();
+    QHashIterator<int, KTextEditor::Mark *> i(marks);
+
+    while (i.hasNext()) {
+        i.next();
+        pMark = i.value();
 		if (pMark->type == KTextEditor::MarkInterface::markType01)
 			fll.append(new FileLocation(getFilePath(), pMark->line, 0));
-	}
+    }
 }
 
 /**
@@ -287,16 +274,9 @@ void EditorPage::getBookmarks(FileLocationList& fll)
  */
 QString EditorPage::getSelection()
 {
-	KTextEditor::SelectionInterface* pSelect;
-
-	// Get the selected text
-	pSelect = dynamic_cast<KTextEditor::SelectionInterface*>(m_pDoc);
-	if (!pSelect || !pSelect->hasSelection())
-		return QString::null;
-
-	// Return the selected text
-	return pSelect->selection();
+    return m_pView->selectionText();
 }
+
 /**
  * Returns a the complete word defined by the current cursor position.
  * Attempts to extract a valid C symbol from the location of the cursor, by
@@ -304,27 +284,22 @@ QString EditorPage::getSelection()
  * for non-symbol characters.
  * @return	A C symbol under the cursor, if any, or QString::null otherwise
  */
+// TODO: will be a word in two lines ?
 QString EditorPage::getWordUnderCursor(uint* pPosInWord)
 {
-	KTextEditor::ViewCursorInterface* pCursor;
-	KTextEditor::EditInterface* pEditIf;
 	QString sLine;
-	uint nLine, nCol, nFrom, nTo, nLast, nLength;
+	int nLine, nCol, nFrom, nTo, nLast, nLength;
 	QChar ch;
 
-	// Get a cursor object
-	pCursor = dynamic_cast<KTextEditor::ViewCursorInterface*>(m_pView);
-	if (pCursor == NULL)
-		return QString::null;
+	const KTextEditor::Cursor c = m_pView->cursorPosition();
 
-	// Get a pointer to the edit interface	
-	pEditIf = dynamic_cast<KTextEditor::EditInterface*>(m_pDoc);
-	if (!pEditIf)
-		return QString::null;
-	
 	// Get the line on which the cursor is positioned
-	pCursor->cursorPositionReal(&nLine, &nCol);
-	sLine = pEditIf->textLine(nLine);
+    c.position(nLine, nCol);
+    const KTextEditor::Cursor cFrom(nLine, 0);
+    const KTextEditor::Cursor cTo = m_pDoc->endOfLine(nLine);
+    KTextEditor::Range range(cFrom, cTo);
+
+    sLine = m_pDoc->text(range);
 	
 	// Find the beginning of the current word
 	for (nFrom = nCol; nFrom > 0;) {
@@ -344,7 +319,7 @@ QString EditorPage::getWordUnderCursor(uint* pPosInWord)
 		
 		nTo++;
 	}
-	
+
 	// Mark empty words
 	nLength = nTo - nFrom;
 	if (nLength == 0)
@@ -387,21 +362,20 @@ QString EditorPage::getSuggestedText()
  */
 QString EditorPage::getLineContents(uint nLine)
 {
-	KTextEditor::EditInterface* pEditIf;
 	QString sLine;
 
 	// Cannot accept line 0
 	if (nLine == 0)
 		return QString::null;
-	
-	// Get a pointer to the edit interface
-	pEditIf = dynamic_cast<KTextEditor::EditInterface*>(m_pDoc);
-	if (!pEditIf)
-		return QString::null;
 
 	// Get the line on which the cursor is positioned
-	sLine = pEditIf->textLine(nLine - 1);
-	return sLine.stripWhiteSpace();
+    const KTextEditor::Cursor cFrom(nLine, 0);
+    const KTextEditor::Cursor cTo = m_pDoc->endOfLine(nLine);
+    KTextEditor::Range range(cFrom, cTo);
+
+    sLine = m_pDoc->text(range);
+	// TODO: return sLine.stripWhiteSpace();
+    return sLine;
 }
 
 /**
@@ -431,7 +405,7 @@ void EditorPage::slotGotoLine(uint nLine)
  */
 void EditorPage::slotMenuSelect()
 {
-	m_pParentTab->setCurrentPage(m_pParentTab->indexOf(this));
+	m_pParentTab->setCurrentWidget(this);
 }
 
 /**
@@ -440,7 +414,7 @@ void EditorPage::slotMenuSelect()
  */
 void EditorPage::slotCompleteSymbol()
 {
-	m_pCompletion->slotComplete();
+	//m_pCompletion->slotComplete();
 }
 
 /**
@@ -489,15 +463,12 @@ void EditorPage::setLayout(bool bShowTagList, const SPLIT_SIZES& si)
  */
 bool EditorPage::getCursorPos(uint& nLine, uint& nCol)
 {
-	KTextEditor::ViewCursorInterface* pCursorIf;
-	
-	// Acquire the view cursor
-	pCursorIf = dynamic_cast<KTextEditor::ViewCursorInterface*>(m_pView);
-	if (pCursorIf == NULL)
-		return false;
-	
+    int line, col;
 	// Get the cursor position (adjusted to 1-based counting)
-	pCursorIf->cursorPosition(&nLine, &nCol);
+	const KTextEditor::Cursor c = m_pView->cursorPosition();
+    c.position(line, col);
+    nLine = line;
+    nCol = col;
 	nLine++;
 	nCol++;
 	
@@ -513,9 +484,6 @@ bool EditorPage::getCursorPos(uint& nLine, uint& nCol)
  */
 bool EditorPage::setCursorPos(uint nLine, uint nCol)
 {
-	Kate::View* pKateView;
-	KTextEditor::ViewCursorInterface* pCursorIf;
-	
 	// Cannot accept line 0
 	if (nLine == 0)
 		return false;
@@ -524,11 +492,8 @@ bool EditorPage::setCursorPos(uint nLine, uint nCol)
 	nLine--;
 	nCol--;
 		
-	// Acquire the view cursor
-	pCursorIf = dynamic_cast<KTextEditor::ViewCursorInterface*>(m_pView);
-	if (pCursorIf == NULL)
-		return false;
-	
+#if 0
+	Kate::View* pKateView;
 	// NOTE: The following code is a fix to a bug in Kate, which wrongly
 	// calculates the column number in setCursorPosition.
 	pKateView = dynamic_cast<Kate::View*>(m_pView);
@@ -567,28 +532,34 @@ bool EditorPage::setCursorPos(uint nLine, uint nCol)
 			nLine = pEditIf->numLines() - 1;
 		}
 		// Set the cursor position
-		pCursorIf->setCursorPositionReal(nLine, nRealCol);
+        KTextEditor::cursor setc(nLine, nRealCol);
+		m_pView->setCursorPosition(setc);
 	}
 	else {
 		// Non-Kate editors: set the cursor position normally
-		pCursorIf->setCursorPosition(nLine, nCol);
+        KTextEditor::cursor setc(nLine, nRealCol);
+		m_pView->setCursorPosition(setc);
 	}
+#endif
+    KTextEditor::Cursor c(nLine, nCol);
+    m_pView->setCursorPosition(c);
 	
 	return true;
 }
 
 void EditorPage::setTabWidth(uint nTabWidth)
 {
+#if 0  // TODO
 	Kate::Document* pKateDoc;
 	Kate::Command* pKateCmd;
 	QString sCmd, sResult;
 	
 	pKateDoc = dynamic_cast<Kate::Document*>(m_pDoc);
-	if ((pKateDoc) &&
-		(pKateCmd = pKateDoc->queryCommand("set-tab-width"))) {
+	if ((pKateDoc) && (pKateCmd = pKateDoc->queryCommand("set-tab-width"))) {
 		sCmd.sprintf("set-tab-width %u", nTabWidth);
 		pKateCmd->exec((Kate::View*)m_pView, sCmd, sResult);
 	}
+#endif
 }
 
 /**
@@ -602,6 +573,7 @@ void EditorPage::setTabWidth(uint nTabWidth)
 void EditorPage::slotFileOpened()
 {
 	QFileInfo fi(m_pDoc->url().path());
+    const QStringList t;
 	
 	// Get file information
 	m_sName = fi.fileName();
@@ -612,7 +584,7 @@ void EditorPage::slotFileOpened()
 	
 	// Refresh the tag list
 	m_pCtagsList->clear();
-	m_ctags.run(m_pDoc->url().path());
+	m_ctags.run(m_pDoc->url().path(), t);
 
 	// Check if this is a modified file that has just been saved
 	if (m_bModified)
@@ -625,7 +597,8 @@ void EditorPage::slotFileOpened()
 
 	// Set initial position of the cursor
 	m_nLine = 0;
-	slotCursorPosChange();
+    KTextEditor::Cursor c(0, 0);
+	slotCursorPosChange(m_pView, c);
 	
 	// This is no longer a new file
 	m_bNewFile = false;
@@ -645,6 +618,7 @@ void EditorPage::slotSetModified()
 		emit modified(this, m_bModified);
 	
 #if KDE_IS_VERSION(3,3,0)
+#if 0 // TODO
 		Kate::DocumentExt* pKateDoc;
 	
 		// If the editor is a Kate part, check whether it was modified on
@@ -653,10 +627,11 @@ void EditorPage::slotSetModified()
 		if (pKateDoc)
 			pKateDoc->slotModifiedOnDisk(dynamic_cast<Kate::View*>(m_pView));
 #endif
+#endif
 	}
 	
 	// Start/restart the auto-completion timer
-	m_pCompletion->slotAutoComplete();
+	//m_pCompletion->slotAutoComplete();
 }
 
 /**
@@ -678,7 +653,7 @@ void EditorPage::slotUndoChanged()
  * Handles changes in the cursor position.
  * Emits a signal with the new line and column numbers.
  */
-void EditorPage::slotCursorPosChange()
+void EditorPage::slotCursorPosChange(KTextEditor::View *view, const KTextEditor::Cursor &newPosition)
 {
 	uint nLine, nCol;
 	
@@ -696,7 +671,7 @@ void EditorPage::slotCursorPosChange()
 	
 	// Abort code completion on cursor changes during the completion
 	// process
-	m_pCompletion->abort();
+	//m_pCompletion->abort();
 }
 
 #include "editorpage.moc"

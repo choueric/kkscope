@@ -2,20 +2,20 @@
 #define EDITORPAGE_H
 
 #include <qwidget.h>
-#include <qsplitter.h>
 #include <qtabwidget.h>
+#include <QSplitter>
+#include <QMenu>
 
-
-//#include <qpopupmenu.h>
-//#include <document.h>
-//#include <view.h>
-//#include <ktexteditor/markinterfaceextension.h>
+#include <KTextEditor/Document>
+#include <KTextEditor/View>
+#include <KTextEditor/MarkInterface>
 
 #include "ctagsfrontend.h"
 #include "ctagslist.h"
 #include "kscopeconfig.h"
-#include "symbolcompletion.h"
 #include "projectbase.h"
+
+// TODO: cursor position type change  from uint to int or to Cursor
 
 /**
  * An editor window based on the system's current editing application.
@@ -28,12 +28,12 @@
  * @author Elad Lahav
  */
 
-class EditorPage : public QObject
+class EditorPage : public QWidget
 {
    Q_OBJECT
 
 public:
-	EditorPage(KTextEditor::Document*, QPopupMenu*, QTabWidget* pParent = 0,
+	EditorPage(KTextEditor::Document*, QMenu*, QTabWidget* pParent = 0,
 		const char* szName = 0);
 	~EditorPage();
 
@@ -171,7 +171,7 @@ private:
 	uint m_nLine;
 	
 	/** Provides symbol completion. */
-	SymbolCompletion* m_pCompletion;
+	//SymbolCompletion* m_pCompletion;
 	
 	/** Determines whether size changes in the child widgets should be
 		stored in the global configuration file. 
@@ -184,7 +184,7 @@ private slots:
 	void slotFileOpened();
 	void slotSetModified();
 	void slotUndoChanged();
-	void slotCursorPosChange();
+	void slotCursorPosChange(KTextEditor::View *view, const KTextEditor::Cursor &newPosition);
 };
 
 #endif

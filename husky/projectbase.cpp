@@ -15,19 +15,20 @@ bool ProjectBase::open(const QString& sPath)
 	QFileInfo fi(sPath);
 		
 	// Make sure the file exists, and that is is a cross-reference file
-	if (!fi.exists() || !isCscopeOut(fi.absFilePath()))
+	if (!fi.exists() || !isCscopeOut(fi.absoluteFilePath()))
 		return false;
 		
 	// Set the project's directory
-	m_dir = fi.dirPath(true);
+	m_dir = fi.absolutePath();
+    //m_dir.makeAbsolute();
 	
 	// Set the name of the project to be the full path of the file
-	m_sName = fi.absFilePath();
+	m_sName = fi.absoluteFilePath();
 	
 	// Initialise project options (assume source root is the folder holding the
 	// cscope.out file)
 	getDefOptions(m_opt);
-	m_opt.sSrcRootPath = m_dir.absPath();
+	m_opt.sSrcRootPath = m_dir.path();
 	
 	return true;
 }
@@ -117,12 +118,12 @@ bool ProjectBase::isCscopeOut(const QString& sPath)
 	char szDir[PATH_MAX];
 
 	// Try to open the file
-	if (!file.open(IO_ReadOnly))
+	if (!file.open(QIODevice::ReadOnly))
 		return false;
 		
 	// Check if the first line matches the expected format
 	sLine = QTextStream(&file).readLine();
-	return sscanf(sLine.latin1(), "cscope %d %s", &nVer, szDir) == 2;
+	return sscanf(sLine.toLatin1().constData(), "cscope %d %s", &nVer, szDir) == 2;
 }
 
 /**
@@ -143,8 +144,8 @@ bool ProjectBase::loadFileList(FileListTarget* pList)
 		return false;
 	
 	// Open the file
-	file.setName(m_dir.absPath() + "/cscope.files");
-	if (!file.open(IO_ReadOnly))
+	file.setFileName(m_dir.absolutePath() + "/cscope.files");
+	if (!file.open(QIODevice::ReadOnly))
 		return false;
 
 	// Read all file names from the file

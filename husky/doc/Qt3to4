@@ -1,8 +1,13 @@
 QListView -> QListWidget  / QListView QStandardItemModel
 QMemArray -> QVector
 QValueList(T> -> QList<T> / QLinkedList<T>
-KProcess  -> K3Process
-
+KProcess  -> KProcess : some signals have been changed
+QPtrList<T> -> QList<T *>
+QDir -> absolut path;
+KTextEditor -> 
+QPopupMenu -> QMenu
+QSplitter ->  interface changed
+QTabWidget -> interface changed
 
 --------------------------------------------------------------------------------
 KParts::PartManager
