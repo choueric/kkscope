@@ -1,4 +1,8 @@
-QListView -> QListWidget  / QListView QStandardItemModel
+QListView -> QListWidget  / QListView / QListViewItem: QListWidget dosen't have a header
+             QTreeView has a header.
+
+             QTreeView is used in a Model/View way. But QTreeWidget and QTreeWidgetItem is more conveniuent, 
+             and like QListView in Qt3 more.
 QMemArray -> QVector
 QValueList(T> -> QList<T> / QLinkedList<T>
 KProcess  -> KProcess : some signals have been changed
@@ -8,6 +12,13 @@ KTextEditor ->
 QPopupMenu -> QMenu
 QSplitter ->  interface changed
 QTabWidget -> interface changed
+QToolButton -> 
+QToolTip -> 
+QComboBox -> 
+QProgressBar ->
+
+UI files ->  uic3, generates code out of Qt3 UI files for Qt4
+
 
 --------------------------------------------------------------------------------
 KParts::PartManager
