@@ -217,9 +217,14 @@ KScopePixmaps::KScopePixmaps() :
 KScopePixmaps::~KScopePixmaps()
 {
 	int i;
+
+    if (m_pPixArray == NULL)
+        return;
 	
-	for (i = 0; i < PIX_ARRAY_SIZE; i++)
-		delete m_pPixArray[i];
+	for (i = 0; i < PIX_ARRAY_SIZE; i++) {
+        if (m_pPixArray[i] != NULL)
+            delete m_pPixArray[i];
+    }
 		
 	delete [] m_pPixArray;
 }
