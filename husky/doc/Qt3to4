@@ -16,6 +16,16 @@ QToolButton ->
 QToolTip -> 
 QComboBox -> 
 QProgressBar ->
+QCustomEvent -> QEvent
+QDict<T> -> QHash<QString T>
+QString:
+    - findRev -> lastIndexOf
+    - stripWhiteSpace -> trimmed
+
+QRegExp
+    - setWildcard -> setPatternSyntax
+    - search -> indexIn
+
 
 UI files ->  uic3, generates code out of Qt3 UI files for Qt4
 
