@@ -27,7 +27,14 @@ QRegExp
     - search -> indexIn
 
 Q3ListBox -> QListView, QListWidget
-Q3TextEdit
+Q3TextEdit -> QTextEdit
+QButtonGroup -> QGroupBox
+
+KUrlRequester:
+    - setURL ->  setUrl(KUrl(path))
+
+QFileInfo:
+    - dirPath -> absolutePath
 
 
 UI files ->  uic3, generates code out of Qt3 UI files for Qt4
