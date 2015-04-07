@@ -141,6 +141,7 @@ void FileList::processItemSelected(QTreeWidgetItem* pItem)
 void FileList::applyPrefs()
 {
     qDebug() << "TODO: " << __FUNCTION__;
+    // see void QueryPageBase::applyPrefs()
 #if 0
 	// Apply colour settings
 	m_pList->setPaletteBackgroundColor(Config().getColor(

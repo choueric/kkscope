@@ -291,6 +291,7 @@ bool CtagsList::getTip(QTreeWidgetItem* pItem, QString& sTip)
 void CtagsList::applyPrefs()
 {
 	// Apply colour settings
+    // see QueryPageBase::applyPrefs()
 #if 0 // TODO
 	m_pList->setPaletteBackgroundColor(Config().getColor(
 		KScopeConfig::TagListBack));
