@@ -26,6 +26,9 @@ QRegExp
     - setWildcard -> setPatternSyntax
     - search -> indexIn
 
+Q3ListBox -> QListView, QListWidget
+Q3TextEdit
+
 
 UI files ->  uic3, generates code out of Qt3 UI files for Qt4
 
