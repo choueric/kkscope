@@ -17,7 +17,7 @@ QToolTip ->
 QComboBox -> 
 QProgressBar ->
 QCustomEvent -> QEvent
-QDict<T> -> QHash<QString T>
+QDict<T> -> QHash<QString, T>
 QString:
     - findRev -> lastIndexOf
     - stripWhiteSpace -> trimmed
@@ -32,12 +32,25 @@ QButtonGroup -> QGroupBox
 
 KUrlRequester:
     - setURL ->  setUrl(KUrl(path))
+    - url -> text/url
 
 QFileInfo:
     - dirPath -> absolutePath
 
+QPointArray -> QPolygon
+
 
 UI files ->  uic3, generates code out of Qt3 UI files for Qt4
+
+
+Q3CanvasPolygon -> QGraphicsPolygonItem
+Q3CanvasPolygonalItem -> QAbstractGraphicsShapeItem
+Q3CanvasView -> QGraphicsView
+Q3Canvas -> QGraphicsScene
+
+
+
+
 
 
 --------------------------------------------------------------------------------
