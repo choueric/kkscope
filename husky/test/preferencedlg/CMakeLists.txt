@@ -7,11 +7,12 @@ include_directories (${KDE4_INCLUDES})
 add_definitions(-DTESTCASE)
 
 set (husky_FORMS
+    ../../ui/graphpreflayout.ui
+
     ../../ui/prefcolorlayout.ui
     ../../ui/preffontlayout.ui
     ../../ui/prefoptlayout.ui
     ../../ui/preffrontendlayout.ui
-    #../../ui/graphpreflayout.ui
 
     ../../ui/querywidgetlayout.ui
     ../../ui/openprojectlayout.ui
@@ -25,16 +26,19 @@ QT4_WRAP_UI(husky_FORMS_HEADERS
     ${husky_FORMS})
 
 set (husky_SRCS 
+     ../../dotfrontend.cpp
+     ../../graphnode.cpp
+     ../../graphedge.cpp
+     ../../graphwidget.cpp
+     ../../graphprefdlg.cpp
+     ../../encoder.cpp
+     ../../progressdlg.cpp
+
     ../../prefcolor.cpp
     ../../preffont.cpp
     ../../prefopt.cpp
     ../../preffrontend.cpp
     ../../preferencesdlg.cpp
-    # ../../dotfrontend.cpp
-    # ../../graphnode.cpp
-    # ../../graphedge.cpp
-    # ../../graphwidget.cpp
-    # ../../graphprefdlg.cpp
 
     ../../querywidget.cpp
     ../../querypagebase.cpp
@@ -53,6 +57,7 @@ set (husky_SRCS
     ../../queryviewdlg.cpp
     ../../searchresultsdlg.cpp
     ../../frontend.cpp
+    ../../ctagsfrontend.cpp
     ../../cscopefrontend.cpp
     ../../configfrontend.cpp
     ../../projectbase.cpp

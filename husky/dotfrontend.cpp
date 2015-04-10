@@ -31,11 +31,10 @@ bool DotFrontend::run(const QString& sFile)
 {
 	QString sPath;
 	QStringList slArgs;
-	QPaintDevice pdm(m_pGraph);
 	
 	// Set the horizontal and vertical DPI values
-	m_dDpiX = (double)pdm.logicalDpiX();
-	m_dDpiY = (double)pdm.logicalDpiY();
+	m_dDpiX = (double)m_pGraph->logicalDpiX();
+	m_dDpiY = (double)m_pGraph->logicalDpiY();
 
 	// Make sure the executable exists
 	sPath = Config().getDotPath();
@@ -90,7 +89,7 @@ Frontend::ParseResult DotFrontend::parseStdout(QString& sToken,
 	ParserDelim delim)
 {
 	static int nWidth, nHeight, nXpos, nYpos, nCurveSize, nCurveCount;
-	static QPointArray arrCurve;
+	static QPolygon arrCurve;
 	static QString sNode, sEdgeHead, sEdgeTail;
 	ParseResult result = DiscardToken;
 	double dVal;

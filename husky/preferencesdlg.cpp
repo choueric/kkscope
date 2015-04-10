@@ -18,7 +18,7 @@
 #include "kscopeconfig.h"
 #include "cscopefrontend.h"
 #include "ctagsfrontend.h"
-//#include "dotfrontend.h" // TODO
+#include "dotfrontend.h"
 
 
 /**
@@ -145,10 +145,8 @@ bool PreferencesDlg::updateConfig()
  */
 bool PreferencesDlg::verifyPaths()
 {
-#if 0 // TODO
 	return (CtagsFrontend::verify(m_pPrefFrontend->m_pCtagsURL->text()) &&
 		DotFrontend::verify(m_pPrefFrontend->m_pDotURL->text()));
-#endif
     return false;
 }
 

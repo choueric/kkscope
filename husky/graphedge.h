@@ -1,6 +1,7 @@
 #ifndef GRAPHEDGE_H
 #define GRAPHEDGE_H
 
+#include <QGraphicsPolygonItem>
 #include <QGraphicsScene>
 #include <QPolygon>
 
@@ -30,7 +31,7 @@ struct ArrowInfo
 class GraphEdge : public QGraphicsPolygonItem
 {
 public:
-    GraphEdge(QGraphicsScene*, GraphNode*, GraphNode*);
+    GraphEdge(QGraphicsScene *, GraphNode *, GraphNode *);
     ~GraphEdge();
 	
 	void setCallInfo(const QString&, const QString&, const QString&);

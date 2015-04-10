@@ -10,6 +10,7 @@ QPtrList<T> -> QList<T *>
 QDir -> absolut path;
 KTextEditor -> 
 QPopupMenu -> QMenu
+    - insterItem -> addAction
 QSplitter ->  interface changed
 QTabWidget -> interface changed
 QToolButton -> 

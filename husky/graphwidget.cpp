@@ -1,4 +1,7 @@
+#include <QMatrix>
+#include <QMouseEvent>
 #include <math.h>
+#include <QTextStream>
 #include <stdlib.h>
 #include <qfile.h>
 #include <qpainter.h>
@@ -24,6 +27,9 @@ const char TMP_TMPL[] = "/tmp/kscope_dot.XXXXXX";
  * items are neither rectangular nor is their position known in advance.
  * @author	Elad Lahav
  */
+	
+// TODO: maybe we can set ToolTip for each items in this scene
+#if 0
 class GraphTip : public QToolTip
 {
 public:
@@ -60,10 +66,11 @@ private:
 	/** The parent graph widget. */
 	GraphWidget* m_pGraphWidget;
 };
+#endif
 
 /**
  * Provides a menu separator with text.
- * The separator is added with QMenuData::insertItem(QWidget*).
+ * The separator is added with QMenuData::addAction(QWidget*).
  * @author Elad Lahav
  */
 class MenuLabel : public QLabel
@@ -77,8 +84,8 @@ public:
 	MenuLabel(const QString& sText, QWidget* pParent) :
 		QLabel(sText, pParent) {
 		// Set the appropriate visual properties
-		setFrameShape(MenuBarPanel);
-		setAlignment(AlignHCenter | AlignVCenter);
+		setFrameShape(QFrame::Panel);
+		setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 		setIndent(0);
 	}
 };
@@ -90,8 +97,8 @@ ArrowInfo GraphWidget::s_ai;
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-GraphWidget::GraphWidget(QWidget* pParent, const char* szName) :
-	QCanvasView(pParent, szName),
+GraphWidget::GraphWidget(QWidget* pParent) :
+	QGraphicsView(pParent),
 	m_progress(this),
 	m_dot(this),
 	m_dZoom(1.0),
@@ -100,11 +107,11 @@ GraphWidget::GraphWidget(QWidget* pParent, const char* szName) :
 	m_pProgressDlg(NULL)					 
 {
 	// Automatically delete nodes when they are removed
-	m_dictNodes.setAutoDelete(true);
+	// m_dictNodes.setAutoDelete(true); // TODO
 	
-	// Create a canvas
-	setCanvas(new QCanvas(this));
-	canvas()->setBackgroundColor(Config().getColor(KScopeConfig::GraphBack));
+	// Create a graphics scene
+	setScene(new QGraphicsScene());
+	scene()->setBackgroundBrush(Config().getColor(KScopeConfig::GraphBack));
 
 	// Create a persistent Cscope process
 	m_pCscope = new CscopeFrontend();
@@ -129,45 +136,33 @@ GraphWidget::GraphWidget(QWidget* pParent, const char* szName) :
 	connect(&m_dot, SIGNAL(finished(uint)), this, SLOT(slotDotFinished()));	
 	
 	// Create the node popup menu
-	m_pNodePopup = new QPopupMenu(this);
+	m_pNodePopup = new QMenu(this);
 	
-	m_pNodePopup->insertItem(new MenuLabel(i18n("<b>Called Functions</b>"),
-		m_pNodePopup));
-	m_pNodePopup->insertItem(i18n("Show"), this,
-		SLOT(slotShowCalled()));
-	m_pNodePopup->insertItem(i18n("List/Filter..."), this,
-		SLOT(slotListCalled()));
-	m_pNodePopup->insertItem(i18n("Hide"), this,
-		SLOT(slotHideCalled()));
+	m_pNodePopup->addAction(i18n("<b>Called Functions</b>"));
+	m_pNodePopup->addAction(i18n("Show"), this, SLOT(slotShowCalled()));
+	m_pNodePopup->addAction(i18n("List/Filter..."), this, SLOT(slotListCalled()));
+	m_pNodePopup->addAction(i18n("Hide"), this, SLOT(slotHideCalled()));
 	
-	m_pNodePopup->insertItem(new MenuLabel(i18n("<b>Calling Functions</b>"),
-		m_pNodePopup));
-	m_pNodePopup->insertItem(i18n("Show"), this,
-		SLOT(slotShowCalling()));
-	m_pNodePopup->insertItem(i18n("List/Filter..."), this,
-		SLOT(slotListCalling()));
-	m_pNodePopup->insertItem(i18n("Hide"), this,
-		SLOT(slotHideCalling()));
+	m_pNodePopup->addAction(i18n("<b>Calling Functions</b>"));
+	m_pNodePopup->addAction(i18n("Show"), this, SLOT(slotShowCalling()));
+	m_pNodePopup->addAction(i18n("List/Filter..."), this, SLOT(slotListCalling()));
+	m_pNodePopup->addAction(i18n("Hide"), this, SLOT(slotHideCalling()));
 	
-	m_pNodePopup->insertItem(new MenuLabel(i18n("<b>This Function</b>"),
-		m_pNodePopup));
-	m_pNodePopup->insertItem(i18n("Find Definition"), this,
-		SLOT(slotFindDef()));
-	m_pNodePopup->insertItem(i18n("Remove"), this, SLOT(slotRemoveNode()));
+	m_pNodePopup->addAction(i18n("<b>This Function</b>"));
+	m_pNodePopup->addAction(i18n("Find Definition"), this, SLOT(slotFindDef()));
+	m_pNodePopup->addAction(i18n("Remove"), this, SLOT(slotRemoveNode()));
 		
 	// Create the multi-call node popup menu
-	m_pMultiCallPopup = new QPopupMenu(this);
-	m_pMultiCallPopup->insertItem(i18n("List..."), this,
-		SLOT(slotMultiCallDetails()));
-	m_pMultiCallPopup->insertSeparator();
-	m_pMultiCallPopup->insertItem(i18n("Remove"), this,
-		SLOT(slotRemoveNode()));
+	m_pMultiCallPopup = new QMenu(this);
+	m_pMultiCallPopup->addAction(i18n("List..."), this, SLOT(slotMultiCallDetails()));
+	m_pMultiCallPopup->addSeparator();
+	m_pMultiCallPopup->addAction(i18n("Remove"), this, SLOT(slotRemoveNode()));
 	
 	// Create the edge menu
-	m_pEdgePopup = new QPopupMenu(this);
-	m_pEdgePopup->insertItem(i18n("Open Call"), this, SLOT(slotOpenCall()));
+	m_pEdgePopup = new QMenu(this);
+	m_pEdgePopup->addAction(i18n("Open Call"), this, SLOT(slotOpenCall()));
 		
-	(void)new GraphTip(this);
+	// (void)new GraphTip(this); // TODO: maybe we can set ToolTip for each items in this scene
 }
 
 /**
@@ -201,9 +196,9 @@ GraphNode* GraphWidget::addNode(const QString& sFunc, bool bMultiCall)
 	GraphNode* pNode;
 	
 	// Look for a node with the given name
-	if ((pNode = m_dictNodes.find(sFunc)) == NULL) {
+	if ((pNode = m_dictNodes.value(sFunc)) == NULL) {
 		// Node not found, create it
-		pNode = new GraphNode(canvas(), sFunc, bMultiCall);
+		pNode = new GraphNode(scene(), sFunc, bMultiCall);
 		m_dictNodes.insert(sFunc, pNode);
 	}
 	
@@ -268,24 +263,24 @@ void GraphWidget::addMultiCall(const QString& sFunc, bool bCalled)
 }
 
 /**
- * Draws the graph on the canvas using the graphviz engine.
- * A new canvas is created, so all items need to be regenerated.
- * TODO: Can we use the same canvas and only reposition existing items?
+ * Draws the graph on the scene using the graphviz engine.
+ * A new scene is created, so all items need to be regenerated.
+ * TODO: Can we use the same scene and only reposition existing items?
  */
 void GraphWidget::draw()
 {
-	QWMatrix mtx;
+	QMatrix mtx;
 	char szTempFile[TMP_TMPL_SIZE];
 	int nFd;
 	FILE* pFile;
 	
 	// Do nothing if drawing process has already started
-	if (m_dot.isRunning())
+	if (m_dot.state() == QProcess::Running)
 		return;
 	
 	// Apply the zoom factor
 	mtx.scale(m_dZoom, m_dZoom);
-	setWorldMatrix(mtx);
+	setMatrix(mtx);
 
 	// Do not draw until the Dot process finishes
 	setUpdatesEnabled(false);
@@ -301,7 +296,7 @@ void GraphWidget::draw()
 	
 	// Write the graph contents to the temporary file
 	{
-		QTextStream str(pFile, IO_WriteOnly);
+		QTextStream str(pFile, QIODevice::WriteOnly);
 		write(str, "graph", "--", false);
 	}
 	
@@ -332,7 +327,7 @@ void GraphWidget::draw()
 void GraphWidget::save(FILE* pFile)
 {
 	// Write the graph using the dot language
-	QTextStream str(pFile, IO_WriteOnly);
+	QTextStream str(pFile, QIODevice::WriteOnly);
 	write(str, "digraph", "->", true);
 }
 
@@ -345,7 +340,7 @@ void GraphWidget::save(const QString& sFile)
 	QFile file(sFile);
 	
 	// Open/create the file
-	if (!file.open(IO_WriteOnly))
+	if (!file.open(QIODevice::WriteOnly))
 		return;
 		
 	QTextStream str(&file);
@@ -358,7 +353,7 @@ void GraphWidget::save(const QString& sFile)
  */
 void GraphWidget::zoom(bool bIn)
 {
-	QWMatrix mtx;
+	QMatrix mtx;
 	
 	// Set the new zoom factor
 	if (bIn)
@@ -368,7 +363,7 @@ void GraphWidget::zoom(bool bIn)
 		
 	// Apply the transformation matrix
 	mtx.scale(m_dZoom, m_dZoom);
-	setWorldMatrix(mtx);
+	setMatrix(mtx);
 }
 
 /**
@@ -414,6 +409,7 @@ void GraphWidget::rotate()
  */
 QString GraphWidget::getTip(const QPoint& ptPos, QRect& rc)
 {
+#if 0
 	QPoint ptRealPos, ptTopLeft, ptBottomRight;
 	QCanvasItemList il;
 	QCanvasItemList::Iterator itr;
@@ -449,6 +445,8 @@ QString GraphWidget::getTip(const QPoint& ptPos, QRect& rc)
 	
 	// Create a tip for this edge
 	return pEdge->getTip();
+#endif
+    return "";
 }
 
 /**
@@ -458,12 +456,13 @@ QString GraphWidget::getTip(const QPoint& ptPos, QRect& rc)
  */
 void GraphWidget::resize(int nWidth, int nHeight)
 {
-	canvas()->resize(nWidth + 2, nHeight + 2);
+    // The size of scene is default unlimited.
+	// canvas()->resize(nWidth + 2, nHeight + 2);
 }
 
 /**
- * Displays a node on the canvas.
- * Sets the parameters used for drawing the node on the canvas.
+ * Displays a node on the view.
+ * Sets the parameters used for drawing the node on the view.
  * @param	sFunc	The function corresponding to the node to draw
  * @param	rect	The coordinates of the node's rectangle
  */
@@ -476,7 +475,7 @@ void GraphWidget::drawNode(const QString& sFunc, const QRect& rect)
 	
 	// Set the visual aspects of the node
 	pNode->setRect(rect);
-	pNode->setZ(2.0);
+	pNode->setZValue(2.0);
 	pNode->setPen(QPen(Qt::black));
 	pNode->setFont(Config().getFont(KScopeConfig::Graph));
 	
@@ -490,14 +489,14 @@ void GraphWidget::drawNode(const QString& sFunc, const QRect& rect)
 }
 
 /**
- * Displays an edge on the canvas.
- * Sets the parameters used for drawing the edge on the canvas.
+ * Displays an edge on the view.
+ * Sets the parameters used for drawing the edge on the view.
  * @param	sCaller		Identifies the edge's head node
  * @param	sCallee		Identifies the edge's tail node
  * @param	arrCurve	Control points for the edge's spline
  */
 void GraphWidget::drawEdge(const QString& sCaller, const QString& sCallee,
-	const QPointArray& arrCurve)
+	const QPolygon &arrCurve)
 {
 	GraphNode* pCaller, * pCallee;
 	GraphEdge* pEdge;
@@ -509,7 +508,7 @@ void GraphWidget::drawEdge(const QString& sCaller, const QString& sCallee,
 	
 	// Set the visual aspects of the edge
 	pEdge->setPoints(arrCurve, s_ai);
-	pEdge->setZ(1.0);
+	pEdge->setZValue(1.0);
 	pEdge->setPen(QPen(Qt::black));
 	pEdge->setBrush(QBrush(Qt::black));
 	
@@ -538,10 +537,11 @@ void GraphWidget::setArrowInfo(int nLength, int nDegrees)
 	s_ai.m_dSqrt = sqrt(1 + s_ai.m_dTan * s_ai.m_dTan);
 }
 
+#if 0
 /**
- * Draws the contents of the canvas on this view.
+ * Draws the contents of the scene on this view.
  * NOTE: This method is overriden to fix a strange bug in Qt that leaves
- * a border around the canvas part of the view. It should be deleted once
+ * a border around the scene part of the view. It should be deleted once
  * this bug is fixed.
  * TODO: Is there a better way of erasing the border?
  * @param	pPainter	Used to paint on the view
@@ -557,33 +557,30 @@ void GraphWidget::drawContents(QPainter* pPainter, int nX, int nY,
 	QCanvasView::drawContents(pPainter, nX, nY, nWidth, nHeight);
 	
 	// Erase the canvas's area border
-	if (canvas() != NULL) {
-		QRect rect = canvas()->rect();
+	if (scene() != NULL) {
+		QRectF rect = scene()->sceneRect();
 		pPainter->setBrush(QBrush()); // Null brush
 		pPainter->setPen(Config().getColor(KScopeConfig::GraphBack));
 		pPainter->drawRect(-1, -1, rect.width() + 2, rect.height() + 2);
 	}
 }
+#endif
 
 /**
  * Handles mouse clicks over the graph view.
  * @param	pEvent	Includes information on the mouse press event
  */
-void GraphWidget::contentsMousePressEvent(QMouseEvent* pEvent)
+void GraphWidget::mousePressEvent(QMouseEvent* pEvent)
 {
 	QPoint ptRealPos;
-	QCanvasItemList il;
-	QCanvasItemList::Iterator itr;
 	QString sFunc;
-	GraphNode* pNode;
-	GraphEdge* pEdge;
-	
-	pNode = NULL;
-	pEdge = NULL;
-	
+	GraphNode* pNode = NULL;
+	GraphEdge* pEdge = NULL;
+    QGraphicsItem *pItem = NULL;
+
 	// Handle right-clicks only
 	if (pEvent->button() != Qt::RightButton) {
-		QCanvasView::contentsMousePressEvent(pEvent);
+		QGraphicsView::mousePressEvent(pEvent);
 		return;
 	}
 	
@@ -592,27 +589,18 @@ void GraphWidget::contentsMousePressEvent(QMouseEvent* pEvent)
 	ptRealPos /= m_dZoom;
 	
 	// Check if an item was clicked
-	il = canvas()->collisions(ptRealPos);
-	for (itr = il.begin(); itr != il.end(); ++itr) {
-		if (dynamic_cast<GraphNode*>(*itr) != NULL)
-			pNode = dynamic_cast<GraphNode*>(*itr);
-		else if (dynamic_cast<GraphEdge*>(*itr) != NULL)
-			pEdge = dynamic_cast<GraphEdge*>(*itr);
-	}
-	
-	// Handle clicks over different types of items
-	if (pNode != NULL) {
-		// Show a context menu for nodes
+    // get the topmost item
+	pItem = itemAt(ptRealPos);
+    if (dynamic_cast<GraphNode*>(pItem) != NULL) {
+        pNode = dynamic_cast<GraphNode*>(pItem);
 		showNodeMenu(pNode, pEvent->globalPos());
-	}
-	else if (pEdge != NULL) {
-		// Show a context menu for edges
+    } else if (dynamic_cast<GraphEdge*>(pItem) != NULL) {
+        pEdge = dynamic_cast<GraphEdge*>(pItem);
 		showEdgeMenu(pEdge, pEvent->globalPos());
-	}
-	else {
+    } else {
 		// Take the default action
-		QCanvasView::contentsMousePressEvent(pEvent);
-	}
+		QGraphicsView::mousePressEvent(pEvent);
+    }
 }
 
 /**
@@ -630,7 +618,7 @@ void GraphWidget::write(QTextStream& str, const QString& sType,
 	const QString& sEdge, bool bWriteCall)
 {
 	QFont font;
-	QDictIterator<GraphNode> itr(m_dictNodes);
+	QHashIterator<QString, GraphNode *> itr(m_dictNodes);
 	GraphEdge* pEdge;
 	Encoder enc;
 	
@@ -655,14 +643,16 @@ void GraphWidget::write(QTextStream& str, const QString& sType,
 		<< "];\n";
 	
 	// Iterate over all nodes
-	for (; itr.current(); ++itr) {
+    while (itr.hasNext()) {
 		// Write a node
-		str << "\t" << itr.current()->getFunc() << ";\n";
+        itr.next();
+		str << "\t" << itr.value()->getFunc() << ";\n";
 		
 		// Iterate over all edges leaving this node		
-		QDictIterator<GraphEdge> itrEdge(itr.current()->getOutEdges());
-		for (; itrEdge.current(); ++itrEdge) {
-			pEdge = itrEdge.current();
+		QHashIterator<QString, GraphEdge *> itrEdge(itr.value()->getOutEdges());
+        while (itrEdge.hasNext()) {
+            itrEdge.next();
+			pEdge = itrEdge.value();
 			str << "\t" << pEdge->getHead()->getFunc() << sEdge
 				<< pEdge->getTail()->getFunc();
 				
@@ -710,19 +700,19 @@ void GraphWidget::removeEdges(GraphNode* pNode, bool bOut)
  */
 void GraphWidget::removeDisconnected(GraphNode* pNode)
 {
-	QDictIterator<GraphNode> itr(m_dictNodes);
+	QHashIterator<QString, GraphNode *> itr(m_dictNodes);
 	
 	// Find all weakly connected components attached to this node
 	pNode->dfs();
 	
 	// Delete all unmarked nodes, reset marked ones
-	while (itr.current()) {
-		if (!(*itr)->dfsVisited()) {
-			m_dictNodes.remove((*itr)->getFunc());
+	while (itr.hasNext()) {
+        itr.next();
+		if (!itr.value()->dfsVisited()) {
+			m_dictNodes.remove(itr.value()->getFunc());
 		}
 		else {
-			(*itr)->dfsReset();
-			++itr;
+			itr.value()->dfsReset();
 		}
 	}
 }
@@ -780,7 +770,7 @@ void GraphWidget::slotDotFinished()
 	}
 	
 	setUpdatesEnabled(true);
-	canvas()->update();
+	scene()->update();
 }
 
 /**

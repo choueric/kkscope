@@ -46,7 +46,7 @@ public:
 	/**
 	 * @return	The set of outgoing edges
 	 */
-	QHash<QString, GraphEdge>& getOutEdges() { return m_dictOutEdges; }
+	QHash<QString, GraphEdge *>& getOutEdges() { return m_dictOutEdges; }
 	
 	/**
 	 * @return	true if this node was already visited during the current DFS,
@@ -75,10 +75,10 @@ private:
 	QString m_sFunc;
 
 	/** A list of outgoing edges indexed by destination. */
-	QHash<QString, GraphEdge> m_dictOutEdges;
+	QHash<QString, GraphEdge *> m_dictOutEdges;
 
 	/** A list of incoming edges indexed by destination. */
-	QHash<QString, GraphEdge> m_dictInEdges;
+	QHash<QString, GraphEdge *> m_dictInEdges;
 
 	/** The bounding rectangle for the node. */
 	QRect m_rect;

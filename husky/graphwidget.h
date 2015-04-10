@@ -40,7 +40,7 @@ class GraphWidget : public QGraphicsView
 	Q_OBJECT
 	
 public:
-	GraphWidget(QWidget* pParent = 0, const char* szName = 0);
+	GraphWidget(QWidget* pParent = 0);
 	~GraphWidget();
 	
 	/**
@@ -107,13 +107,13 @@ signals:
 	void lineRequested(const QString& sPath, uint nLine);
 	
 protected:
-	virtual void drawContents(QPainter*, int, int, int, int);
-	virtual void contentsMousePressEvent(QMouseEvent*);
+	//virtual void drawContents(QPainter*, int, int, int, int);
+	virtual void mousePressEvent(QMouseEvent*);
 	
 private:
 	/** The graph is stored as a map of nodes indexed by their names. 
 		Each node holds a list of outgoing edges. */
-	QHash<QString, GraphNode> m_dictNodes;
+	QHash<QString, GraphNode *> m_dictNodes;
 	
 	/** A Cscope process to use for running queries. */
 	CscopeFrontend* m_pCscope;

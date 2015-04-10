@@ -8,7 +8,7 @@
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-GraphPrefDlg::GraphPrefDlg(QWidget* pParent) :
+GraphPrefDlg::GraphPrefDlg(QWidget* pParent)
 {
     setupUi(this);
 	m_pMaxDegSpin->setValue(Config().getGraphMaxNodeDegree());
@@ -35,7 +35,7 @@ int GraphPrefDlg::getMaxNodeDegree()
  */
 void GraphPrefDlg::slotFontClicked()
 {
-	PreferencesDlg dlg(PreferencesDlg::Fonts);
+	PreferencesDlg dlg(this, PreferencesDlg::Fonts);
 	
 	dlg.exec();
 }
@@ -46,7 +46,7 @@ void GraphPrefDlg::slotFontClicked()
  */
 void GraphPrefDlg::slotColorClicked()
 {
-	PreferencesDlg dlg(PreferencesDlg::Colors);
+	PreferencesDlg dlg(this, PreferencesDlg::Colors);
 	
 	dlg.exec();
 }

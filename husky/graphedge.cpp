@@ -1,30 +1,3 @@
-/***************************************************************************
- *
- * Copyright (C) 2005 Elad Lahav (elad_lahav@users.sourceforge.net)
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- ***************************************************************************/
-
 #include <math.h>
 #include <stdlib.h>
 #include <qpainter.h>
@@ -50,29 +23,29 @@ typedef int (*CompFunc)(const void*, const void*);
  * points in the array.
  * @author Elad Lahav
  */
-class ConvexHull : public QPointArray
+class ConvexHull : public QPolygon
 {
 public:
 	/**
 	 * Class constructor.
 	 */
-	ConvexHull() : QPointArray() {}
+	ConvexHull() : QPolygon() {}
 	
 	/**
 	 * Computes the convex hull of the points stored in the array, using
 	 * Graham's scan.
 	 * @param	arrHull	Holds the coordinates of the convex hull, upon return
 	 */
-	void compute(QPointArray& arrHull) {
-		uint i, nPivot, nTop;
+	void compute(QPolygon &arrHull) {
+		int i;
+        uint nPivot, nTop;
 		
 		// Find the pivot point
 		nPivot = 0;
 		for (i = 1; i < size(); i++) {
 			if ((*this)[i].y() < (*this)[nPivot].y()) {
 				nPivot = i;
-			}
-			else if ((*this)[i].y() == (*this)[nPivot].y() &&
+			} else if ((*this)[i].y() == (*this)[nPivot].y() &&
 				(*this)[i].x() < (*this)[nPivot].x()) {
 				nPivot = i;
 			}
@@ -99,15 +72,14 @@ public:
 			if (ISLEFT(arrHull[nTop - 1], arrHull[nTop], (*this)[i]) < 0) {
 				arrHull[++nTop] = (*this)[i];
 				i++;
-			}
-			else {
+			} else {
 				nTop--;
 			}
 		}
 		
 		// Close the hull
 		arrHull[++nTop] = (*this)[0];
-		arrHull.truncate(nTop + 1);
+		arrHull.resize(nTop + 1);
 	}
 	
 private:
@@ -143,12 +115,13 @@ QPoint ConvexHull::s_ptPivot;
  * @param	pHead	The edge's starting point
  * @param	pTail	The edge's end point
  */
-GraphEdge::GraphEdge(QCanvas* pCanvas, GraphNode* pHead, GraphNode* pTail) :
-	QCanvasPolygonalItem(pCanvas),
+GraphEdge::GraphEdge(QGraphicsScene *pCanvas, GraphNode* pHead, GraphNode* pTail) :
+	QGraphicsPolygonItem(),
 	m_pHead(pHead),
 	m_pTail(pTail),
 	m_arrPoly(4)
 {
+    pCanvas->addItem(this);
 }
 
 /**
@@ -172,15 +145,15 @@ GraphEdge::~GraphEdge()
  * @param	arrCurve	The control points of the edge's spline
  * @param	ai			Used to calculate the arrow head polygon
  */
-void GraphEdge::setPoints(const QPointArray& arrCurve, const ArrowInfo& ai)
+void GraphEdge::setPoints(const QPolygon& arrCurve, const ArrowInfo& ai)
 {
 	ConvexHull ch;
-	uint i;
+	int i;
 	int nXpos, nYpos;
 
 	// Redraw an existing edge
 	if (m_arrArea.size() > 0)
-		invalidate();
+		update();
 
 	// Store the point array for drawing
 	m_arrCurve = arrCurve;
@@ -244,13 +217,17 @@ QString GraphEdge::getTip() const
 void GraphEdge::drawShape(QPainter& painter)
 {
 	uint i;
+    QPainterPath path;
 	
 	// Draw the polygon
 	painter.drawConvexPolygon(m_arrPoly);
 	
 	// Draw the Bezier curves
-	for (i = 0; i < m_arrCurve.size() - 1; i += 3)
-		painter.drawCubicBezier(m_arrCurve, i);
+	for (i = 0; i < m_arrCurve.size() - 1; i += 3) {
+        path.moveTo(m_arrCurve.at(i));
+        path.cubicTo(m_arrCurve.at(i + 1), m_arrCurve.at(i + 2), m_arrCurve.at(i + 3));
+        painter.strokePath(path, painter.pen());
+    }
 		
 #if 0
 	// Draws the convex hull of the edge
