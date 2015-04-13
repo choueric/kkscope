@@ -42,6 +42,7 @@ bool ConfigFrontend::run(const QString& sCscopePath,
 	// setUseShell(true);
 	
 	// Find the configuration script
+    // TODO: husky/script/kscope_config
 	sScript = sd.findResource("data", "kscope/kscope_config");
 	if (sScript.isEmpty())
 		return false;

@@ -7,6 +7,12 @@ QMemArray -> QVector
 QValueList(T> -> QList<T> / QLinkedList<T>
 KProcess  -> KProcess : some signals have been changed
 QPtrList<T> -> QList<T *>
+   If you use QPtrList's auto-delete feature (by calling QPtrList::setAutoDelete(true)),
+   you need to do some more work. You have two options: Either you call delete yourself
+   whenever you remove an item from the container, or you can use QList<T> instead of
+   QList<T *> (i.e. store values directly instead of pointers to values). Here, we'l
+   l see when to call delete.     
+
 QDir -> absolut path;
 KTextEditor -> 
 QPopupMenu -> QMenu

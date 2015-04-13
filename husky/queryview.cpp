@@ -14,7 +14,7 @@
  * @param	pParent	The parent widget
  * @param	szName	The name of the widget
  */
-QueryView::QueryView(QWidget* pParent, const char* szName) :
+QueryView::QueryView(QWidget* pParent) :
 	QTreeWidget(pParent),
 	m_pLastItem(NULL)
 {
