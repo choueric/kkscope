@@ -10,9 +10,9 @@
 #include <KTextEditor/Editor>
 #include <KTextEditor/EditorChooser>
 
-#include "../../cscopemsgdlg.h"
+#include "../../calltreedlg.h"
 
-#define TYPE_CLASS CscopeMsgDlg
+#define TYPE_CLASS CallTreeDlg
 
 class Mainwin: public QMainWindow
 {
