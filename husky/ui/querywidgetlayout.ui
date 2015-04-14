@@ -33,7 +33,7 @@
     <customwidget>
       <class>TabWidget</class>
       <extends>QWidget</extends>
-      <header location="local">../../tabwidget.h</header>
+      <header location="local">tabwidget.h</header>
       <sizehint>
         <width>-1</width>
         <height>-1</height>

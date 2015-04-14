@@ -21,6 +21,15 @@ DotFrontend::~DotFrontend()
 {
 }
 
+bool DotFrontend::run(const QString& sName, const QStringList& slArgs,
+		const QString& sWorkDir, bool bBlock)
+{
+	// Run a new process
+	if (!Frontend::run(sName, slArgs, sWorkDir, bBlock))
+		return false;
+
+	return true;
+}
 /**
  * Executes dot on the goven input file.
  * @param	sFile	The path to a temporary file holding the graph's 
@@ -44,15 +53,12 @@ bool DotFrontend::run(const QString& sFile)
 	slArgs.append("-Tplain");
 	slArgs.append(sFile);
 	
-	// Run a new process
-	if (!Frontend::run("dot", slArgs))
-		return false;
 
 	// Initialize stdout parsing
 	m_state = Graph;
 	m_delim = All;
 
-	return true;
+    return run("dot", slArgs);
 }
 
 /**

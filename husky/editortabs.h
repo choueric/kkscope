@@ -5,7 +5,7 @@
 #include <QMenu>
 #include "tabwidget.h"
 #include "editorpage.h"
-//#include "projectmanager.h"
+#include "projectmanager.h"
 
 typedef QMap<QString, EditorPage*> EditorMap;
 class QueryView;

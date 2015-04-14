@@ -5,10 +5,10 @@
 #include <qstack.h>
 #include <qlistview.h>
 #include <QStringList>
-#include "../../calltreedlg.h"
-#include "../../graphwidget.h"
-#include "../../treewidget.h"
-#include "../../encoder.h"
+#include "calltreedlg.h"
+#include "graphwidget.h"
+#include "treewidget.h"
+#include "encoder.h"
 
 extern FILE* yyin;
 int yylex();

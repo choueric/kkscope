@@ -187,16 +187,15 @@ void KScopeConfig::loadDefault()
 	m_cp = s_cpDef;
 }
 
-#if 0 // TODO
 /**
  * Loads the layout of the main window.
  * @param	pMainWindow	Pointer to the main docking window
  */
-void KScopeConfig::loadWorkspace(KDockMainWindow* pMainWindow)
+void KScopeConfig::loadWorkspace(KMainWindow* pMainWindow)
 {
-	pMainWindow->readDockConfig(kapp->config(), "Workspace");
+	//pMainWindow->readDockConfig(kapp->config(), "Workspace");
+    qDebug("TODO\n");;
 }
-#endif
  
 /**
  * Writes KScope's parameters from the standard configuration file.
@@ -258,16 +257,15 @@ void KScopeConfig::store()
 	groupGeneral.writeEntry(SHOW_WELCOME_ENTRY, false);
 }
 
-#if 0 // TODO
 /**
  * Stores the layout of the main window.
  * @param	pMainWindow	Pointer to the main docking window
  */
-void KScopeConfig::storeWorkspace(KDockMainWindow* pMainWindow)
+void KScopeConfig::storeWorkspace(KMainWindow* pMainWindow)
 {
-	pMainWindow->writeDockConfig(kapp->config(), "Workspace");
+	// pMainWindow->writeDockConfig(kapp->config(), "Workspace");
+    qDebug("TODO\n");
 }
-#endif
 
 /**
  * Determines if this is the first time KScope was launched by the current

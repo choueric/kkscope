@@ -38,6 +38,7 @@ public:
 protected slots:
 	virtual void slotSearch(QTreeWidgetItem*, const QRegExp&, int);
 	virtual void slotShowAll(QTreeWidgetItem*);
+	virtual void slotShowAll();
 	
 private:
 	/** The CscopeFrontend query type to use (based on the current mode). */

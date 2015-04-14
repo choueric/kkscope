@@ -47,6 +47,7 @@ CscopeFrontend::~CscopeFrontend()
  * @param	slArgs	Command line arguments for Cscope
  * @return	true if successful, false otherwise
  */
+
 bool CscopeFrontend::run(const QStringList& slArgs)
 {
 	QStringList slCmdLine;
@@ -68,9 +69,14 @@ bool CscopeFrontend::run(const QStringList& slArgs)
 		slCmdLine << "-c";
 	if (s_nProjArgs & s_nSupArgs & SlowPathDef)
 		slCmdLine << "-D";
-		
+    return run("cscope", slCmdLine, s_sProjPath);
+}
+
+bool CscopeFrontend::run(const QString& sName, const QStringList& slArgs,
+		const QString& sWorkDir, bool bBlock)
+{
 	// Run a new process
-	if (!Frontend::run("cscope", slCmdLine, s_sProjPath)) {
+	if (!Frontend::run(sName, slArgs, sWorkDir)) {
 		emit aborted();
 		return false;
 	}

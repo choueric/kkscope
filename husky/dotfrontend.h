@@ -22,6 +22,8 @@ public:
 	~DotFrontend();
 
 	bool run(const QString&);
+	bool run(const QString&, const QStringList&,
+		const QString& sWorkDir = "", bool bBlock = false);
 	
 	static bool verify(const QString&);
 	

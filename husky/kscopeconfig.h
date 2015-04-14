@@ -5,8 +5,7 @@
 #include <QStringList>
 #include <QColor>
 #include <QFont>
-
-//#include <kdockwidget.h> // TODO
+#include <kmainwindow.h>
 
 typedef QList<int> SPLIT_SIZES;
 
@@ -50,9 +49,9 @@ public:
 	
 	void load();
 	void loadDefault();
-	//void loadWorkspace(KDockMainWindow*); // TODO
+	void loadWorkspace(KMainWindow*);
 	void store();
-	//void storeWorkspace(KDockMainWindow*); // TODO
+	void storeWorkspace(KMainWindow*);
 	bool isFirstTime();
 	bool showWelcomeDlg();
 	

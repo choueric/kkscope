@@ -9,6 +9,7 @@ include (KDE4Defaults)
 include (${QT_USE_FILE})
 include_directories (${KDE4_INCLUDES})
 include_directories(${husky_test_BINARY_DIR})
+include_directories(${husky_test_SOURCE_DIR}/../../)
 add_definitions(-DTESTCASE)
 
 set (husky_FORMS

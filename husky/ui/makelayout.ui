@@ -151,7 +151,7 @@
   <customwidget>
    <class>QueryView</class>
    <extends>QWidget</extends>
-   <header>../../queryview.h</header>
+   <header>queryview.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

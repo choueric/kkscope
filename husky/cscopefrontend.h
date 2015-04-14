@@ -100,7 +100,9 @@ private:
 	/** The command line arguments supported by this version of Cscope. */
 	static uint s_nSupArgs;
 	
-	bool run(const QStringList&);
+	bool run(const QString&, const QStringList&,
+		const QString& sWorkDir = "", bool bBlock = false);
+	bool run(const QStringList& slArgs);
 };
 
 /**

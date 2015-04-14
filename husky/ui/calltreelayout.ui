@@ -262,17 +262,17 @@
   <customwidget>
    <class>GraphWidget</class>
    <extends>QWidget</extends>
-   <header>../../graphwidget.h</header>
+   <header>graphwidget.h</header>
   </customwidget>
   <customwidget>
    <class>TreeWidget</class>
    <extends>QWidget</extends>
-   <header>../../treewidget.h</header>
+   <header>treewidget.h</header>
   </customwidget>
  </customwidgets>
  <includes>
-     <include location="local">../../graphwidget.h</include>
-     <include location="local">../../treewidget.h</include>
+     <include location="local">graphwidget.h</include>
+     <include location="local">treewidget.h</include>
  </includes>
  <resources/>
  <connections>

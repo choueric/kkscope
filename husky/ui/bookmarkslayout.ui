@@ -67,7 +67,7 @@
     <customwidget>
       <class>QueryView</class>
       <extends>QWidget</extends>
-      <header location="local">../../queryview.h</header>
+      <header location="local">queryview.h</header>
       <sizehint>
         <width>-1</width>
         <height>-1</height>

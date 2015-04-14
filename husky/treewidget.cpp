@@ -209,6 +209,11 @@ void TreeWidget::slotSearch(QTreeWidgetItem* pParent, const QRegExp& re,
 	}
 }
 
+void TreeWidget::slotShowAll()
+{
+    qFatal("not implement this function\n");
+}
+
 /**
  * Makes all descendants of the given item visible.
  * This slot is connected to the showAll() signal of the QueryResultsMenu

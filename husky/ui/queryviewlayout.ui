@@ -108,7 +108,7 @@
   <customwidget>
    <class>QueryView</class>
    <extends>QWidget</extends>
-   <header location="local">../../queryview.h</header>
+   <header location="local">queryview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
