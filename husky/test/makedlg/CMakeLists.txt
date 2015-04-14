@@ -33,6 +33,8 @@ QT4_WRAP_UI(husky_FORMS_HEADERS
     ${husky_FORMS})
 
 set (husky_SRCS 
+     ../../projectmanager.cpp
+     ../../project.cpp
      ../../makedlg.cpp
      ../../makefrontend.cpp
 
