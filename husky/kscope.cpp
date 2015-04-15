@@ -204,17 +204,18 @@ void KScope::initMainWindow()
 
 	// Create the main dock for the editor tabs widget
 	pMainDock = new QDockWidget("Editors Window", this);
+    pMainDock->setAllowedAreas(Qt::NoDockWidgetArea); 
+    pMainDock->setFeatures(QDockWidget::NoDockWidgetFeatures); 
 	pMainDock->setWidget(m_pEditTabs);
-    addDockWidget(Qt::TopDockWidgetArea, pMainDock);
-	// pMainDock->setDockSite(KDockWidget::DockCorner);
-	// setMainDockWidget(pMainDock);
-	// setView(pMainDock);
-	// pMainDock->setEnableDocking(KDockWidget::DockNone);
+    addDockWidget(Qt::LeftDockWidgetArea, pMainDock);
+    setCentralWidget(pMainDock);
 
 	// Create the query window dock
+    m_pQueryDock->setObjectName("querydock");
+    m_pQueryDock->setAllowedAreas(Qt::BottomDockWidgetArea); 
+    m_pQueryDock->setFeatures(QDockWidget::NoDockWidgetFeatures | QDockWidget::DockWidgetMovable); 
 	m_pQueryDock->setWidget(m_pQueryWidget);
     addDockWidget(Qt::BottomDockWidgetArea, m_pQueryDock);
-	// m_pQueryDock->manualDock(pMainDock, KDockWidget::DockBottom, 65);
 
 	// Update the relevant shell action when the dock is hidden through its
 	// close button
@@ -222,9 +223,11 @@ void KScope::initMainWindow()
 		SLOT(slotQueryDockClosed()));
 		
 	// Create the file view dock
+    m_pFileViewDock->setObjectName("fileviewdock");
+    m_pFileViewDock->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea); 
+    m_pFileViewDock->setFeatures(QDockWidget::NoDockWidgetFeatures | QDockWidget::DockWidgetMovable); 
 	m_pFileViewDock->setWidget(m_pFileView);
     addDockWidget(Qt::RightDockWidgetArea, m_pFileViewDock);
-	//m_pFileViewDock->manualDock(pMainDock, KDockWidget::DockRight, 80);
 	
 	// Update the relevant shell action when the dock is hidden through its
 	// close button

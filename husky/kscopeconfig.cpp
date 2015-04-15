@@ -193,8 +193,7 @@ void KScopeConfig::loadDefault()
  */
 void KScopeConfig::loadWorkspace(KMainWindow* pMainWindow)
 {
-	//pMainWindow->readDockConfig(kapp->config(), "Workspace");
-    qDebug("TODO\n");;
+    pMainWindow->setAutoSaveSettings("Worksapcelayout");
 }
  
 /**
@@ -264,6 +263,7 @@ void KScopeConfig::store()
 void KScopeConfig::storeWorkspace(KMainWindow* pMainWindow)
 {
 	// pMainWindow->writeDockConfig(kapp->config(), "Workspace");
+    // QMainWindow::restoreState(), saveState()
     qDebug("TODO\n");
 }
 
