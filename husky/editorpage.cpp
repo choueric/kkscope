@@ -14,7 +14,7 @@
  * @param	szName	The widget's name
  */
 EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu,
-	QTabWidget* pParent, const char* szName) : 
+	QTabWidget* pParent) : 
     m_pParentTab(pParent),
 	m_pDoc(pDoc),
 	m_bOpen(false),
@@ -25,7 +25,7 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu,
 	m_nLine(0),
 	m_bSaveNewSizes(false)
 {
-    //QHBoxLayout *layout = new QHBoxLayout(pParent);
+    QHBoxLayout *layout = new QHBoxLayout(this);
 	
 	// Create code-completion objects (will be deleted by QObject destructor)
 	//m_pCompletion = new SymbolCompletion(this, this);
@@ -44,7 +44,7 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu,
 	//m_pSplit->setResizeMode(m_pCtagsList, QSplitter::KeepSize);
 
     //layout->addWidget(m_pCtagsList);
-    //layout->addWidget(m_pSplit);
+    layout->addWidget(m_pSplit);
     //layout->addWidget(m_pView);
     //QWidget *w = this;
     //w->setLayout(layout);

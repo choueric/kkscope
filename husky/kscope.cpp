@@ -12,6 +12,7 @@
 #include <KActionCollection>
 #include <QUrl>
 #include <QMimeData>
+#include <KToolBar>
 
 #include "kscopeconfig.h"
 #include <qfile.h>
@@ -96,12 +97,6 @@ KScope::KScope(QWidget* pParent) :
 	setStandardToolBarMenuEnabled(true);
 	
 	// Create the initial GUI (no active part)
-#if 0
-	setXMLFile("kscopeui.rc");
-	createShellGUI();
-#endif
-    //createGUI("kscopeui.rc");
-    setupGUI(Default, "kscopeui.rc");
 	
 	// Create all child widgets
 	initMainWindow();
@@ -111,7 +106,7 @@ KScope::KScope(QWidget* pParent) :
 	m_pEditMgr = new EditorManager(this);
 	m_pCallTreeMgr = new CallTreeManager(this);
 
-	// Initialise the icon manager	
+	// Initialise the KscopePixmaps icon manager	
 	Pixmaps().init();
 	
 	// Open a file for editing when selected in the project's file list or the
@@ -148,6 +143,12 @@ KScope::KScope(QWidget* pParent) :
 		
 	// Store main window settings when closed
 	setAutoSaveSettings();
+    // TODO: install to /usr/share/apps/
+    setupGUI(Default, "/home/zhs/workspace/kkscope/husky/kscopeui.rc");
+    QList<KToolBar *> barList = toolBars();
+    for (int i = 0; i < barList.size(); i++) {
+        barList[i]->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    }
 	
 	// Initialise arrow head drawing
 	GraphWidget::setArrowInfo(20, 15);
@@ -204,6 +205,7 @@ void KScope::initMainWindow()
 
 	// Create the main dock for the editor tabs widget
 	pMainDock = new QDockWidget("Editors Window", this);
+    pMainDock->setTitleBarWidget(new QWidget()); // in order to remove title bar
     pMainDock->setAllowedAreas(Qt::NoDockWidgetArea); 
     pMainDock->setFeatures(QDockWidget::NoDockWidgetFeatures); 
 	pMainDock->setWidget(m_pEditTabs);
@@ -235,12 +237,14 @@ void KScope::initMainWindow()
 		SLOT(slotFileViewDockClosed()));
 	
 	// Associate the "Window" menu with the editor tabs widdget
-	pPopup = (QMenu*)factory()->container("window", this);
-	m_pEditTabs->setWindowMenu(pPopup);
+	pPopup = (QMenu*)guiFactory()->container("window", this);
+    if (pPopup)
+        m_pEditTabs->setWindowMenu(pPopup);
 
 	// Associate the "Query" popup menu with the query widget
-	pPopup = (QMenu*)factory()->container("query_popup", this);
-	m_pQueryWidget->setPageMenu(pPopup, m_pActions->getLockAction());
+	pPopup = (QMenu*)guiFactory()->container("query_popup", this);
+    if (pPopup)
+        m_pQueryWidget->setPageMenu(pPopup, m_pActions->getLockAction());
 	
 	// Restore dock configuration
 	Config().loadWorkspace(this);

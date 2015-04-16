@@ -33,8 +33,7 @@ class EditorPage : public QWidget
    Q_OBJECT
 
 public:
-	EditorPage(KTextEditor::Document*, QMenu*, QTabWidget* pParent = 0,
-		const char* szName = 0);
+	EditorPage(KTextEditor::Document*, QMenu*, QTabWidget* pParent = 0);
 	~EditorPage();
 
 	void open(const QString&);

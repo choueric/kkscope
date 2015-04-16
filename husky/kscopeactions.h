@@ -3,7 +3,7 @@
 
 //#include <KLocale>
 //#include <KStandardAction>
-//#include <KActionCollection>
+#include <KActionCollection>
 #include <kaction.h>
 #include <QList>
 #include <ktoggleaction.h>

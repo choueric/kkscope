@@ -271,73 +271,74 @@ const QPixmap& KScopePixmaps::getPixmap(PixName name) const
  */
 QPixmap KScopePixmaps::getPixmap(LoadPixName name)
 {
+    qDebug("%d", name);
 	switch (name) {
 	case TabUnlocked:
-		return m_loader.loadIcon("query_unlocked", KIconLoader::Small, 0,
+		return m_loader.loadIcon(ICON_PREFIX"query_unlocked", KIconLoader::Small, 0,
 			false);
 
 	case TabLocked:
-		return m_loader.loadIcon("query_locked", KIconLoader::Small, 0,
+		return m_loader.loadIcon(ICON_PREFIX"query_locked", KIconLoader::Small, 0,
 			false);
 
 	case TabBookmark:
-		return m_loader.loadIcon("bookmark", KIconLoader::Small, 0,
+		return m_loader.loadIcon(ICON_PREFIX"bookmark", KIconLoader::Small, 0,
 			false);
 
 	case TabRW:
-		return m_loader.loadIcon("file_rw", KIconLoader::Small, 0,
+		return m_loader.loadIcon(ICON_PREFIX"file_rw", KIconLoader::Small, 0,
 			false);
 
 	case TabRO:
-		return m_loader.loadIcon("file_ro", KIconLoader::Small, 0,
+		return m_loader.loadIcon(ICON_PREFIX"file_ro", KIconLoader::Small, 0,
 			false);
 
 	case TabSave:
-		return m_loader.loadIcon("file_save", KIconLoader::Small, 0,
+		return m_loader.loadIcon(ICON_PREFIX"file_save", KIconLoader::Small, 0,
 			false);
 	
 	case TabFileList:
-		return m_loader.loadIcon("view_detailed", KIconLoader::Small, 0,
+		return m_loader.loadIcon(ICON_PREFIX"view_detailed", KIconLoader::Small, 0,
 			false);
 
 	case TabFileTree:
-		return m_loader.loadIcon("view_tree", KIconLoader::Small, 0,
+		return m_loader.loadIcon(ICON_PREFIX"view_tree", KIconLoader::Small, 0,
 			false);
 			
 	case TabList:
-		return m_loader.loadIcon("tab_list", KIconLoader::Small, 0,
+		return m_loader.loadIcon(ICON_PREFIX"tab_list", KIconLoader::Small, 0,
 			false);
 		
 	case ButtonSaveAs:
-		return m_loader.loadIcon("filesaveas", KIconLoader::Toolbar, 
+		return m_loader.loadIcon(ICON_PREFIX"filesaveas", KIconLoader::Toolbar, 
 			0, false);
 		
 	case ButtonZoomIn:
-		return m_loader.loadIcon("viewmag+", KIconLoader::Toolbar, 
+		return m_loader.loadIcon(ICON_PREFIX"viewmag+", KIconLoader::Toolbar, 
 			0, false);
 		
 	case ButtonZoomOut:
-		return m_loader.loadIcon("viewmag-", KIconLoader::Toolbar, 
+		return m_loader.loadIcon(ICON_PREFIX"viewmag-", KIconLoader::Toolbar, 
 			0, false);
 		
 	case ButtonRotate:
-		return m_loader.loadIcon("rotate", KIconLoader::Toolbar, 
+		return m_loader.loadIcon(ICON_PREFIX"rotate", KIconLoader::Toolbar, 
 			0, false);
 		
 	case ButtonPref:
-		return m_loader.loadIcon("configure", KIconLoader::Toolbar, 
+		return m_loader.loadIcon(ICON_PREFIX"configure", KIconLoader::Toolbar, 
 			0, false);
 	
 	case CalledTree:
-		return m_loader.loadIcon("called_tree", KIconLoader::Toolbar, 
+		return m_loader.loadIcon(ICON_PREFIX"called_tree", KIconLoader::Toolbar, 
 			0, false);
 	
 	case CallingTree:
-		return m_loader.loadIcon("calling_tree", KIconLoader::Toolbar, 
+		return m_loader.loadIcon(ICON_PREFIX"calling_tree", KIconLoader::Toolbar, 
 			0, false);
 			
 	case CallGraph:
-		return m_loader.loadIcon("call_graph", KIconLoader::Toolbar, 
+		return m_loader.loadIcon(ICON_PREFIX"call_graph", KIconLoader::Toolbar, 
 			0, false);
 	}
 
