@@ -61,11 +61,12 @@ void ProjectBase::getMakeParams(QString& sCmd, QString& sDir) const
 void ProjectBase::getDefOptions(Options& opt)
 {
 	// Set default source path to file-system root
-	opt.sSrcRootPath = "/";
+	opt.sSrcRootPath = qgetenv("HOME");
 	
 	// Initialise MIME-type list
 	opt.slFileTypes.append("*.c");
 	opt.slFileTypes.append("*.h");
+	opt.slFileTypes.append("*.cpp");
 
 	// Set other options
 	opt.bKernel = DEF_IS_KERNEL;

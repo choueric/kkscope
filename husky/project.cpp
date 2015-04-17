@@ -140,7 +140,7 @@ void Project::getOptions(Options& opt) const
 {
 	// Get project properties
     KConfigGroup group = m_pConf->group("Project");
-	opt.sSrcRootPath = group.readEntry("RootPath", "/");
+	opt.sSrcRootPath = group.readEntry("RootPath", qgetenv("HOME"));
 	opt.slFileTypes = group.readEntry("FileTypes", QStringList());
 	opt.bKernel = group.readEntry("Kernel", DEF_IS_KERNEL);
 	opt.bInvIndex = group.readEntry("InvIndex", DEF_INV_INDEX);

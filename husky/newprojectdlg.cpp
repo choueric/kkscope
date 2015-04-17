@@ -1,3 +1,4 @@
+#include "husky.h"
 #include <qregexp.h>
 #include <qpushbutton.h>
 #include <qspinbox.h>
@@ -38,7 +39,9 @@ NewProjectDlg::NewProjectDlg(bool bNewProj, QWidget* pParent) :
 
 	// Show the auto-completion properties dialogue
 	connect(m_pACButton, SIGNAL(clicked()), m_pAutoCompDlg, SLOT(exec()));	
-		
+
+    connect(m_pAvailTypesList, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(slotAvailTypesChanged(QListWidgetItem *)));
+
 	// Perform actions specific to the type of dialog (new project or
 	// project properties)
 	if (bNewProj) {
@@ -196,7 +199,7 @@ void NewProjectDlg::accept()
 	if (dir.exists())
 		m_pSrcRootRequester->setPath(dir.absolutePath());
 	else
-		m_pSrcRootRequester->setPath("/");
+		m_pSrcRootRequester->setPath(qgetenv("HOME"));
 		
 	// Close the dialog
 	QDialog::accept();
@@ -213,8 +216,9 @@ void NewProjectDlg::slotAddType()
 	// Try the custom type edit-box first.
 	sType = m_pTypesEdit->text();
 	sType = sType.trimmed();
-	if (sType.isEmpty())
+	if (sType.isEmpty()) {
 		return;
+    }
 
 	// Validate the type string
 	QRegExp reg("[ \\t\\n\\|\\\\\\/]");
@@ -230,6 +234,7 @@ void NewProjectDlg::slotAddType()
 	}
 
 	// Add the file type to the list
+    dp("add item %s", sType.toAscii().data());
 	m_pTypesList->addItem(sType);
 	m_pTypesEdit->clear();
 }
@@ -245,19 +250,20 @@ void NewProjectDlg::slotRemoveType()
 	
 	// Verify an item is selected
 	p = m_pTypesList->currentItem();
-	if (p == NULL)
+	if (p == NULL) {
 		return;
+    }
 
 	// Remove the selected item
 	sType = p->text();
-	m_pTypesList->removeItemWidget(p);
+	m_pTypesList->takeItem(m_pTypesList->row(p));
+    delete p;
 	
 	// Add to the list of available types.
     QList<QListWidgetItem *> f = m_pAvailTypesList->findItems(sType, Qt::MatchCaseSensitive | Qt::MatchExactly);
 	if (f.isEmpty()) {
 		m_pAvailTypesList->addItem(sType);
 	}
-	
 }
 
 /**
@@ -267,9 +273,9 @@ void NewProjectDlg::slotRemoveType()
  * available types.
  * @param	sType	The newly selected type
  */
-void NewProjectDlg::slotAvailTypesChanged(const QString& sType)
+void NewProjectDlg::slotAvailTypesChanged(QListWidgetItem *pItem)
 {
-	m_pTypesEdit->setText(sType);
+	m_pTypesEdit->setText(pItem->text());
 }
 
 /**

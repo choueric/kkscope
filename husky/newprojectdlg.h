@@ -70,7 +70,7 @@ protected slots:
 	virtual void accept();
 	virtual void slotAddType();
 	virtual void slotRemoveType();
-	virtual void slotAvailTypesChanged(const QString&);
+    virtual void slotAvailTypesChanged(QListWidgetItem *pItem);
 
 private:
 	/** The file MIME-types associated with the new project. */

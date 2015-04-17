@@ -196,7 +196,8 @@ void QueryWidget::addQueryPage()
 	pPage = new QueryPage(this);
 
 	// Add the page, and set it as the current one
-	m_pQueryTabs->addTab(pPage, GET_PIXMAP(TabUnlocked), "Query");
+    QIcon icon("project_new");
+	m_pQueryTabs->addTab(pPage, "Query");
     m_nQueryPages++;
 	m_pQueryTabs->setCurrentWidget(pPage);
 	
