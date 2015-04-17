@@ -1,5 +1,7 @@
 #include <QKeyEvent>
+#include <QApplication>
 #include <QHeaderView>
+#include <QTreeView>
 #include "searchlist.h"
 
 /**
@@ -30,7 +32,7 @@ void SearchLineEdit::keyPressEvent(QKeyEvent* pKey)
  * @param	pParent		The parent widget
  * @param	szName		The widget's name
  */
-SearchList::SearchList(int nSearchCol, QWidget* pParent, const char* szName) :
+SearchList::SearchList(int nSearchCol, QWidget* pParent) :
     QWidget(pParent),
 	m_nSearchCol(nSearchCol)
 {
@@ -133,6 +135,9 @@ void SearchList::slotItemSelected()
  */
 void SearchList::slotKeyPressed(QKeyEvent* pKey)
 {
+#if 1
+    QApplication::sendEvent(m_pList, pKey);
+#else
 	QTreeWidgetItem* pItem, * pNewItem;
 	int nPageSize, nPos;
 
@@ -161,8 +166,6 @@ void SearchList::slotKeyPressed(QKeyEvent* pKey)
         }
 		break;
 	
-        // TODO
-#if 0
 	case  Qt::Key_PageUp:
 		nPageSize = m_pList->visibleHeight() / pItem->height();
 		for (nPos = 0; 
@@ -178,7 +181,6 @@ void SearchList::slotKeyPressed(QKeyEvent* pKey)
 			nPos++)
 			pItem = pItem->itemBelow();
 		break;
-#endif
 	
 	default:
 		pKey->ignore();
@@ -194,6 +196,7 @@ void SearchList::slotKeyPressed(QKeyEvent* pKey)
 		m_pList->setCurrentItem(pItem);
 		m_pList->scrollToItem(pItem);
 	}
+#endif
 }
 
 #include "searchlist.moc"

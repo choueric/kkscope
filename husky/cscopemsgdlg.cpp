@@ -7,7 +7,8 @@
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-CscopeMsgDlg::CscopeMsgDlg(QWidget* pParent)
+CscopeMsgDlg::CscopeMsgDlg(QWidget* pParent):
+    QDialog(pParent)
 {
     setupUi(this);
 	// Hide the dialog when the "Hide" button is clicked

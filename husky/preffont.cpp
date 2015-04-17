@@ -84,7 +84,8 @@ private:
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-PrefFont::PrefFont(QWidget* pParent)
+PrefFont::PrefFont(QWidget* pParent):
+    QWidget(pParent)
 {
     setupUi(this);
 	// Set initial values
@@ -105,11 +106,10 @@ PrefFont::~PrefFont()
 void PrefFont::load()
 {
 	uint i;
-	FontListItem* pItem;
 	
 	// Create a list item for every GUI element
 	for (i = 0; i <= KScopeConfig::LAST_FONT; i++)
-		pItem = new FontListItem(m_pList, (KScopeConfig::FontElement)i);
+		new FontListItem(m_pList, (KScopeConfig::FontElement)i);
 }
 
 /**

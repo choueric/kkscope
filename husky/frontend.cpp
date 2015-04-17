@@ -1,3 +1,4 @@
+#include "husky.h"
 #include <iostream>
 #include <qfileinfo.h>
 #include <qdir.h>
@@ -40,8 +41,6 @@ Frontend::Frontend(uint nRecordSize, bool bAutoDelete) : KProcess(),
             SLOT(slotReadStderr2()));
 		
 	// Delete the process object when the process exits
-	//connect(this, SIGNAL(processExited(KProcess*)), this,
-		//SLOT(slotProcessExit(KProcess*)));
     connect(this, SIGNAL(finished(int, QProcess::ExitStatus)), this,
         SLOT(slotFinished(int, QProcess::ExitStatus)));
 }
@@ -255,8 +254,9 @@ void Frontend::parseStderr(const QString& sText)
 /**
  * Deletes the process object upon the process' exit.
  */
-void Frontend::slotProcessExit(KProcess*)
+void Frontend::slotFinished(int exitCode, ExitStatus exitStatus)
 {
+    printf("%s()\n", __FUNCTION__);
 	// Allow specialised clean-up by inheriting classes
 	finalize();
 	
@@ -266,13 +266,6 @@ void Frontend::slotProcessExit(KProcess*)
 	// Delete the object, if required
 	if (m_bAutoDelete)
 		delete this;
-}
-
-
-void Frontend::slotFinished(int exitCode, ExitStatus exitStatus)
-{
-    printf("%s()\n", __FUNCTION__);
-    slotProcessExit(this);
 }
 
 /**

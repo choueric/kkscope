@@ -31,7 +31,7 @@ class ProjectFilesDlg : public QDialog, public Ui_ProjectFilesLayout, public Fil
    Q_OBJECT
 
 public: 
-	ProjectFilesDlg(Project*, QWidget* pParent = 0,	const char* szName = 0);
+	ProjectFilesDlg(Project*, QWidget* pParent = 0);
 	~ProjectFilesDlg();
 
 	virtual void addItem(const QString&);

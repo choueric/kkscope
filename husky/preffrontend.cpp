@@ -13,7 +13,8 @@
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-PrefFrontend::PrefFrontend(QWidget* pParent)
+PrefFrontend::PrefFrontend(QWidget* pParent):
+    QWidget(pParent)
 {
     setupUi(this);
 	// Set initial values

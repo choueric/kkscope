@@ -9,7 +9,7 @@
  * @param	pParent	A pointer to the parent widget
  * @param	szName	Optional widget name
  */
-TabWidget::TabWidget(QWidget* pParent, const char* szName) :
+TabWidget::TabWidget(QWidget* pParent) :
 	KTabWidget(pParent)
 {
 	// Create a menu

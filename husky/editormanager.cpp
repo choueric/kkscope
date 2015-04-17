@@ -14,7 +14,7 @@
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-EditorManager::EditorManager(QWidget* pParent, const char* szName) :
+EditorManager::EditorManager(QWidget* pParent) :
 	KParts::PartManager(pParent)
 {
     m_pEditor = KTextEditor::EditorChooser::editor();

@@ -8,7 +8,8 @@
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-GraphPrefDlg::GraphPrefDlg(QWidget* pParent)
+GraphPrefDlg::GraphPrefDlg(QWidget* pParent):
+    QDialog(pParent)
 {
     setupUi(this);
 	m_pMaxDegSpin->setValue(Config().getGraphMaxNodeDegree());

@@ -20,7 +20,7 @@ class QueryResultsMenu : public QMenu
 	Q_OBJECT
 	
 public:
-    QueryResultsMenu(QWidget* pParent = 0, const char* szName = 0);
+    QueryResultsMenu(QWidget* pParent = 0);
     ~QueryResultsMenu();
 	
 public slots:		
@@ -64,8 +64,12 @@ signals:
 	void remove(QTreeWidgetItem* pItem);
 	
 private:
-	/** Menu item IDs. */
-	enum { ViewSource, FindDef, Copy, Filter, ShowAll, Remove };
+    QAction *m_pViewSourceAction;
+    QAction *m_pFindDefAction;
+    QAction *m_pCopyAction;
+    QAction *m_pFilterAction;
+    QAction *m_pShowAllAction;
+    QAction *m_pRemoveAction;
 		
 	/** The item for which the popup menu is provided (cannot be NULL). */
 	QTreeWidgetItem* m_pItem;

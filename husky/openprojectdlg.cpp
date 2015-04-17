@@ -10,7 +10,8 @@
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-OpenProjectDlg::OpenProjectDlg(QWidget* pParent)
+OpenProjectDlg::OpenProjectDlg(QWidget* pParent):
+    QDialog(pParent)
 {
     setupUi(this);
 	loadRecent();

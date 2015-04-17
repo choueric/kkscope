@@ -80,7 +80,7 @@ KScope::KScope(QWidget* pParent) :
 	Config().load();
 	
 	// Create the main child widgets
-	m_pEditTabs = new EditorTabs(this, NULL);
+	m_pEditTabs = new EditorTabs(this);
 	m_pQueryWidget = new QueryWidget(this);
 	m_pFileView = new FileView(this);
 	m_pFileList = m_pFileView->getFileList();

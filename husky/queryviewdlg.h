@@ -23,8 +23,7 @@ class QueryViewDlg : public QDialog, public Ui_QueryViewLayout
 	Q_OBJECT
 
 public:
-	QueryViewDlg(uint nFlags = 0, QWidget* pParent = 0, 
-		const char* szName = 0);
+	QueryViewDlg(uint nFlags = 0, QWidget* pParent = 0);
 	~QueryViewDlg();
 
 	/** These flags control the behaviour of the dialogue. */

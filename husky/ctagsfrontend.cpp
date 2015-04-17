@@ -1,4 +1,4 @@
-#include <iostream>
+#include "husky.h"
 #include <qfileinfo.h>
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -22,14 +22,22 @@ CtagsFrontend::~CtagsFrontend()
 {
 }
 
+bool CtagsFrontend::run(const QString& sFileName, const QStringList& slArgs,
+		const QString& sWorkDir, bool bBlock)
+{
+	if (!Frontend::run(sFileName, slArgs, sWorkDir, bBlock)) {
+		return false;
+    }
+	return true;
+}
+
 /**
  * Executes a Ctags process on a source file.
  * @param	sFileName	The full path to the source file
  * @return	true if successful, false otherwise
  */
 // TODO: will override Frontend::run ?
-bool CtagsFrontend::run(const QString& sFileName, const QStringList& Args,
-		const QString& sWorkDir, bool bBlock)
+bool CtagsFrontend::run(const QString& sFileName)
 {
 	QString sPath;
 	QStringList slArgs;
@@ -49,17 +57,13 @@ bool CtagsFrontend::run(const QString& sFileName, const QStringList& Args,
 	
 	slArgs.append(sFileName);
 
-	// Run a new process
-	if (!Frontend::run("ctags", slArgs)) {
-        printf("failed\n");
-		return false;
-    }
-
 	// Initialize stdout parsing
-	m_state = Name;
-	m_delim = Tab;
-
-	return true;
+    if (run("ctags", slArgs)) {
+        m_state = Name;
+        m_delim = Tab;
+        return true;
+    }
+    return false;
 }
 
 /**

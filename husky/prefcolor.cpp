@@ -71,7 +71,8 @@ private:
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-PrefColor::PrefColor(QWidget* Parent)
+PrefColor::PrefColor(QWidget* pParent):
+    QWidget(pParent)
 {
     setupUi(this);
 	
@@ -93,11 +94,10 @@ PrefColor::~PrefColor()
 void PrefColor::load()
 {
 	uint i;
-	ColorListItem* pItem;
 	
 	// Create a list item for every GUI element
 	for (i = 0; i <= KScopeConfig::LAST_COLOR; i++) {
-		pItem = new ColorListItem(m_pList, (KScopeConfig::ColorElement)i);
+		new ColorListItem(m_pList, (KScopeConfig::ColorElement)i);
     }
     m_pList->resizeColumnToContents(0);
 }

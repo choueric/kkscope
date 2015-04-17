@@ -12,12 +12,11 @@ class CtagsListItem;
 //class CtagsToolTip;
 
 /**
- * Displays a list of tags for a source file.
+ * Displays a list of tags for a source file with QTreeWidget.
  * The list is embedded inside an editor page. Whenever a new document is
  * opened in that editor, or the current document is changed and saved, the
  * source file is re-scanned for tags, and the results are displayed in this
  * list.
- * @author Elad Lahav
  */
 
 class CtagsList : public SearchList
@@ -25,7 +24,7 @@ class CtagsList : public SearchList
    Q_OBJECT
 
 public:
-	CtagsList(QWidget* pParent = 0, const char* szName = 0);
+	CtagsList(QWidget* pParent = 0);
 	~CtagsList();
 
 	void applyPrefs();

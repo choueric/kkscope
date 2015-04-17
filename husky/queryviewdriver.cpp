@@ -9,8 +9,8 @@
  * @param	pParent	The parent object of the driver
  * @param	szName	The name of the object
  */
-QueryViewDriver::QueryViewDriver(QueryView* pView, QObject* pParent, 
-	const char* szName) : QObject(pParent),
+QueryViewDriver::QueryViewDriver(QueryView* pView, QObject* pParent) :
+    QObject(pParent),
 	m_pView(pView),
 	m_pItem(NULL),
 	m_progress(pView),

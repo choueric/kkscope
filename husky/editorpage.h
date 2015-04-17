@@ -59,6 +59,8 @@ public:
 	bool getCursorPos(uint&, uint&);
 	bool setCursorPos(uint, uint nCol = 1);
 	void setTabWidth(uint);
+
+    void aboutCommand();
 	
 	virtual QString getWordUnderCursor(uint* pPosInWord = NULL);
 
@@ -167,7 +169,7 @@ private:
 	bool m_bModified;
 	
 	/** The current line position of the cursor. */
-	uint m_nLine;
+	int m_nLine;
 	
 	/** Provides symbol completion. */
 	//SymbolCompletion* m_pCompletion;

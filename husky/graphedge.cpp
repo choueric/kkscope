@@ -216,7 +216,7 @@ QString GraphEdge::getTip() const
  */
 void GraphEdge::drawShape(QPainter& painter)
 {
-	uint i;
+	int i;
     QPainterPath path;
 	
 	// Draw the polygon

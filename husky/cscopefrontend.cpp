@@ -76,7 +76,7 @@ bool CscopeFrontend::run(const QString& sName, const QStringList& slArgs,
 		const QString& sWorkDir, bool bBlock)
 {
 	// Run a new process
-	if (!Frontend::run(sName, slArgs, sWorkDir)) {
+	if (!Frontend::run(sName, slArgs, sWorkDir, bBlock)) {
 		emit aborted();
 		return false;
 	}

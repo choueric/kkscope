@@ -151,7 +151,6 @@ protected:
 	virtual void finalize() {}
 
 protected slots:
-	virtual void slotProcessExit(KProcess*);
 	virtual void slotFinished(int exitCode, QProcess::ExitStatus exitStatus);
 	
 private:

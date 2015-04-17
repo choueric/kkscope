@@ -239,7 +239,7 @@ void GraphWidget::addMultiCall(const QString& sFunc, bool bCalled)
 {
 	QString sMulti;
 	GraphNode* pCaller, * pCallee;
-	GraphEdge* pEdge;
+	// GraphEdge* pEdge;
 	
 	// Create a unique name for the new node.
 	// The name is of the form 0XXX, where XXX is a hexadecimal number. 
@@ -259,7 +259,7 @@ void GraphWidget::addMultiCall(const QString& sFunc, bool bCalled)
 	}
 	
 	// Create a new edge
-	pEdge = pCaller->addOutEdge(pCallee);
+	pCaller->addOutEdge(pCallee);
 }
 
 /**
@@ -409,25 +409,21 @@ void GraphWidget::rotate()
  */
 QString GraphWidget::getTip(const QPoint& ptPos, QRect& rc)
 {
-#if 0
-	QPoint ptRealPos, ptTopLeft, ptBottomRight;
-	QCanvasItemList il;
-	QCanvasItemList::Iterator itr;
-	GraphEdge* pEdge;
+    // TODO
+    QList<QGraphicsItem *> list;
+	GraphEdge* pEdge = NULL;
+
 	QString sText, sFile, sLine;
-	
-	ptRealPos = viewportToContents(ptPos);
-	ptRealPos /= m_dZoom;
-	pEdge = NULL;
-	
+	QPoint ptTopLeft, ptBottomRight;
+
 	// Check if there is an edge at this position
-	il = canvas()->collisions(ptRealPos);
-	for (itr = il.begin(); itr != il.end(); ++itr) {
-		pEdge = dynamic_cast<GraphEdge*>(*itr);
-		if (pEdge != NULL)
-			break;
-	}
-	
+    list = items(ptPos);
+    for (int i = 0; i < list.size(); i++) {
+        pEdge = dynamic_cast<GraphEdge *>(list[i]);
+        if (pEdge != NULL)
+            break;
+    }
+
 	// No tip if no edge was found
 	if (pEdge == NULL)
 		return QString::null;
@@ -439,14 +435,12 @@ QString GraphWidget::getTip(const QPoint& ptPos, QRect& rc)
 	ptBottomRight = rc.bottomRight();
 	ptTopLeft *= m_dZoom;	
 	ptBottomRight *= m_dZoom;
-	ptTopLeft = contentsToViewport(ptTopLeft);
-	ptBottomRight = contentsToViewport(ptBottomRight);
+	// ptTopLeft = contentsToViewport(ptTopLeft);
+	// ptBottomRight = contentsToViewport(ptBottomRight);
 	rc = QRect(ptTopLeft, ptBottomRight);
 	
 	// Create a tip for this edge
 	return pEdge->getTip();
-#endif
-    return "";
 }
 
 /**
@@ -457,7 +451,7 @@ QString GraphWidget::getTip(const QPoint& ptPos, QRect& rc)
 void GraphWidget::resize(int nWidth, int nHeight)
 {
     // The size of scene is default unlimited.
-	// canvas()->resize(nWidth + 2, nHeight + 2);
+	scene()->setSceneRect(0, 0, nWidth + 2, nHeight + 2);
 }
 
 /**

@@ -10,7 +10,8 @@
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-PrefOpt::PrefOpt(QWidget* pParent)
+PrefOpt::PrefOpt(QWidget* pParent):
+    QWidget(pParent)
 {
     setupUi(this);
 	// Set initial values

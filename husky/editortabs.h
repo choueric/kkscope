@@ -22,7 +22,7 @@ class EditorTabs : public TabWidget
    Q_OBJECT
    
 public:
-	EditorTabs(QWidget* pParent = 0, const char* szName = 0);
+	EditorTabs(QWidget* pParent = 0);
 	~EditorTabs();
 
 	void setWindowMenu(QMenu*);

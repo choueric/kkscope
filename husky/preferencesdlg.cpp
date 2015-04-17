@@ -33,8 +33,8 @@ PreferencesDlg::PreferencesDlg(QWidget* pParent, uint nPage) :
 {
 	QVBoxLayout* pLayout;
     KPageWidgetItem *pFrame;
-    int index = 0;
-    KPageWidgetItem *pCur;
+    uint index = 0;
+    KPageWidgetItem *pCur = NULL;
     
     setCaption(i18n("Preferences"));
 
@@ -94,7 +94,8 @@ PreferencesDlg::PreferencesDlg(QWidget* pParent, uint nPage) :
 	connect(m_pPrefOpt, SIGNAL(modified()), this, SLOT(slotModified()));
 	
 	// Set the active page
-	setCurrentPage(pCur);
+    if (pCur)
+        setCurrentPage(pCur);
     show();
 }
 

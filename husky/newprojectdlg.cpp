@@ -17,6 +17,7 @@
  * @param	szName		The widget's name
  */
 NewProjectDlg::NewProjectDlg(bool bNewProj, QWidget* pParent) :
+    QDialog(pParent),
 	m_bNewProj(bNewProj)
 {
     setupUi(this);
@@ -276,7 +277,8 @@ void NewProjectDlg::slotAvailTypesChanged(const QString& sType)
  * @param	pParent		The parent widget
  * @param	szName		The widget's name
  */
-AutoCompletionDlg::AutoCompletionDlg(QWidget* pParent)
+AutoCompletionDlg::AutoCompletionDlg(QWidget* pParent):
+    QDialog(pParent)
 {
     setupUi(this);
 	connect(m_pOKButton, SIGNAL(clicked()), this, SLOT(accept()));

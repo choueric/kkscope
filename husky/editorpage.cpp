@@ -2,6 +2,11 @@
 
 #include <qfileinfo.h>
 #include <kdeversion.h>
+#include <KTextEditor/Command>
+#include <KTextEditor/CommandInterface>
+#include <KTextEditor/Editor>
+#include <QStringList>
+#include <QString>
 
 #include "kscopeconfig.h"
 #include "editorpage.h"
@@ -13,8 +18,7 @@
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu,
-	QTabWidget* pParent) : 
+EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu, QTabWidget* pParent) : 
     m_pParentTab(pParent),
 	m_pDoc(pDoc),
 	m_bOpen(false),
@@ -43,11 +47,7 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu,
     m_pSplit->addWidget(m_pView);
 	//m_pSplit->setResizeMode(m_pCtagsList, QSplitter::KeepSize);
 
-    //layout->addWidget(m_pCtagsList);
     layout->addWidget(m_pSplit);
-    //layout->addWidget(m_pView);
-    //QWidget *w = this;
-    //w->setLayout(layout);
 	
 	// Perform tasks only when the document has been loaded completely
 	connect(m_pDoc, SIGNAL(completed()), this, SLOT(slotFileOpened()));
@@ -501,7 +501,7 @@ bool EditorPage::setCursorPos(uint nLine, uint nCol)
 	nLine--;
 	nCol--;
 		
-#if 0
+#if 0 // TODO
 	Kate::View* pKateView;
 	// NOTE: The following code is a fix to a bug in Kate, which wrongly
 	// calculates the column number in setCursorPosition.
@@ -556,20 +556,58 @@ bool EditorPage::setCursorPos(uint nLine, uint nCol)
 	return true;
 }
 
+// set Tab charactor's width (4 / 8 or else)
 void EditorPage::setTabWidth(uint nTabWidth)
 {
-#if 0  // TODO
-	Kate::Document* pKateDoc;
-	Kate::Command* pKateCmd;
+    KTextEditor::Editor *editor = m_pDoc->editor();
+    KTextEditor::CommandInterface *iface = 
+        qobject_cast<KTextEditor::CommandInterface *>(editor);
+
 	QString sCmd, sResult;
-	
-	pKateDoc = dynamic_cast<Kate::Document*>(m_pDoc);
-	if ((pKateDoc) && (pKateCmd = pKateDoc->queryCommand("set-tab-width"))) {
+    const QString cmd("set-tab-width");
+    KTextEditor::Command *pCmd = iface->queryCommand(cmd);
+
+    if (pCmd) {
 		sCmd.sprintf("set-tab-width %u", nTabWidth);
-		pKateCmd->exec((Kate::View*)m_pView, sCmd, sResult);
-	}
-#endif
+		if (pCmd->exec(m_pView, sCmd, sResult) == false) {
+            qDebug("set tab width failed: %s", sResult.toAscii().data());
+        }
+    } else {
+        qDebug("no this cmd");
+    }
 }
+
+/*
+ * show all the commands supported by KTextEditor
+ * It's a debug function
+ */
+void EditorPage::aboutCommand()
+{
+    KTextEditor::Editor *editor = m_pDoc->editor();
+    KTextEditor::CommandInterface *iface = qobject_cast<KTextEditor::CommandInterface *>(editor);
+
+    if (iface == NULL) {
+        qDebug("CommandInterface cast failed");
+        return;
+    }
+
+    QString msg;
+    const QString cmd("set-tab-width");
+    KTextEditor::Command *pcmd = iface->queryCommand(cmd);
+    QStringList list = pcmd->cmds();
+
+    for (int i = 0; i < list.size(); i++)
+        qDebug("cmd: %s", list[i].toAscii().data());
+
+
+    if (pcmd) {
+        pcmd->help(m_pView, cmd, msg);
+        qDebug("%s", msg.toAscii().data());
+    } else {
+        qDebug("no this cmd");
+    }
+}
+
 
 /**
  * Called when a document has completed loading.
@@ -582,7 +620,6 @@ void EditorPage::setTabWidth(uint nTabWidth)
 void EditorPage::slotFileOpened()
 {
 	QFileInfo fi(m_pDoc->url().path());
-    const QStringList t;
 	
 	// Get file information
 	m_sName = fi.fileName();
@@ -593,7 +630,7 @@ void EditorPage::slotFileOpened()
 	
 	// Refresh the tag list
 	m_pCtagsList->clear();
-	m_ctags.run(m_pDoc->url().path(), t);
+	m_ctags.run(m_pDoc->url().path());
 
 	// Check if this is a modified file that has just been saved
 	if (m_bModified)
@@ -664,12 +701,14 @@ void EditorPage::slotUndoChanged()
  */
 void EditorPage::slotCursorPosChange(KTextEditor::View *view, const KTextEditor::Cursor &newPosition)
 {
-	uint nLine, nCol;
+	int nLine, nCol;
+
+    if (view == NULL)
+        return;
 	
 	// Find the new line and column number, and emit the signal
-	if (!getCursorPos(nLine, nCol))
-		return;
-		
+    newPosition.position(nLine, nCol);
+
 	emit cursorPosChanged(nLine, nCol);
 	
 	// Select the relevant symbol in the tag list

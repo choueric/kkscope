@@ -90,8 +90,8 @@ private:
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-CtagsList::CtagsList(QWidget* pParent, const char* szName) :
-	SearchList(0, pParent, szName),
+CtagsList::CtagsList(QWidget* pParent) :
+	SearchList(0, pParent),
 	m_arrLines(16),
 	m_nItems(0),
 	m_nCurItem(0),
@@ -233,10 +233,8 @@ void CtagsList::slotDataReady(FrontendToken* pToken)
 	// Add a new item to the list
 	pItem = new CtagsListItem(m_pList, sName, sLine, sType);
 
-#if 0
     QIcon icon(Pixmaps().getPixmap(pix));
 	pItem->setIcon(HEADER_ICON, icon);
-#endif
 	m_nItems++;
 	
 	// Resize the line array, if required
@@ -413,33 +411,30 @@ void CtagsList::slotCtagsFinished(uint nRecords)
  */
 void CtagsList::slotSortChanged(int nSection)
 {
-#if 0   // TODO
-	Qt::SortOrder order;
-	
 	// Determine whether the new order is ascending or descending
-	order = m_pList->sortOrder();
+    QHeaderView *pHeader = (QHeaderView *)m_pList->headerItem();
+    Qt::SortOrder order = pHeader->sortIndicatorOrder(); 
 	
 	// Translate the section number into the order constant
 	switch (nSection) {
 	case HEADER_NAME:
 		// Sort by name
-		Config().setCtagSortOrder(order == Qt::Ascending ?
+		Config().setCtagSortOrder(order == Qt::AscendingOrder ?
 			KScopeConfig::NameAsc : KScopeConfig::NameDes);
 		break;
 		
 	case HEADER_LINE:
 		// Sort by line
-		Config().setCtagSortOrder(order == Qt::Ascending ?
+		Config().setCtagSortOrder(order == Qt::AscendingOrder ?
 			KScopeConfig::LineAsc : KScopeConfig::LineDes);
 		break;
 		
 	case HEADER_TYPE:
 		// Sort by type
-		Config().setCtagSortOrder(order == Qt::Ascending ?
+		Config().setCtagSortOrder(order == Qt::AscendingOrder ?
 			KScopeConfig::TypeAsc : KScopeConfig::TypeDes);
 		break;
 	}
-#endif
 }
 
 #include "ctagslist.moc"

@@ -19,6 +19,17 @@ ConfigFrontend::~ConfigFrontend()
 {
 }
 
+	
+bool ConfigFrontend::run(const QString& sName, const QStringList& slArgs,
+		const QString& sWorkDir, bool bBlock)
+{
+	if (!Frontend::run(sName, slArgs, sWorkDir, bBlock))
+		return false;
+		
+	emit test(CscopePath);
+	return true;
+}
+
 /**
  * Executes the script using the "sh" shell.
  * @param	sCscopePath		If given, overrides the automatic check for Cscope's
@@ -68,11 +79,7 @@ bool ConfigFrontend::run(const QString& sCscopePath,
     const QString cmd = slArgs.join(" ");
     setShellCommand(cmd);
 	
-	if (!Frontend::run("sh", slArgs))
-		return false;
-		
-	emit test(CscopePath);
-	return true;
+    return run("sh", slArgs);
 }
 
 /**

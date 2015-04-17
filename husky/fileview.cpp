@@ -14,6 +14,7 @@
  * @param	fl		Widget creation flags
  */
 FileView::FileView(QWidget* pParent) :
+    QWidget(pParent),
 	m_sRoot("")
 {
     setupUi(this);

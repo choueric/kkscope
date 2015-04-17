@@ -15,7 +15,7 @@ class TabWidget : public KTabWidget
 {
 Q_OBJECT
 public:
-    TabWidget(QWidget* pParent = 0, const char* szName = 0);
+    TabWidget(QWidget* pParent = 0);
     ~TabWidget();
 
 private:

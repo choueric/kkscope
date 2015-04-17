@@ -45,7 +45,7 @@ class SearchList : public QWidget
    Q_OBJECT
 
 public: 
-	SearchList(int nSearchCol, QWidget* pParent = 0, const char* szName = 0);
+	SearchList(int nSearchCol, QWidget* pParent = 0);
 	~SearchList();
 
 	/**

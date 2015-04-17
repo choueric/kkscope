@@ -2,6 +2,8 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <KUrl>
+#include <QMimeData>
+#include <QDragMoveEvent>
 #include "editortabs.h"
 #include "kscopepixmaps.h"
 #include "queryview.h"
@@ -11,8 +13,8 @@
  * @param	pParent		The parent widget
  * @param	szName		The widget's name
  */
-EditorTabs::EditorTabs(QWidget* pParent, const char* szName) :
-	TabWidget(pParent, szName),
+EditorTabs::EditorTabs(QWidget* pParent) :
+	TabWidget(pParent),
 	m_pCurPage(NULL),
 	m_pWindowMenu(NULL),
 	m_nWindowMenuItems(0),
@@ -424,14 +426,10 @@ void EditorTabs::slotToggleTagList()
  */
 void EditorTabs::dragMoveEvent(QDragMoveEvent* pEvent)
 {
-    printf("%s()\n", __func__);
-#if 0
-	KUrl::List list;
-	bool bAccept;
-	
-	bAccept = KURLDrag::decode(pEvent, list);
-	pEvent->accept(bAccept);
-#endif
+    const QMimeData *data = pEvent->mimeData();
+    if (data->hasUrls()) {
+        pEvent->accept();
+    }
 }
 
 /**
@@ -453,18 +451,14 @@ void EditorTabs::dropEvent(QDropEvent* pEvent)
  */
 void EditorTabs::slotInitiateDrag(QWidget* pWidget)
 {
-    printf("%s()\n", __func__);
-#if 0
-	KUrl url;
-	KURLDrag* pDrag;
+    QDrag *pDrag = new QDrag(this);
+    QMimeData *pData = new QMimeData;
+    QList<QUrl> list;
+    list << ((EditorPage*)pWidget)->getFilePath();
+    pData->setUrls(list);
+    pDrag->setMimeData(pData);
 
-	// Create a URL list containing the appropriate file path
-	url.setPath(((EditorPage*)pWidget)->getFilePath());
-	pDrag = new KURLDrag(KURL::List(url), this);
-	
-	// Start the drag
-	pDrag->dragCopy();
-#endif
+    pDrag->exec();
 }
 
 /**

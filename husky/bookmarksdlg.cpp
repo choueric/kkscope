@@ -1,7 +1,8 @@
 #include "bookmarksdlg.h"
 #include "queryview.h"
 
-BookmarksDlg::BookmarksDlg(QWidget* pParent)
+BookmarksDlg::BookmarksDlg(QWidget* pParent):
+    QDialog(pParent)
 {
     setupUi(this);
 	// Do not show the "Function" column

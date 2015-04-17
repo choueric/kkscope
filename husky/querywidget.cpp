@@ -12,6 +12,7 @@
  * @param	szName	The widget's name
  */
 QueryWidget::QueryWidget(QWidget* pParent) :
+    QDialog(pParent),
 	m_pPageMenu(NULL),
 	m_pLockAction(NULL),
 	m_pHistPage(NULL),

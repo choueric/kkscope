@@ -6,20 +6,20 @@
  * @param	pParent	Parent widget
  * @param	szName	Optional object name
  */
-QueryResultsMenu::QueryResultsMenu(QWidget* pParent, const char* szName) :
+QueryResultsMenu::QueryResultsMenu(QWidget* pParent) :
 	QMenu(pParent),
 	m_pItem(NULL)
 {
 	// Create the menu
-	addAction(i18n("&View Source"), this, SLOT(slotViewSource()));
-	addAction(i18n("Find &Definition"), this, SLOT(slotFindDef()));
+	m_pViewSourceAction = addAction(i18n("&View Source"), this, SLOT(slotViewSource()));
+	m_pFindDefAction = addAction(i18n("Find &Definition"), this, SLOT(slotFindDef()));
 	addSeparator();
-	addAction(i18n("&Copy"), this, SLOT(slotCopy()));
+	m_pCopyAction = addAction(i18n("&Copy"), this, SLOT(slotCopy()));
 	addSeparator();
-	addAction(i18n("&Filter..."), this, SLOT(slotFilter()));
-	addAction(i18n("&Show All"), this, SIGNAL(showAll()));
+	m_pFilterAction = addAction(i18n("&Filter..."), this, SLOT(slotFilter()));
+	m_pShowAllAction = addAction(i18n("&Show All"), this, SIGNAL(showAll()));
 	addSeparator();
-	addAction(i18n("&Remove Item"), this, SLOT(slotRemove()));
+	m_pRemoveAction = addAction(i18n("&Remove Item"), this, SLOT(slotRemove()));
 }
 
 /**
@@ -39,53 +39,44 @@ QueryResultsMenu::~QueryResultsMenu()
 void QueryResultsMenu::slotShow(QTreeWidgetItem* pItem, const QPoint& ptPos, 
 	int nCol)
 {
-#if 0  //TODO
 	// Save the requested item and column number to use in signals
 	m_pItem = pItem;
 	m_nCol = nCol;
 	
 	if (m_pItem == NULL) {
 		// No item selected, disable everything but the "Filter" and "Show All" 
-		// items
-		setItemEnabled(ViewSource, false);
-		setItemEnabled(FindDef, false);
-		setItemEnabled(Copy, false);
-		setItemEnabled(Remove, false);
-	}
-	else {
+        m_pViewSourceAction->setEnabled(false);
+		m_pFindDefAction->setEnabled(false);
+		m_pCopyAction->setEnabled(false);
+		m_pRemoveAction->setEnabled(false);
+	} else {
 		// Item selected, enable record-specific actions
-		setItemEnabled(ViewSource, true);
-		setItemEnabled(Copy, true);
-		setItemEnabled(Remove, true);
+        m_pViewSourceAction->setEnabled(true);
+		m_pCopyAction->setEnabled(true);
+		m_pRemoveAction->setEnabled(true);
 			
 		// The "Find Definition" item should only be enabled if the mouse
 		// was clicked over a valid function name 
-		setItemEnabled(FindDef, (m_nCol == 0) && 
-			(m_pItem->text(0) != "<global>"));
+        m_pFindDefAction->setEnabled((m_nCol == 0) && (m_pItem->text(0) != "<global>"));
 
 		// Set menu contents according to the column number
 		switch (m_nCol) {
 		case 0:
-			changeItem(Copy, "&Copy Function");
+			m_pCopyAction->setText("&Copy Function");
 			break;
-			
 		case 1:
-			changeItem(Copy, "&Copy File");
+			m_pCopyAction->setText("&Copy File");
 			break;
-			
 		case 2:
-			changeItem(Copy, "&Copy Line Number");
+			m_pCopyAction->setText("&Copy Line Number");
 			break;
-			
 		case 3:
-			changeItem(Copy, "&Copy Text");
+			m_pCopyAction->setText("&Copy Text");
 			break;
-			
 		default:
 			m_nCol = 0;
 		}
 	}
-#endif
 	
 	// Show the menu
 	popup(ptPos);

@@ -20,8 +20,8 @@
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-FileList::FileList(QWidget* pParent, const char* szName) :
-	SearchList(FILE_LIST_NAME_COL, pParent, szName),
+FileList::FileList(QWidget* pParent) :
+	SearchList(FILE_LIST_NAME_COL, pParent),
 	m_sRoot("/")
 {
 	// Set the list's columns

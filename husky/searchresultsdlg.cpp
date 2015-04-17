@@ -13,7 +13,8 @@ bool SearchResultsDlg::s_bNegate = false;
  * @param	pParent	The parent widget
  * @param	szName	Optional widget name
  */
-SearchResultsDlg::SearchResultsDlg(QWidget* pParent, const char* szName)
+SearchResultsDlg::SearchResultsDlg(QWidget* pParent) :
+    QDialog(pParent)
 {
     setupUi(this);
 	// Select the last selected type radio button

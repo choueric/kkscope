@@ -18,6 +18,7 @@ QStringList SymbolDlg::s_slHistory;
  * @param	szName	This widget's name
  */
 SymbolDlg::SymbolDlg(QWidget* pParent) : 
+    QDialog(pParent),
 	m_progress(m_pHintList)
 {
     setupUi(this);

@@ -18,6 +18,8 @@ public:
 	
 	bool run(const QString&, const QString&, const QString&, 
 		bool bCscopeOptsOnly = false);
+	bool run(const QString&, const QStringList&,
+		const QString& sWorkDir = "", bool bBlock = false);
 	
 	/**
 	 * The types of tests executed by the script.

@@ -7,8 +7,8 @@
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-QueryViewDlg::QueryViewDlg(uint nFlags, QWidget* pParent, 
-	const char* szName) :
+QueryViewDlg::QueryViewDlg(uint nFlags, QWidget* pParent) :
+    QDialog(pParent),
 	m_nFlags(nFlags)
 {
     setupUi(this);

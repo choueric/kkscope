@@ -21,7 +21,8 @@
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-MakeDlg::MakeDlg(QWidget* pParent)
+MakeDlg::MakeDlg(QWidget* pParent):
+    QDialog(pParent)
 {
     setupUi(this);
 	// Don't show the "Function" column

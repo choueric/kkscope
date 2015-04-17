@@ -29,7 +29,8 @@ int CallTreeDlg::s_nFileNameIndex = 0;
  * @param	pParent	The parent widget
  * @param	szName	The widget's name
  */
-CallTreeDlg::CallTreeDlg(QWidget* pParent)
+CallTreeDlg::CallTreeDlg(QWidget* pParent):
+    QDialog(pParent)
 {
     setupUi(this);
 	// Set button pixmaps

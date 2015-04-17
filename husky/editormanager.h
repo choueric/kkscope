@@ -18,7 +18,7 @@ class EditorManager : public KParts::PartManager
    Q_OBJECT
 
 public: 
-	EditorManager(QWidget* pParent = 0, const char* szName = 0);
+	EditorManager(QWidget* pParent = 0);
 	~EditorManager();
 
 	KTextEditor::Document* add();

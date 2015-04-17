@@ -17,8 +17,8 @@
  * @param	pParent		The parent widget
  * @param	szName		The widget's name
  */
-ProjectFilesDlg::ProjectFilesDlg(Project* pProj, QWidget* pParent,
-	const char* szName) :
+ProjectFilesDlg::ProjectFilesDlg(Project* pProj, QWidget* pParent) :
+    QDialog(pParent),
 	m_pProj(pProj),
 	m_pScanDlg(NULL),
 	m_pItrItem(NULL),

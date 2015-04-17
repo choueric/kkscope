@@ -264,7 +264,7 @@ void KScopeConfig::storeWorkspace(KMainWindow* pMainWindow)
 {
 	// pMainWindow->writeDockConfig(kapp->config(), "Workspace");
     // QMainWindow::restoreState(), saveState()
-    qDebug("TODO\n");
+    qDebug("TODO %s()\n", __FUNCTION__);
 }
 
 /**

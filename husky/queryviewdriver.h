@@ -20,7 +20,7 @@ class QueryViewDriver : public QObject
 	Q_OBJECT
 
 public:
-    QueryViewDriver(QueryView*, QObject* pParent = 0, const char* szName = 0);
+    QueryViewDriver(QueryView*, QObject* pParent = 0);
     ~QueryViewDriver();
 
 	void query(uint, const QString&, bool bCase, QTreeWidgetItem* pItem = NULL);

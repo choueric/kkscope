@@ -30,6 +30,7 @@ public:
 
 	bool run(const QString&, const QStringList& slArgs,
 		const QString& sWorkDir = "", bool bBlock = false);
+	bool run(const QString&);
 	
 	static bool verify(const QString&);
 	static void setExtraArgs(const QString&);

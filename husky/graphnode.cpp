@@ -37,7 +37,7 @@ GraphNode::~GraphNode()
  */
 GraphEdge* GraphNode::addOutEdge(GraphNode* pTail)
 {
-	GraphEdge* pEdge;
+	GraphEdge* pEdge = NULL;
 	
 	// Look for the edge
 	if ((pEdge = m_dictOutEdges.value(pTail->getFunc())) == NULL) {

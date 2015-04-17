@@ -17,7 +17,7 @@ class FileList : public SearchList, public FileListTarget
 	Q_OBJECT
 
 public: 
-	FileList(QWidget* pParent = 0, const char* szName = 0);
+	FileList(QWidget* pParent = 0);
 	~FileList();
 	
 	virtual void addItem(const QString&);

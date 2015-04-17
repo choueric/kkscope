@@ -10,6 +10,7 @@
  * @param	szName	The widget's name
  */
 ScanProgressDlg::ScanProgressDlg(QWidget* pParent) :
+    QDialog(pParent),
 	m_nFiles(0),
 	m_nCurFiles(0)
 {

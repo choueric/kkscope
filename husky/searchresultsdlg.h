@@ -15,7 +15,7 @@ class SearchResultsDlg : public QDialog, public Ui_SearchResultsLayout
 	Q_OBJECT
 
 public:
-	SearchResultsDlg(QWidget* pParent = 0, const char* szName = 0);
+	SearchResultsDlg(QWidget* pParent = 0);
 	~SearchResultsDlg();
 
 	void setColumn(int);
