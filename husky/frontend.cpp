@@ -7,9 +7,10 @@
 
 static void printStringList(const QStringList &list)
 {
+    std::cout << "[";
     for (int i = 0; i < list.size(); i++)
         std::cout << list.at(i).toLocal8Bit().constData() << " ";
-    std::cout << std::endl;
+    std::cout << "]" << std::endl;
 }
 
 /**
@@ -341,8 +342,8 @@ void Frontend::slotReadStdout(KProcess*, char* pBuffer, int nSize)
 
 void Frontend::slotReadStdout2()
 {
+    dp();
     QByteArray output = this->readAllStandardOutput();
-    printf("---- Stdout ---\n");
     std::cout << output.constData() << std::endl;
     slotReadStdout(this, output.data(), output.size());
 }
@@ -369,7 +370,7 @@ void Frontend::slotReadStderr(KProcess*, char* pBuffer, int nSize)
 
 void Frontend::slotReadStderr2()
 {
-    printf("%s()\n", __FUNCTION__);
+    dp();
 }
 
 #include "frontend.moc"

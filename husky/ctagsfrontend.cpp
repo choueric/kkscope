@@ -45,6 +45,11 @@ bool CtagsFrontend::run(const QString& sFileName)
 	// Make sure the executable exists
 	sPath = Config().getCtagsPath();
 
+    if (sPath == "") {
+        dp("ctags path is empty");
+        return false;
+    }
+
 	// Set the command line arguments
 	slArgs.append(sPath);
 	slArgs.append("--excmd=n");

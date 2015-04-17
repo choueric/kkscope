@@ -4,6 +4,6 @@
 #include <stdio.h>
 #include <iostream>
 
-#define dp(fmt, args...) printf("--> %d %s @ %s: " fmt, __LINE__, __FUNCTION__, __FILE__, ##args)
+#define dp(fmt, args...) printf("--> %d %s @ %s: " fmt "\n", __LINE__, __FUNCTION__, __FILE__, ##args)
 
 #endif

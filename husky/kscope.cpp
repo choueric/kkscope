@@ -13,6 +13,7 @@
 #include <QUrl>
 #include <QMimeData>
 #include <KToolBar>
+#include <KProcess>
 
 #include "kscopeconfig.h"
 #include <qfile.h>

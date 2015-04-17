@@ -130,9 +130,9 @@ void KScopeConfig::load()
 	
 	// Read the paths to required executables
     KConfigGroup groupProgram = pConf->group("Programs");
-	m_cp.sCscopePath = groupProgram.readEntry("CScope");
-	m_cp.sCtagsPath = groupProgram.readEntry("CTags");
-	m_cp.sDotPath = groupProgram.readEntry("Dot");
+	m_cp.sCscopePath = groupProgram.readEntry("CScope", "/usr/bin/cscope");
+	m_cp.sCtagsPath = groupProgram.readEntry("CTags", "/usr/bin/ctags");
+	m_cp.sDotPath = groupProgram.readEntry("Dot", "/usr/bin/dot");
 
 	// Read size and position parameters
     KConfigGroup groupGeometry = pConf->group("Geometry");
