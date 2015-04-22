@@ -31,6 +31,7 @@ Mainwin::Mainwin()
 
     p_test = new FileView(this);
     setCentralWidget(p_test);
+    p_test->setRoot("/home/zhs/workspace/kkscope/husky");
 }
 
 void Mainwin::exit()

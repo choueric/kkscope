@@ -1,3 +1,4 @@
+#include "husky.h"
 #include <qpushbutton.h>
 #include <qfileinfo.h>
 #include <KUrl>
@@ -23,17 +24,19 @@ FileView::FileView(QWidget* pParent) :
 	m_pTabWidget->setTabIcon(0, GET_PIXMAP(TabFileList));
 	m_pTabWidget->setTabIcon(1, GET_PIXMAP(TabFileTree));
 	
-	// Create a single column for the file tree
-	// m_pFileTree->addColumn("");
+    m_pFileModel = new QFileSystemModel;
+    m_pFileModel->setRootPath(m_sRoot);
+    m_pFileModel->setReadOnly(true);
+    m_pFileTree->setModel(m_pFileModel);
+    m_pFileTree->setRootIndex(m_pFileModel->index(m_sRoot));
 	
 	// Send the fileRequested() signal whenever a file is selected in either
 	// the list or the tree
 	connect(m_pFileList, SIGNAL(fileRequested(const QString&, uint)), this,
 		SIGNAL(fileRequested(const QString&, uint)));
-	connect(m_pFileTree, SIGNAL(doubleClicked(QTreeWidgetItem*)), 
-		this, SLOT(slotTreeItemSelected()));
-	connect(m_pFileTree, SIGNAL(returnPressed(QTreeWidgetItem*)), this, 
-		SLOT(slotTreeItemSelected()));
+    // TODO: add returnEntered signal slot
+	connect(m_pFileTree, SIGNAL(doubleClicked(const QModelIndex &)), 
+		this, SLOT(slotTreeItemSelected(const QModelIndex &)));
 }
 
 /**
@@ -63,7 +66,8 @@ void FileView::setRoot(const QString& sRoot)
 	// Nothing more to do for an empty root directory
 	if (sRoot.isEmpty())
 		return;
-    m_pFileTree->setRootUrl(sRoot);
+    m_pFileModel->setRootPath(sRoot);
+    m_pFileTree->setRootIndex(m_pFileModel->index(sRoot));
 }
 
 /**
@@ -84,14 +88,14 @@ void FileView::clear()
  * @param	pItem	The selected tree item
  */
 	
-void FileView::slotTreeItemSelected()
+void FileView::slotTreeItemSelected(const QModelIndex & index)
 {
-    KUrl url = m_pFileTree->currentUrl();
-    QString path = url.toLocalFile();
-    QFileInfo info(path);
-	 
-	if (!info.isDir())
-		emit fileRequested(path, 0);
+    QFileInfo info = m_pFileModel->fileInfo(index);
+
+    qDebug() << info.absoluteFilePath() << "is selected in FileTree";
+	if (!info.isDir()) {
+		emit fileRequested(info.absoluteFilePath(), 0);
+    }
 }
 
 #include "fileview.moc"

@@ -1,6 +1,7 @@
 #ifndef FILEVIEW_H
 #define FILEVIEW_H
 
+#include <QFileSystemModel>
 #include <QTreeWidgetItem>
 #include <kfiletreeview.h>
 #include "ui_fileviewlayout.h"
@@ -42,9 +43,10 @@ signals:
 private:
 	/** The current root of the file tree. */
 	QString m_sRoot;
+    QFileSystemModel *m_pFileModel;
 	
 private slots:
-	void slotTreeItemSelected();
+    void slotTreeItemSelected(const QModelIndex &);
 };
 
 #endif
