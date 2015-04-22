@@ -11,6 +11,7 @@
 #include <KTextEditor/EditorChooser>
 
 #include "../../querywidget.h"
+#include "../../queryview.h"
 
 
 class Mainwin: public QMainWindow
@@ -30,7 +31,7 @@ class Mainwin: public QMainWindow
         QAction *saveAction;
         QAction *exitAction;
 
-        QueryWidget *p_test;
+        QueryView  *p_test;
 };
 
 #endif

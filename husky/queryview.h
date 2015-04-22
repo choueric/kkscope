@@ -181,7 +181,9 @@ protected:
 	/** A pointer to the last item (used for appending results). */
 	QTreeWidgetItem* m_pLastItem;
 	
-	void contentsMouseDoubleClickEvent(QMouseEvent*);
+	void mouseDoubleClickEvent(QMouseEvent*);
+    void MousePressEvent(QMouseEvent *pEvent);
+    void keyPressEvent(QKeyEvent *pEvent);
 	
 protected slots:
 	virtual void slotRecordSelected(QTreeWidgetItem*);

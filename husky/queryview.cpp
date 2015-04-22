@@ -1,3 +1,4 @@
+#include "husky.h"
 #include <qapplication.h>
 #include <qclipboard.h>
 #include <klocale.h>
@@ -35,16 +36,9 @@ QueryView::QueryView(QWidget* pParent) :
 	
 	// A record is selected if it is either double-clicked, or the ENTER
 	// key is pressed while the record is highlighted
-	connect(this, SIGNAL(doubleClicked(QTreeWidgetItem*)), this, 
+	connect(this, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, 
 		SLOT(slotRecordSelected(QTreeWidgetItem*)));
-	connect(this, SIGNAL(returnPressed(QTreeWidgetItem*)), this, 
-		SLOT(slotRecordSelected(QTreeWidgetItem*)));
-		
-	// Show the popup-menu when requested
-	connect(this, 
-		SIGNAL(contextMenuRequested(QTreeWidgetItem*, const QPoint&, int)),
-		m_pQueryMenu, SLOT(slotShow(QTreeWidgetItem*, const QPoint&, int)));
-		
+
 	// Handle popup-menu commands
 	connect(m_pQueryMenu, SIGNAL(viewSource(QTreeWidgetItem*)), this,
 		SLOT(slotRecordSelected(QTreeWidgetItem*)));
@@ -233,7 +227,7 @@ QueryView::Iterator QueryView::getIterator()
  * call tree.
  * @param	pEvent	Event description object
  */
-void QueryView::contentsMouseDoubleClickEvent(QMouseEvent* pEvent)
+void QueryView::mouseDoubleClickEvent(QMouseEvent* pEvent)
 {
 	QTreeWidgetItem* pItem;
 	
@@ -248,6 +242,34 @@ void QueryView::contentsMouseDoubleClickEvent(QMouseEvent* pEvent)
 		
 	// Emit the doubleClicked() signal
 	emit itemDoubleClicked(pItem, 0);
+}
+
+// to handle Return Press Event 
+void QueryView::keyPressEvent(QKeyEvent *pEvent)
+{
+    if (pEvent->key() != Qt::Key_Return 
+            && pEvent->key() != Qt::Key_Enter) {
+        QTreeWidget::keyPressEvent(pEvent);
+        return;
+    }
+    QTreeWidgetItem *pItem = currentItem();
+    if (pItem == NULL)
+        return;
+    slotRecordSelected(pItem);
+}
+
+// when mouse right-click, show the menu
+void QueryView::MousePressEvent(QMouseEvent *pEvent)
+{
+    if (pEvent == NULL || pEvent->button() != Qt::RightButton)
+        return;
+
+    QPoint point = pEvent->pos();
+    QTreeWidgetItem *pItem = itemAt(point);
+    if (pItem == NULL)
+        return;
+    int column = currentColumn();
+    m_pQueryMenu->slotShow(pItem, point, column);
 }
 
 /**
