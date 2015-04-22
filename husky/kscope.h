@@ -38,6 +38,8 @@ public:
 
 public slots:
 	void slotClose();
+    void slotChangeShowStateFileViewDock();
+    void slotChangeSHowStateQueryDock();
 
 protected:
 	virtual bool queryClose();
@@ -159,7 +161,7 @@ private slots:
 	void slotCloseAllWindows();
 	void slotExtEdit();
 	void slotCompleteSymbol();
-	// void slotShowWelcome();
+	void slotShowWelcome();
 	void slotGotoTag();
 	void slotProjectMake();
 	void slotProjectRemake();

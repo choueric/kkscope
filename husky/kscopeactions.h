@@ -33,8 +33,6 @@ public:
 	
 public slots:
 	void slotQueryDockToggled(bool);
-	void slotQueryDockClosed();
-	void slotFileViewDockClosed();
 	void slotEnableProjectActions(bool);
 	void slotEnableFileActions(bool);
 	

@@ -18,8 +18,13 @@ Mainwin::Mainwin()
 
     setWindowTitle(tr("Mainwin"));
 
-    pFileList = new FileList(this, "test file list");
+    pFileList = new FileList(this);
     setCentralWidget(pFileList);
+
+    pFileList->addItem("first");
+    pFileList->addItem("second");
+    pFileList->addItem("third");
+    pFileList->addItem("fourth");
 }
 
 void Mainwin::exit()

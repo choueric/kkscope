@@ -80,7 +80,7 @@ protected:
 	
 protected slots:
 	void slotFindItem(const QString&);
-	void slotItemSelected(QTreeWidgetItem*);
+    void slotItemSelected(QTreeWidgetItem *item, int column);
 	void slotItemSelected();
 	void slotKeyPressed(QKeyEvent*);
 	

@@ -220,22 +220,12 @@ void KScope::initMainWindow()
 	m_pQueryDock->setWidget(m_pQueryWidget);
     addDockWidget(Qt::BottomDockWidgetArea, m_pQueryDock);
 
-	// Update the relevant shell action when the dock is hidden through its
-	// close button
-	connect(m_pQueryDock, SIGNAL(headerCloseButtonClicked()), m_pActions,
-		SLOT(slotQueryDockClosed()));
-		
 	// Create the file view dock
     m_pFileViewDock->setObjectName("fileviewdock");
     m_pFileViewDock->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea); 
     m_pFileViewDock->setFeatures(QDockWidget::NoDockWidgetFeatures | QDockWidget::DockWidgetMovable); 
 	m_pFileViewDock->setWidget(m_pFileView);
     addDockWidget(Qt::RightDockWidgetArea, m_pFileViewDock);
-	
-	// Update the relevant shell action when the dock is hidden through its
-	// close button
-	connect(m_pFileViewDock, SIGNAL(headerCloseButtonClicked()), m_pActions,
-		SLOT(slotFileViewDockClosed()));
 	
 	// Associate the "Window" menu with the editor tabs widdget
 	pPopup = (QMenu*)guiFactory()->container("window", this);
@@ -261,6 +251,16 @@ void KScope::slotClose()
 {
 	// Destroy the main window
 	close(); // TODO
+}
+
+void KScope::slotChangeShowStateFileViewDock()
+{
+    m_pFileViewDock->setVisible(!m_pFileViewDock->isVisible());
+}
+
+void KScope::slotChangeSHowStateQueryDock()
+{
+    m_pQueryDock->setVisible(!m_pQueryDock->isVisible());
 }
 
 /**
@@ -1111,17 +1111,18 @@ void KScope::slotCompleteSymbol()
 		pPage->slotCompleteSymbol();
 }
 
-#if 0
 /**
  * Handles the "Help->Show Welcome Message..." menu command.
  * Displays the "Welcome" dialogue.
  */
 void KScope::slotShowWelcome()
 {
+#if 0
 	WelcomeDlg dlg;
 	dlg.exec();
-}
 #endif
+    qDebug() << "TODO" << __FUNCTION__;
+}
 
 /**
  * Handles the "Edit->Go To Tag" menu command.

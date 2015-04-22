@@ -57,7 +57,7 @@ SymbolDlg::SymbolDlg(QWidget* pParent) :
 	// Double-clicking an item in the hint list accepts that item as the
 	// result of the query (i.e., the item is selcted and the dialogue is
 	// closed)
-	connect(m_pHintList, SIGNAL(doubleClicked(QTreeWidgetItem*)), this,
+	connect(m_pHintList, SIGNAL(doubleClicked(QTreeWidgetItem*, int)), this,
 		SLOT(accept()));
 		
 	// Refresh the hint list when the hint options change

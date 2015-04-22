@@ -1,3 +1,4 @@
+#include "husky.h"
 #include <QKeyEvent>
 #include <QApplication>
 #include <QHeaderView>
@@ -47,10 +48,12 @@ SearchList::SearchList(int nSearchCol, QWidget* pParent) :
 	
 	connect(m_pEdit, SIGNAL(textChanged(const QString&)), this,
 		SLOT(slotFindItem(const QString&)));
-	connect(m_pList, SIGNAL(doubleClicked(QTreeWidgetItem*)), this,
-		SLOT(slotItemSelected(QTreeWidgetItem*)));
+	connect(m_pList, SIGNAL(itemDoubleClicked(QTreeWidgetItem *, int)), this,
+		SLOT(slotItemSelected(QTreeWidgetItem *, int)));
+#if 0 // TODO: add returnPressed slot
 	connect(m_pList, SIGNAL(returnPressed(QTreeWidgetItem*)), this,
 		SLOT(slotItemSelected(QTreeWidgetItem*)));
+#endif
 	connect(m_pEdit, SIGNAL(returnPressed()), this,
 		SLOT(slotItemSelected()));
 	connect(m_pEdit, SIGNAL(keyPressed(QKeyEvent*)), this,
@@ -102,10 +105,11 @@ void SearchList::slotFindItem(const QString& sText)
  * This slot is connected to the doubleClicked() and returnPressed()
  * signals of the list widget.
  */
-void SearchList::slotItemSelected(QTreeWidgetItem* pItem)
+void SearchList::slotItemSelected(QTreeWidgetItem *item, int column)
 {
-	processItemSelected(pItem);
-	m_pEdit->setText(pItem->text(1));
+    qDebug() << "SearchList slot Item Selectd" << item->text(1);
+	processItemSelected(item);
+	m_pEdit->setText(item->text(1));
 }
 
 /**

@@ -58,12 +58,12 @@ void KScopeActions::init()
 
 	// View menu
 	m_pToggleFileViewAction = addToggle(i18n("Toggle File List"),
-		"view_sidetree", "Ctrl+/", m_pWindow->m_pFileViewDock,
-		SLOT(changeHideShowState()), "view_toggle_filelist_dock", NULL); // used
+		"view_sidetree", "Ctrl+/", m_pWindow,
+		SLOT(slotChangeShowStateFileViewDock()), "view_toggle_filelist_dock", NULL); // used
 	
 	m_pToggleQueryWindowAction = addToggle(i18n("Toggle Query Window"),
-		"view_top_bottom", "Ctrl+.", m_pWindow->m_pQueryDock,
-		SLOT(changeHideShowState()), "view_toggle_query_dock", NULL); // used
+		"view_top_bottom", "Ctrl+.", m_pWindow,
+		SLOT(slotChangeSHowStateQueryDock()), "view_toggle_query_dock", NULL); // used
 	
 	m_pToggleTagListAction = addToggle(i18n("Toggle Tag List"),
 		"view_detailed", "Ctrl+'", (QWidget *)m_pWindow->m_pEditTabs,
@@ -234,28 +234,6 @@ void KScopeActions::slotQueryDockToggled(bool bVisible)
 	m_pToggleQueryWindowAction->setChecked(bVisible);
 }
 
-/**
- * Ensures the "Show/Hide Query Window" action is unchecked when the dock
- * is closed through its close button.
- * This slot is conncted to the headerCloseButtonClicked() signal of the
- * query window dock widget.
- */
-void KScopeActions::slotQueryDockClosed()
-{
-	m_pToggleQueryWindowAction->setChecked(false);
-}
-
-/**
- * Ensures the "Show/Hide File View" action is unchecked when the dock
- * is closed through its close button.
- * This slot is conncted to the headerCloseButtonClicked() signal of the
- * file view dock widget.
- */
-void KScopeActions::slotFileViewDockClosed()
-{
-	m_pToggleFileViewAction->setChecked(false);
-}
- 
 /**
  * Enables/disables all actions related to open projects.
  * This slot should be called whenever a project is opened or closed.

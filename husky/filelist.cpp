@@ -70,7 +70,7 @@ void FileList::addItem(const QString& sFilePath)
 
     // Extract the file name
     sFileName = sFilePath.mid(sFilePath.lastIndexOf('/') + 1);
-    qDebug() << sFileName;
+    qDebug() << "FileList addItem(): " << sFileName;
 
 	// Get the file's extension (empty string for file names without an
 	// extension)
