@@ -31,7 +31,7 @@ class Mainwin: public QMainWindow
         QAction *saveAction;
         QAction *exitAction;
 
-        QueryView  *p_test;
+        QueryWidget  *p_test;
 };
 
 #endif

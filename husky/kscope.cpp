@@ -77,6 +77,8 @@ KScope::KScope(QWidget* pParent) :
 {
 	QString sPath;
 
+    DirScanEvent::registerScanEventType();
+
 	// Load configuration
 	Config().load();
 	
@@ -96,6 +98,9 @@ KScope::KScope(QWidget* pParent) :
 	
 	// Show a toolbar show/hide menu
 	setStandardToolBarMenuEnabled(true);
+
+    // TODO: install to /usr/share/apps/
+    setupGUI(Default, "/home/zhs/workspace/kkscope/husky/kscopeui.rc");
 	
 	// Create the initial GUI (no active part)
 	
@@ -144,8 +149,6 @@ KScope::KScope(QWidget* pParent) :
 		
 	// Store main window settings when closed
 	setAutoSaveSettings();
-    // TODO: install to /usr/share/apps/
-    setupGUI(Default, "/home/zhs/workspace/kkscope/husky/kscopeui.rc");
     QList<KToolBar *> barList = toolBars();
     for (int i = 0; i < barList.size(); i++) {
         barList[i]->setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -226,16 +229,26 @@ void KScope::initMainWindow()
     m_pFileViewDock->setFeatures(QDockWidget::NoDockWidgetFeatures | QDockWidget::DockWidgetMovable); 
 	m_pFileViewDock->setWidget(m_pFileView);
     addDockWidget(Qt::RightDockWidgetArea, m_pFileViewDock);
+
+	KXMLGUIFactory* pFactory = guiFactory();
 	
 	// Associate the "Window" menu with the editor tabs widdget
-	pPopup = (QMenu*)guiFactory()->container("window", this);
-    if (pPopup)
+	pPopup = qobject_cast<QMenu *>(pFactory->container("file", this));
+    if (pPopup) 
         m_pEditTabs->setWindowMenu(pPopup);
+    else {
+        qDebug() << "get window menu failed";
+        exit(1);
+    }
 
 	// Associate the "Query" popup menu with the query widget
-	pPopup = (QMenu*)guiFactory()->container("query_popup", this);
+	pPopup = qobject_cast<QMenu *>(pFactory->container("query_popup", this));
     if (pPopup)
         m_pQueryWidget->setPageMenu(pPopup, m_pActions->getLockAction());
+    else {
+        qDebug() << "get query_popup menu failed";
+        exit(1);
+    }
 	
 	// Restore dock configuration
 	Config().loadWorkspace(this);
@@ -361,9 +374,11 @@ void KScope::slotProjectFiles()
 	ProjectFilesDlg dlg((Project*)pProj, this);
 	if (dlg.exec() != QDialog::Accepted)
 		return;
+
+    FileListSource *pListSource = static_cast<FileListSource *>(&dlg);
 	
 	// Update the project's file list
-	if (pProj->storeFileList(&dlg))
+	if (pProj->storeFileList(pListSource))
 		slotProjectFilesChanged();
 }
 

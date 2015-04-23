@@ -31,7 +31,7 @@ QueryPage::QueryPage(QWidget* pParent) :
 	m_pDriver = new QueryViewDriver(m_pView, this);
 
     m_pLayout->addWidget(m_pView);
-    this->setLayout(m_pLayout);
+    setLayout(m_pLayout);
 	
 	connect(m_pView, SIGNAL(lineRequested(const QString&, uint)), this,
 		SIGNAL(lineRequested(const QString&, uint)));

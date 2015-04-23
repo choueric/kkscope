@@ -12,6 +12,7 @@
 
 class DirScanner;
 
+
 /**
  * Defines a new event that can be used to pass progress information from the
  * dir scanning thread to the main application thread.
@@ -24,6 +25,8 @@ public:
 	enum { EventId = 6924 };
 	
 	DirScanEvent(int, bool);
+    static int registerScanEventType();
+    static int eventTypeId;
 
 	/** The number of files already scanned. */
 	int m_nFiles;
@@ -60,7 +63,7 @@ public:
 class DirScanner : public QThread
 {
 public: 
-	DirScanner(QObject*, QHash<QString, QTreeWidgetItem>*);
+	DirScanner(QObject*, QHash<QString, QTreeWidgetItem *>*);
 	~DirScanner();
 
 	void start(const QString&, const QString&, bool);
@@ -98,7 +101,7 @@ private:
 	
 	/** Pointer to a list of files indexed by the file path (used to identify
 		files that should not appear in the scan results.) */
-	QHash<QString, QTreeWidgetItem>* m_pDicFiles;
+	QHash<QString, QTreeWidgetItem *> *m_pDicFiles;
 	
 	/** Regular expression for scanning source files. */
 	QString m_sNameFilter;

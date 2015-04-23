@@ -114,10 +114,10 @@ private:
 	void setPageLocked(QueryPageBase*, bool);
 	void findQueryPage();
 	void findHistoryPage();
-		
+
 private slots:
 	void slotRequestLine(const QString&, uint);
-	void slotCurrentChanged(QWidget*);
+	void slotCurrentChanged(int index);
 	void slotClosePage(QWidget*);
 	void slotContextMenu(const QPoint&);
 	void slotContextMenu(QWidget*, const QPoint&);

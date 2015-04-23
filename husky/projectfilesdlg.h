@@ -47,7 +47,7 @@ private:
 
 	/** Holds all file paths in a quickly searchable format (for duplicate
 		entries lookup). */
-	QHash<QString, QTreeWidgetItem> m_dicFiles;
+	QHash<QString, QTreeWidgetItem *> m_dicFiles;
 	
 	/** A thread object to a-synchronously scan directories for source files
 		to add to the project. */

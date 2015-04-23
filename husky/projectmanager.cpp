@@ -96,10 +96,12 @@ bool ProjectManager::open(const QString& sPath)
 		delete pProj;
 		return false;
 	}
-	
+
 	// Add to the list of recently opened projects
 	Config().addRecentProject(sPath);
 	
+    // TODO: need to delete old project ?
+    // delete m_pCurProj
 	// Project opened successfully
 	m_pCurProj = pProj;
 	return true;

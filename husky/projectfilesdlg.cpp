@@ -93,7 +93,7 @@ void ProjectFilesDlg::addItem(const QString& sFilePath)
 	pItem = new QTreeWidgetItem(m_pFileList, m_pLastItem);
 	pItem->setText(0, sFilePath);
 	m_pLastItem = pItem;
-	m_dicFiles.insert(sFilePath, *pItem);
+	m_dicFiles.insert(sFilePath, pItem);
 }
 
 /**
@@ -123,10 +123,9 @@ bool ProjectFilesDlg::firstItem(QString& sFilePath)
  */
 bool ProjectFilesDlg::nextItem(QString& sFilePath)
 {
+	m_pItrItem = m_pFileList->itemBelow(m_pItrItem);;
 	if (m_pItrItem == NULL)
 		return false;
-
-	m_pItrItem = m_pFileList->itemBelow(m_pItrItem);;
 	sFilePath = m_pItrItem->text(0);
 	return true;
 }
@@ -143,8 +142,10 @@ void ProjectFilesDlg::customEvent(QEvent* pEvent)
 	QString sMsg;
 
 	// Process only directory scan progress events
-	if (((uint)pEvent->type()) != DirScanEvent::EventId)
+	if (((uint)pEvent->type()) != DirScanEvent::EventId) {
+        qDebug() << "custom dirscanevent id dose not match" << pEvent->type();
 		return;
+    }
 
 	pDSE = (DirScanEvent*)pEvent;
 

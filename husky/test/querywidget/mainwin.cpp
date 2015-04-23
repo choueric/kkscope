@@ -29,10 +29,8 @@ Mainwin::Mainwin()
 
     setWindowTitle(tr("Mainwin"));
 
-    p_test = new QueryView(this);
-    p_test->addRecord("first", NULL, NULL, NULL, NULL);
-    p_test->addRecord("second", NULL, NULL, NULL, NULL);
-    p_test->addRecord("third", NULL, NULL, NULL, NULL);
+    p_test = new QueryWidget(this);
+    p_test->addQueryPage();
     p_test->show();
     setCentralWidget(p_test);
 }

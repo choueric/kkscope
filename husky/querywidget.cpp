@@ -1,3 +1,4 @@
+#include "husky.h"
 #include <qtoolbutton.h>
 #include <qtooltip.h>
 #include <klocale.h>
@@ -24,8 +25,8 @@ QueryWidget::QueryWidget(QWidget* pParent) :
 	m_pQueryTabs->setHoverCloseButton(true);
 	
 	// Change the lock action state according to the current page
-	connect(m_pQueryTabs, SIGNAL(currentChanged(QWidget*)), this,
-		SLOT(slotCurrentChanged(QWidget*)));
+	connect(m_pQueryTabs, SIGNAL(currentChanged(int)), this,
+		SLOT(slotCurrentChanged(int)));
 	
 	// Close a query when its tab button is clicked
 	connect(m_pQueryTabs, SIGNAL(closeRequest(QWidget*)), this,
@@ -196,7 +197,7 @@ void QueryWidget::addQueryPage()
 	pPage = new QueryPage(this);
 
 	// Add the page, and set it as the current one
-    QIcon icon("project_new");
+    // QIcon icon("project_new");
 	m_pQueryTabs->addTab(pPage, "Query");
     m_nQueryPages++;
 	m_pQueryTabs->setCurrentWidget(pPage);
@@ -310,7 +311,7 @@ void QueryWidget::slotCloseAll()
 	// Close all pages
 	nPageCount = m_pQueryTabs->count();
 	for (i = 0; i < nPageCount; i++) {
-		pPage = (QueryPage*)m_pQueryTabs->widget(0);
+		pPage = qobject_cast<QueryPage*>(m_pQueryTabs->widget(i));
 		m_pQueryTabs->removePage(pPage);
 		delete pPage;
 	}
@@ -361,7 +362,7 @@ void QueryWidget::selectActiveHistory()
  * @param	pAction Pointer to the "Lock/Unlock" toggle action
  */
 void QueryWidget::setPageMenu(QMenu* pMenu, KToggleAction* pAction)
-{ 
+{
 	m_pPageMenu = pMenu;
 	m_pLockAction = pAction;
 }
@@ -393,11 +394,16 @@ void QueryWidget::slotRequestLine(const QString& sFileName, uint nLine)
  * Update the lock button when the current query page changes.
  * @param	pWidget	The new current page
  */
-void QueryWidget::slotCurrentChanged(QWidget* pWidget)
+void QueryWidget::slotCurrentChanged(int index)
 {
-	QueryPage* pPage;
+    if (index == -1)
+        return;
+	QueryPage* pPage = qobject_cast<QueryPage *>(m_pQueryTabs->widget(index));
+    if (pPage == NULL) {
+        qDebug() << "invalid pPage pointer";
+        return;
+    }
 	
-	pPage = (QueryPage*)pWidget;
 	m_pLockAction->setChecked(pPage->isLocked());
 }
 

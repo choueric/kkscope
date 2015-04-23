@@ -1,13 +1,16 @@
+#include "husky.h"
 #include <qapplication.h>
 #include "dirscanner.h"
+
+int DirScanEvent::eventTypeId = QEvent::None;
 
 /**
  * Class constructor.
  * @param	nFiles		The number of files scanned since the previous event
  * @param	bFinished	true if all files were scanned, false otherwise
  */
-DirScanEvent::DirScanEvent(int nFiles, bool bFinished)
-	: QEvent(QEvent::Type(registerEventType(EventId))),
+DirScanEvent::DirScanEvent(int nFiles, bool bFinished) :
+    QEvent(QEvent::Type(DirScanEvent::eventTypeId)),
 	m_nFiles(nFiles),
 	m_bFinished(bFinished)
 {
@@ -21,10 +24,16 @@ DirScanEvent::DirScanEvent(int nFiles, bool bFinished)
  							avoid duplication)
  */
 DirScanner::DirScanner(QObject* pEventReceiver,
-	QHash<QString, QTreeWidgetItem>* pDicFiles) : QThread(),
+	QHash<QString, QTreeWidgetItem *> *pDicFiles) : QThread(),
 	m_pEventReceiver(pEventReceiver),
 	m_pDicFiles(pDicFiles)
 {
+}
+
+int DirScanEvent::registerScanEventType()
+{
+    DirScanEvent::eventTypeId = QEvent::registerEventType(DirScanEvent::EventId);
+    return DirScanEvent::eventTypeId;
 }
 
 /**
@@ -66,6 +75,7 @@ void DirScanner::run()
 	int nFiles;
 	
 	nFiles = scanDir(m_dir);
+
 	QApplication::postEvent(m_pEventReceiver,
 		new DirScanEvent(nFiles, true));
 	
@@ -82,8 +92,7 @@ int DirScanner::scanDir(QDir& dir)
 {
 	QString sCanon;
 	QStringList slDirFiles, slDirs;
-	QStringList::const_iterator itr;
-	QString sFile;
+	QString sFile, sDir;
 	int nFiles = 0;
 
 	if (m_bCancel)
@@ -94,16 +103,14 @@ int DirScanner::scanDir(QDir& dir)
 	sCanon = dir.canonicalPath();
 	if (m_setScanned.exists(sCanon))
 		return 0;
-	
 	m_setScanned.insert(sCanon);
 	
 	// Add all files in this directory
     QStringList nameFilter;
-    nameFilter << m_sNameFilter;
+    nameFilter << m_sNameFilter.split(" ");
 	slDirFiles = dir.entryList(nameFilter, QDir::Files);
-	for (itr = slDirFiles.begin(); itr != slDirFiles.end(); ++itr) {
-		sFile = dir.absolutePath() + "/" + *itr;
-
+    for (int i = 0; i < slDirFiles.size(); i++) {
+        sFile = dir.absolutePath() + "/" + slDirFiles[i];
 		// Make sure an entry for this file does not exist
 		if (m_pDicFiles->find(sFile) == m_pDicFiles->end()) {
 			m_slFiles.append(sFile);
@@ -115,23 +122,25 @@ int DirScanner::scanDir(QDir& dir)
 		new DirScanEvent(nFiles, false));
 	
 	// Recurse into sub-directories, if requested
-	if (!m_bRecursive)
+	if (!m_bRecursive) {
 		return nFiles;
+    }
 
 	slDirs = dir.entryList(QDir::Dirs);
 
 	// Iterate the list of sub-directories
-	for (itr = slDirs.begin(); itr != slDirs.end(); ++itr) {
+    for (int i = 0; i < slDirs.size(); i++) {
 		if (m_bCancel)
 			return -1;
 			
+        sDir = slDirs[i];
 		// Skip the "." and ".." directories
-		if (*itr == "." || *itr == "..")
+		if (sDir == "." || sDir == "..")
 			continue;
 
 		// Add the files in each sub-directory
 		QDir dirSub(dir);
-		if (dirSub.cd(*itr))
+		if (dirSub.cd(sDir))
 			nFiles += scanDir(dirSub);
 	}
 
