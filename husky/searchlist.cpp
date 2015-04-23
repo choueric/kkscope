@@ -107,9 +107,7 @@ void SearchList::slotFindItem(const QString& sText)
  */
 void SearchList::slotItemSelected(QTreeWidgetItem *item, int column)
 {
-    qDebug() << "SearchList slot Item Selectd" << item->text(1);
 	processItemSelected(item);
-	m_pEdit->setText(item->text(1));
 }
 
 /**

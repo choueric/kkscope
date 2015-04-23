@@ -7,11 +7,10 @@
 #include "kscopeconfig.h"
 #include "kscopepixmaps.h"
 
-#define HEADER_COUNT 4
-#define HEADER_ICON 0
-#define HEADER_NAME 1
-#define HEADER_LINE 2
-#define HEADER_TYPE 3
+#define HEADER_COUNT 3
+#define HEADER_NAME 0
+#define HEADER_LINE 1
+#define HEADER_TYPE 2
 
 /**
  * Defines a special list item for the tag list.
@@ -34,7 +33,6 @@ public:
 	 */
 	CtagsListItem(QTreeWidget* pParent, QString sName, QString sLine, QString sType) :
         QTreeWidgetItem(pParent), m_nPendLine (sLine.toUInt()) {
-        setText(HEADER_ICON, "Icon"); // Type Icon
         setText(HEADER_NAME, sName);  // Symbol Name
         setText(HEADER_LINE, sLine);  // Line Number
         setText(HEADER_TYPE, sType);  // Symbol Type
@@ -132,8 +130,10 @@ CtagsList::CtagsList(QWidget* pParent) :
 	// Add the list columns
     m_pList->setColumnCount(HEADER_COUNT);
     QStringList strList;
-    strList << i18n("Icon") << i18n("Name") << i18n("Line") << i18n("Type");
+    strList << i18n("Name") << i18n("Line") << i18n("Type");
     m_pList->setHeaderLabels(strList);
+    m_pList->setRootIsDecorated(false);
+    m_pList->header()->setResizeMode(QHeaderView::ResizeToContents);
 
     // TODO: to complicated to do so, so don't set it right now.
 	//m_pList->setColumnAlignment(1, Qt::AlignRight);
@@ -234,7 +234,7 @@ void CtagsList::slotDataReady(FrontendToken* pToken)
 	pItem = new CtagsListItem(m_pList, sName, sLine, sType);
 
     QIcon icon(Pixmaps().getPixmap(pix));
-	pItem->setIcon(HEADER_ICON, icon);
+	pItem->setIcon(HEADER_NAME, icon);
 	m_nItems++;
 	
 	// Resize the line array, if required
@@ -267,6 +267,7 @@ void CtagsList::processItemSelected(QTreeWidgetItem* pItem)
 	QString sLine;
 
 	sLine = pItem->text(HEADER_LINE);
+	m_pEdit->setText(pItem->text(HEADER_NAME));
 	emit lineRequested(sLine.toUInt());
 }
 

@@ -2,6 +2,7 @@
 #include <qfileinfo.h>
 #include <klocale.h>
 #include "filelist.h"
+#include <QHeaderView>
 
 #include <QtDebug>
 
@@ -30,6 +31,7 @@ FileList::FileList(QWidget* pParent) :
     strList << i18n("Type") << i18n("File") << i18n("Path");
     m_pList->setHeaderLabels(strList);
     m_pList->setRootIsDecorated(false);
+    m_pList->header()->setResizeMode(QHeaderView::ResizeToContents);
 	
 #ifndef TESTCASE
 	// Sort only when asked to by the user
@@ -130,6 +132,7 @@ void FileList::processItemSelected(QTreeWidgetItem* pItem)
 	sPath = pItem->text(FILE_LIST_PATH_COL);
 	if (sPath.startsWith("$"))
 		sPath.replace("$", m_sRoot);
+	m_pEdit->setText("");
 		
 	// Submit a request to open the file for editing
 	emit fileRequested(sPath, 0);
