@@ -4,6 +4,7 @@
 #include <kdeversion.h>
 #include <KTextEditor/Command>
 #include <KTextEditor/CommandInterface>
+#include <KTextEditor/ModificationInterface>
 #include <KTextEditor/Editor>
 #include <QStringList>
 #include <QString>
@@ -53,7 +54,8 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu, QTabWidget* pP
 	connect(m_pDoc, SIGNAL(completed()), this, SLOT(slotFileOpened()));
 	
 	// Be notified when the text in the editor changes
-	connect(m_pDoc, SIGNAL(textChanged()), this, SLOT(slotSetModified()));
+	connect(m_pDoc, SIGNAL(textChanged(KTextEditor::Document *)),
+            this, SLOT(slotSetModified(KTextEditor::Document *)));
 	connect(m_pDoc, SIGNAL(undoChanged()), this, SLOT(slotUndoChanged()));
 	
 	// Store the sizes of the child windows when the tag list is resized
@@ -76,8 +78,8 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu, QTabWidget* pP
     m_pView->setContextMenu(pMenu);
 
 	// Emit a signal whenever the cursor's position changes
-    connect(m_pView, SIGNAL(cursorPositionChanged(KTextEditor::View *view, const KTextEditor::Cursor &newPosition)), 
-                this, SLOT(slotCursorPosChange(KTextEditor::View *view, const KTextEditor::Cursor &newPosition)));
+    connect(m_pView, SIGNAL(cursorPositionChanged(KTextEditor::View *, const KTextEditor::Cursor &)), 
+                this, SLOT(slotCursorPosChange(KTextEditor::View *, const KTextEditor::Cursor &)));
 }
 
 /**
@@ -656,24 +658,24 @@ void EditorPage::slotFileOpened()
  * In addition to marking the file, this method also emits the modified()
  * signal.
  */
-void EditorPage::slotSetModified()
+void EditorPage::slotSetModified(KTextEditor::Document *pDoc)
 {
+    if (m_pDoc != pDoc) {
+        qDebug() << "edieor page documant dose not match"; 
+        return;
+    }
+
 	// Only perform tasks if the file is not already marked
-	if (!m_bModified && m_pDoc->isModified()) {
+	if (!m_bModified && pDoc->isModified()) {
 		m_bModified = true;
 		emit modified(this, m_bModified);
 	
-#if KDE_IS_VERSION(3,3,0)
-#if 0 // TODO
-		Kate::DocumentExt* pKateDoc;
-	
-		// If the editor is a Kate part, check whether it was modified on
+		// check whether it was modified on
 		// disk as well, and issue a warning if so
-		pKateDoc = dynamic_cast<Kate::DocumentExt*>(m_pDoc);
-		if (pKateDoc)
-			pKateDoc->slotModifiedOnDisk(dynamic_cast<Kate::View*>(m_pView));
-#endif
-#endif
+        KTextEditor::ModificationInterface *iface =
+            qobject_cast<KTextEditor::ModificationInterface *>(pDoc);
+		if (iface)
+			iface->slotModifiedOnDisk(m_pView);
 	}
 	
 	// Start/restart the auto-completion timer

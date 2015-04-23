@@ -183,7 +183,7 @@ private:
 private slots:
 	void slotChildResized();
 	void slotFileOpened();
-	void slotSetModified();
+    void slotSetModified(KTextEditor::Document *pDoc);
 	void slotUndoChanged();
 	void slotCursorPosChange(KTextEditor::View *view, const KTextEditor::Cursor &newPosition);
 };
