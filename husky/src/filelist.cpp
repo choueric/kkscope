@@ -11,10 +11,10 @@
 #include "kscopeconfig.h"
 #endif
 
+#define FILE_LIST_COL_NUM 3
 #define FILE_LIST_TYPE_COL 0
 #define FILE_LIST_NAME_COL 1
 #define FILE_LIST_PATH_COL 2
-#define FILE_LIST_COL_NUM 3
 
 /**
  * Class constructor.
@@ -85,6 +85,7 @@ void FileList::addItem(const QString& sFilePath)
 	sPath = sFilePath;
 	if (m_sRoot != "/")
 		sPath.replace(m_sRoot, "$");
+    sPath.truncate(sPath.lastIndexOf('/') + 1);
 	
 	// Create the list item
     QStringList strList;
@@ -127,11 +128,15 @@ void FileList::clear()
 void FileList::processItemSelected(QTreeWidgetItem* pItem)
 {
 	QString sPath;
+    QString sFile;
+
+    sFile = pItem->text(FILE_LIST_NAME_COL);
 
 	// Get the file path (replace the root symbol, if required)
 	sPath = pItem->text(FILE_LIST_PATH_COL);
 	if (sPath.startsWith("$"))
 		sPath.replace("$", m_sRoot);
+    sPath += sFile;
 	m_pEdit->setText("");
 		
 	// Submit a request to open the file for editing
@@ -179,6 +184,7 @@ void FileList::setRoot(const QString& sRoot)
 		if (sRoot != "/")
 			sPath.replace(sRoot, "$");
 		
+        sPath.truncate(sPath.lastIndexOf('/') + 1);
 		pItem->setText(FILE_LIST_PATH_COL, sPath);
         ++it;
 	}

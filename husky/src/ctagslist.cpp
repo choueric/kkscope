@@ -134,6 +134,7 @@ CtagsList::CtagsList(QWidget* pParent) :
     m_pList->setHeaderLabels(strList);
     m_pList->setRootIsDecorated(false);
     m_pList->header()->setResizeMode(QHeaderView::ResizeToContents);
+    m_pList->setSortingEnabled(true);
 
     // TODO: to complicated to do so, so don't set it right now.
 	//m_pList->setColumnAlignment(1, Qt::AlignRight);
