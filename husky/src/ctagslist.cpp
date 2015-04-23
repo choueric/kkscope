@@ -1,3 +1,4 @@
+#include "husky.h"
 #include <QTreeWidget>
 #include <iostream>
 
@@ -97,9 +98,18 @@ CtagsList::CtagsList(QWidget* pParent) :
 	m_nCurLine(0),
 	m_nPendLine(0)
 {
-	connect(m_pList->header(), SIGNAL(clicked(int)), this,
+	connect(m_pList->header(), SIGNAL(sectionClicked(int)), this,
 		SLOT(slotSortChanged(int)));
-	
+
+	// Add the list columns
+    m_pList->setColumnCount(HEADER_COUNT);
+    QStringList strList;
+    strList << i18n("Name") << i18n("Line") << i18n("Type");
+    m_pList->setHeaderLabels(strList);
+    m_pList->setRootIsDecorated(false);
+    m_pList->header()->setResizeMode(QHeaderView::ResizeToContents);
+    m_pList->setSortingEnabled(true);
+
 	// Determine the default sorting order
 	switch (Config().getCtagSortOrder()) {
 	case KScopeConfig::NameAsc:
@@ -126,18 +136,6 @@ CtagsList::CtagsList(QWidget* pParent) :
 		m_pList->sortItems(HEADER_TYPE, Qt::DescendingOrder);
 		break;
 	}
-				
-	// Add the list columns
-    m_pList->setColumnCount(HEADER_COUNT);
-    QStringList strList;
-    strList << i18n("Name") << i18n("Line") << i18n("Type");
-    m_pList->setHeaderLabels(strList);
-    m_pList->setRootIsDecorated(false);
-    m_pList->header()->setResizeMode(QHeaderView::ResizeToContents);
-    m_pList->setSortingEnabled(true);
-
-    // TODO: to complicated to do so, so don't set it right now.
-	//m_pList->setColumnAlignment(1, Qt::AlignRight);
 
 	// Set colours and font
 	applyPrefs();
@@ -418,9 +416,9 @@ void CtagsList::slotCtagsFinished(uint nRecords)
 void CtagsList::slotSortChanged(int nSection)
 {
 	// Determine whether the new order is ascending or descending
-    QHeaderView *pHeader = (QHeaderView *)m_pList->headerItem();
+    QHeaderView *pHeader = (QHeaderView *)m_pList->header();
     Qt::SortOrder order = pHeader->sortIndicatorOrder(); 
-	
+
 	// Translate the section number into the order constant
 	switch (nSection) {
 	case HEADER_NAME:
