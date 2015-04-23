@@ -100,7 +100,7 @@ KScope::KScope(QWidget* pParent) :
 	setStandardToolBarMenuEnabled(true);
 
     // TODO: install to /usr/share/apps/
-    setupGUI(Default, "/home/zhs/workspace/kkscope/husky/kscopeui.rc");
+    setupGUI(Default, "/home/zhs/workspace/kkscope/husky/src/ui/kscopeui.rc");
 	
 	// Create the initial GUI (no active part)
 	

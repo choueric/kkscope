@@ -1,5 +1,0 @@
-== build ==
-$ cd ./husky
-$ mkdir build && cd build
-$ cmake ..
-$ make
