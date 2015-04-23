@@ -27,7 +27,7 @@ public:
 
 	/** Identifiers for embedded pixmaps. */
 	enum PixName { SymFunc, SymVar, SymStruct, SymMacro, SymMember, SymEnum,
-		SymEnumerator, SymTypedef, SymLabel, SymInclude, SymUnknown,
+		SymEnumerator, SymTypedef, SymLabel, SymInclude, SymClass, SymUnknown,
 		PIX_ARRAY_SIZE };
 		
 	/** Identifiers for loadable pixmaps. */

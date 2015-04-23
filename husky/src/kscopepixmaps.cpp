@@ -184,6 +184,24 @@ static const char* XPM_INCLUDE[] = {
 	"............"
 };
 
+static const char* XPM_CLASS[] = {
+	"12 12 2 1",
+	". c #000000",
+	"# c #a0a0a0",
+	"............",
+	".##########.",
+	".##.......#.",
+	".#.########.",
+	".#.########.",
+	".#.########.",
+	".#.########.",
+	".#.########.",
+	".#.########.",
+	".##.......#.",
+	".##########.",
+	"............"
+};
+
 static const char* XPM_UNKNOWN[] = {
 	"12 12 2 1",
 	". c #000000",
@@ -251,6 +269,7 @@ void KScopePixmaps::init()
 	m_pPixArray[SymTypedef] = new QPixmap(XPM_TYPEDEF);
 	m_pPixArray[SymLabel] = new QPixmap(XPM_LABEL);
 	m_pPixArray[SymInclude] = new QPixmap(XPM_INCLUDE);
+	m_pPixArray[SymClass] = new QPixmap(XPM_CLASS);
 	m_pPixArray[SymUnknown] = new QPixmap(XPM_UNKNOWN);
 }
 
@@ -271,7 +290,6 @@ const QPixmap& KScopePixmaps::getPixmap(PixName name) const
  */
 QPixmap KScopePixmaps::getPixmap(LoadPixName name)
 {
-    qDebug("%d", name);
 	switch (name) {
 	case TabUnlocked:
 		return m_loader.loadIcon(ICON_PREFIX"query_unlocked", KIconLoader::Small, 0,

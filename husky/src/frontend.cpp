@@ -5,14 +5,6 @@
 #include <klocale.h>
 #include "frontend.h"
 
-static void printStringList(const QStringList &list)
-{
-    std::cout << "[";
-    for (int i = 0; i < list.size(); i++)
-        std::cout << list.at(i).toLocal8Bit().constData() << " ";
-    std::cout << "]" << std::endl;
-}
-
 /**
  * Class constructor.
  * @param	nRecordSize	The number of fields in each record
@@ -30,14 +22,10 @@ Frontend::Frontend(uint nRecordSize, bool bAutoDelete) : KProcess(),
 {
     setOutputChannelMode(SeparateChannels);
 	// Parse data on the standard output
-	//connect(this, SIGNAL(receivedStdout(KProcess*, char*, int)), this,
-		//SLOT(slotReadStdout(KProcess*, char*, int)));
     connect(this, SIGNAL(readyReadStandardOutput()), this,
                 SLOT(slotReadStdout2()));
 
 	// Parse data on the standard error
-	//connect(this, SIGNAL(receivedStderr(KProcess*, char*, int)), this,
-		//SLOT(slotReadStderr(KProcess*, char*, int)));
     connect(this, SIGNAL(readyReadStandardError()), this,
             SLOT(slotReadStderr2()));
 		
@@ -83,8 +71,6 @@ bool Frontend::run(const QString& sName, const QStringList& slArgs,
 	clearProgram();
 	*this << slArgs;
 
-    printStringList(slArgs);
-	
 	// Set the working directory, if requested
 	if (!sWorkDir.isEmpty())
 		setWorkingDirectory(sWorkDir);
@@ -257,7 +243,6 @@ void Frontend::parseStderr(const QString& sText)
  */
 void Frontend::slotFinished(int exitCode, ExitStatus exitStatus)
 {
-    printf("%s()\n", __FUNCTION__);
 	// Allow specialised clean-up by inheriting classes
 	finalize();
 	
@@ -342,9 +327,7 @@ void Frontend::slotReadStdout(KProcess*, char* pBuffer, int nSize)
 
 void Frontend::slotReadStdout2()
 {
-    dp();
     QByteArray output = this->readAllStandardOutput();
-    std::cout << output.constData() << std::endl;
     slotReadStdout(this, output.data(), output.size());
 }
 
@@ -370,7 +353,7 @@ void Frontend::slotReadStderr(KProcess*, char* pBuffer, int nSize)
 
 void Frontend::slotReadStderr2()
 {
-    dp();
+    qDebug() << "TODO:" << __FUNCTION__;
 }
 
 #include "frontend.moc"

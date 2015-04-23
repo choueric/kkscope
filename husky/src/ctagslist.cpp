@@ -225,6 +225,11 @@ void CtagsList::slotDataReady(FrontendToken* pToken)
 		sType = i18n("Include");
 		pix = KScopePixmaps::SymInclude;
 		break;
+
+    case 'c':
+        sType = i18n("Class");
+        pix = KScopePixmaps::SymClass;
+        break;
 		
 	default:
 		sType = "Unknown";
@@ -398,7 +403,6 @@ void CtagsList::clear()
  */
 void CtagsList::slotCtagsFinished(uint nRecords)
 {
-    std::cout << __FUNCTION__ << std::endl;
 	if (nRecords) {
 		m_bReady = true;
 		if (m_nPendLine)
