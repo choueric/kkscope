@@ -88,6 +88,8 @@ public:
 	void setWarnModifiedOnDisk(bool);
 	bool getAutoSortFiles();
 	void setAutoSortFiles(bool);
+	bool getShowLinenum();
+	void setShowLinenum(bool);
 	const QString& getExtEditor();
 	void setExtEditor(const QString&);
 	bool useExtEditor();
@@ -155,6 +157,9 @@ private:
 		
 		/** Should files be sorted automatically when a project is loaded. */
 		bool bAutoSortFiles;
+
+        /** show line number */
+        bool bShowLinenum;
 		
 		/** A command line pattern for an external editor (in read-only
 			mode.)*/

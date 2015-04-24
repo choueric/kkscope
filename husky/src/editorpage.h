@@ -45,6 +45,7 @@ public:
 	void setTagListFocus();
 	void addBookmark(uint);
 	void getBookmarks(FileLocationList&);
+    void setShowLinenum(bool bShow);
 	
 	KTextEditor::Document* getDocument();
 	KTextEditor::View* getView();

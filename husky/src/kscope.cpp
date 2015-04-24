@@ -341,11 +341,13 @@ void KScope::slotOpenProject()
 		return;
 
 	sPath = dlg.getPath();
+
+    qDebug() << "open project:" << sPath;
 	
 	// Check if the path refers to a permanent or temporary project
 	if (QFileInfo(sPath).isDir())
 		openProject(sPath);
-	else
+	else // TODO: call this function, there is no respond in GUI.
 		openCscopeOut(sPath);
 }
 

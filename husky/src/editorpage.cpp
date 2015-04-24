@@ -1,4 +1,5 @@
 #include <QHBoxLayout>
+#include <KTextEditor/ConfigInterface>
 
 #include <qfileinfo.h>
 #include <kdeversion.h>
@@ -38,7 +39,7 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu, QTabWidget* pP
 	// Set read-only mode, if required
 	if (Config().getReadOnlyMode())
 		m_pDoc->setReadWrite(false);
-	
+
 	// Create the child widgets
 	m_pSplit = new QSplitter(Qt::Horizontal, this);
 	m_pCtagsList = new CtagsList(m_pSplit);
@@ -80,6 +81,8 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu, QTabWidget* pP
 	// Emit a signal whenever the cursor's position changes
     connect(m_pView, SIGNAL(cursorPositionChanged(KTextEditor::View *, const KTextEditor::Cursor &)), 
                 this, SLOT(slotCursorPosChange(KTextEditor::View *, const KTextEditor::Cursor &)));
+
+    setShowLinenum(Config().getShowLinenum());
 }
 
 /**
@@ -87,6 +90,15 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu, QTabWidget* pP
  */
 EditorPage::~EditorPage()
 {
+}
+
+void EditorPage::setShowLinenum(bool bShow)
+{
+    KTextEditor::ConfigInterface *iface =
+        qobject_cast<KTextEditor::ConfigInterface *>(m_pView);
+    if (iface) {
+        iface->setConfigValue("line-numbers", bShow);
+    }
 }
 
 /**

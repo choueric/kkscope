@@ -88,6 +88,7 @@ KScopeConfig::ConfParams KScopeConfig::s_cpDef = {
 	false, // Brief query captions
 	true, // Warn when file is modified on the disk
 	true, // Sort files when a project is loaded
+    true, // show line number
 	"kate --line %L %F", // External editor example
 	Fast, // System profile
 	Embedded, // Editor context menu
@@ -170,6 +171,7 @@ void KScopeConfig::load()
 	m_cp.bBriefQueryCaptions = gOpt.readEntry("BriefQueryCaptions", s_cpDef.bBriefQueryCaptions);
 	m_cp.bWarnModifiedOnDisk = gOpt.readEntry("WarnModifiedOnDisk", s_cpDef.bWarnModifiedOnDisk);
 	m_cp.bAutoSortFiles = gOpt.readEntry("AutoSortFiles", s_cpDef.bAutoSortFiles);
+	m_cp.bShowLinenum = gOpt.readEntry("ShowLinenum", s_cpDef.bShowLinenum);
 	m_cp.sExtEditor = gOpt.readEntry("ExternalEditor", s_cpDef.sExtEditor);
 	m_cp.profile = (SysProfile)gOpt.readEntry("SystemProfile", (int)s_cpDef.profile);
 	m_cp.popup = (EditorPopup)gOpt.readEntry("EditorPopup", (int)s_cpDef.popup);
@@ -243,6 +245,7 @@ void KScopeConfig::store()
 	groupOptions.writeEntry("BriefQueryCaptions", m_cp.bBriefQueryCaptions);
 	groupOptions.writeEntry("WarnModifiedOnDisk", m_cp.bWarnModifiedOnDisk);
 	groupOptions.writeEntry("AutoSortFiles", m_cp.bAutoSortFiles);
+	groupOptions.writeEntry("ShowLinenum", m_cp.bShowLinenum);
 	groupOptions.writeEntry("ExternalEditor", m_cp.sExtEditor);
 	groupOptions.writeEntry("SystemProfile", (uint)m_cp.profile);
 	groupOptions.writeEntry("EditorPopup", (uint)m_cp.popup);
@@ -583,6 +586,11 @@ bool KScopeConfig::getAutoSortFiles()
 	return m_cp.bAutoSortFiles;
 }
 
+bool KScopeConfig::getShowLinenum()
+{
+	return m_cp.bShowLinenum;
+}
+
 /**
  * @param	bSort	true to sort files when a project is loaded, false 
  *					otherwise
@@ -590,6 +598,11 @@ bool KScopeConfig::getAutoSortFiles()
 void KScopeConfig::setAutoSortFiles(bool bSort)
 {
 	m_cp.bAutoSortFiles = bSort;
+}
+
+void KScopeConfig::setShowLinenum(bool bShow)
+{
+	m_cp.bShowLinenum = bShow;
 }
 
 /**
