@@ -1,5 +1,5 @@
-kkscope
-=======
+husky
+=====
 
 A porting of kscope 1.6.2 using Qt4 and KDE4.
 
