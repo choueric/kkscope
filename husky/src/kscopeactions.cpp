@@ -6,10 +6,6 @@
 #include "kscope.h"
 #include "kscopeconfig.h"
 
-//#include "filelist.h"
-//#include "editortabs.h"
-//#include "querywidget.h"
-
 KScopeActions::KScopeActions(KScope* pWindow) : QObject(),
 		m_pWindow(pWindow),
 		m_pCollection(pWindow->actionCollection())
@@ -26,12 +22,12 @@ KScopeActions::~KScopeActions()
  * handle the actions associated with each command.
  */
 // TODO: some Icon names are no longer valid.
+// see /usr/share/icon
 void KScopeActions::init()
 {
 	// File menu
 	KStandardAction::openNew(m_pWindow, SLOT(slotNewFile()), m_pCollection);
 	KStandardAction::open(m_pWindow, SLOT(slotOpenFile()), m_pCollection);
-    // "file_close"
 	KStandardAction::close(m_pWindow, SLOT(slotCloseEditor()), m_pCollection);
 	KStandardAction::quit(m_pWindow, SLOT(slotClose()), m_pCollection);
 
@@ -45,36 +41,36 @@ void KScopeActions::init()
 	
 	// Edit menu
 	m_pExtEditAction = addAction(i18n("Edit in E&xternal Editor"),
-		NULL, "Ctrl+E", m_pWindow, SLOT(slotExtEdit()),
-		"edit_external_editor", SIGNAL(toggleFile(bool))); // used
+		"accessories-text-editor", "Ctrl+E", m_pWindow, SLOT(slotExtEdit()),
+		"edit_external_editor", SIGNAL(toggleFile(bool))); // renew
 		
 	addAction(i18n("Go To Tag"),
-		NULL, "Ctrl+Shift+T", m_pWindow, SLOT(slotGotoTag()),
-		"edit_goto_tag", SIGNAL(toggleFile(bool))); // used
+		"go-jump-definition", "Ctrl+Shift+T", m_pWindow, SLOT(slotGotoTag()),
+		"edit_goto_tag", SIGNAL(toggleFile(bool))); // renew
 	
 	addAction(i18n("Complete Symbol"),
-		NULL, "Ctrl+Space", m_pWindow, SLOT(slotCompleteSymbol()),
-		"edit_comp_symbol", SIGNAL(toggleFile(bool))); // used
+		"task-complete", "Ctrl+Space", m_pWindow, SLOT(slotCompleteSymbol()),
+		"edit_comp_symbol", SIGNAL(toggleFile(bool))); // renew
 
 	// View menu
-	m_pToggleFileViewAction = addToggle(i18n("Toggle File List"),
-		"view_sidetree", "Ctrl+/", m_pWindow,
-		SLOT(slotChangeShowStateFileViewDock()), "view_toggle_filelist_dock", NULL); // used
-	
-	m_pToggleQueryWindowAction = addToggle(i18n("Toggle Query Window"),
-		"view_top_bottom", "Ctrl+.", m_pWindow,
-		SLOT(slotChangeSHowStateQueryDock()), "view_toggle_query_dock", NULL); // used
-	
 	m_pToggleTagListAction = addToggle(i18n("Toggle Tag List"),
-		"view_detailed", "Ctrl+'", (QWidget *)m_pWindow->m_pEditTabs,
-		SLOT(slotToggleTagList()), "view_toggle_tag_list", NULL); // used
-			
+		"view-list-details", "Ctrl+'", (QWidget *)m_pWindow->m_pEditTabs,
+		SLOT(slotToggleTagList()), "view_toggle_tag_list", NULL); // renew
+
+	m_pToggleQueryWindowAction = addToggle(i18n("Toggle Query Window"),
+		"view-split-top-bottom", "Ctrl+.", m_pWindow,
+		SLOT(slotChangeSHowStateQueryDock()), "view_toggle_query_dock", NULL); // renew
+
+	m_pToggleFileViewAction = addToggle(i18n("Toggle File List"),
+		"view-sidetree", "Ctrl+/", m_pWindow,
+		SLOT(slotChangeShowStateFileViewDock()), "view_toggle_filelist_dock", NULL); // renew
+
 	// Project menu
-	addAction(i18n("&New Project..."), NULL, NULL, m_pWindow,
-		SLOT(slotCreateProject()), "project_new", NULL); // used
+	addAction(i18n("&New Project..."), "project-development-new-template", NULL, m_pWindow,
+		SLOT(slotCreateProject()), "project_new", NULL); // renew
 		
-	addAction(i18n("&Open Project..."), "project_open", NULL,
-		m_pWindow, SLOT(slotOpenProject()), "project_open", NULL);  // used
+	addAction(i18n("&Open Project..."), "project-open", NULL,
+		m_pWindow, SLOT(slotOpenProject()), "project_open", NULL);  // renew
 		
 	addAction(i18n("Open &Cscope.out..."), NULL, NULL, m_pWindow,
 		SLOT(slotProjectCscopeOut()), "project_cscope_out", NULL);  // used
@@ -83,26 +79,26 @@ void KScopeActions::init()
 		SLOT(slotProjectFiles()), "project_add_rem_files",
 		SIGNAL(toggleProject(bool)));  // used
 		
-	addAction(i18n("&Properties..."), NULL, NULL, m_pWindow,
+	addAction(i18n("&Properties..."), "preferences-system", NULL, m_pWindow,
 		SLOT(slotProjectProps()), "project_properties",
-		SIGNAL(toggleProject(bool)));  // used
+		SIGNAL(toggleProject(bool)));  // renew
 		
-	addAction(i18n("&Make Project"), "make_kdevelop", "Ctrl+M",
+	addAction(i18n("&Make Project"), "run-build", "Ctrl+M",
 		m_pWindow, SLOT(slotProjectMake()), "project_make",
-		SIGNAL(toggleProject(bool)));  // used
+		SIGNAL(toggleProject(bool)));  // renew
 		
-	addAction(i18n("&Remake Project"), "rebuild", "Ctrl+Shift+M",
+	addAction(i18n("&Remake Project"), "run-build-clean", "Ctrl+Shift+M",
 		m_pWindow, SLOT(slotProjectRemake()), "project_remake",
-		SIGNAL(toggleProject(bool)));  // used
+		SIGNAL(toggleProject(bool)));  // renew
 	
-	addAction(i18n("&Close Project"), "fileclose", NULL, m_pWindow,
+	addAction(i18n("&Close Project"), "window-close", NULL, m_pWindow,
 		SLOT(slotCloseProject()), "project_close",
-		SIGNAL(toggleProject(bool)));  // used
+		SIGNAL(toggleProject(bool)));  // renew
 
 	// Cscope menu
-	addAction(i18n("Re&build database"), "vcs_update", NULL, m_pWindow,
+	addAction(i18n("Re&build database"), "vcs-update-cvs-cervisia", NULL, m_pWindow,
 		SLOT(slotRebuildDB()), "cscope_rebuild",
-		SIGNAL(toggleProject(bool))); // used
+		SIGNAL(toggleProject(bool))); // renew
 		
 	addAction(i18n("&References..."), NULL, "Ctrl+0", m_pWindow,
 		SLOT(slotQueryReference()), "cscope_references",
@@ -145,41 +141,41 @@ void KScopeActions::init()
 		SIGNAL(toggleProject(bool))); // used
 
 	// Go menu
-	addAction(i18n("P&revious Result"), "up", "Alt+Up", 
+	addAction(i18n("P&revious Result"), "draw-arrow-up", "Alt+Up", 
 		(QWidget *)m_pWindow->m_pQueryWidget,
 		SLOT(slotPrevResult()), "go_prev_result",
-		SIGNAL(toggleProject(bool)));  // used
+		SIGNAL(toggleProject(bool)));  // renew
 	
-	addAction(i18n("N&ext Result"), "down", "Alt+Down",
+	addAction(i18n("N&ext Result"), "draw-arrow-down", "Alt+Down",
 		(QWidget *)m_pWindow->m_pQueryWidget,
 		SLOT(slotNextResult()), "go_next_result",
-		SIGNAL(toggleProject(bool)));  // used
+		SIGNAL(toggleProject(bool)));  // renew
 	
-	addAction(i18n("&Previous Position"), "back", "Alt+Left",
+	addAction(i18n("&Previous Position"), "draw-arrow-back", "Alt+Left",
 		(QWidget *)m_pWindow->m_pQueryWidget,
-		SLOT(slotHistoryPrev()), "go_prev_pos", NULL);  // used
+		SLOT(slotHistoryPrev()), "go_prev_pos", NULL);  // renew
 	
-	addAction(i18n("&Next Position"), "forward", "Alt+Right",
+	addAction(i18n("&Next Position"), "draw-arrow-forward", "Alt+Right",
 		(QWidget *)m_pWindow->m_pQueryWidget,
-		SLOT(slotHistoryNext()), "go_next_pos", NULL);  // used
+		SLOT(slotHistoryNext()), "go_next_pos", NULL);  // renew
 		
-	addAction(i18n("Position &History"), "history", "Ctrl+h",
-		m_pWindow, SLOT(slotHistoryShow()), "go_history", NULL);  // used
+	addAction(i18n("Position &History"), "view-history", "Ctrl+h",
+		m_pWindow, SLOT(slotHistoryShow()), "go_history", NULL);  // renew
 		
-	addAction(i18n("Global &Bookmarks"), "bookmark", "Ctrl+Shift+G",
-		m_pWindow, SLOT(slotShowBookmarks()), "go_bookmarks", NULL);  // used
+	addAction(i18n("Global &Bookmarks"), "bookmark-toolbar", "Ctrl+Shift+G",
+		m_pWindow, SLOT(slotShowBookmarks()), "go_bookmarks", NULL);  // renew
 
 	// Window menu
-	addAction(i18n("Close &All"), "fileclose", NULL, m_pWindow,
-		SLOT(slotCloseAllWindows()), "window_close_all", NULL); // used
+	addAction(i18n("Close &All"), "window-close", NULL, m_pWindow,
+		SLOT(slotCloseAllWindows()), "window_close_all", NULL); // renew
 		
-	addAction(i18n("Go &Left"), "back", "Alt+Shift+Left",
+	addAction(i18n("Go &Left"), "draw-arrow-back", "Alt+Shift+Left",
 		(QWidget *)m_pWindow->m_pEditTabs, SLOT(slotGoLeft()),
-		"window_go_left", NULL); // used
+		"window_go_left", NULL); // renew
 		
-	addAction(i18n("Go &Right"), "forward", "Alt+Shift+Right",
+	addAction(i18n("Go &Right"), "draw-arrow-forward", "Alt+Shift+Right",
 		(QWidget *)m_pWindow->m_pEditTabs,
-		SLOT(slotGoRight()), "window_go_right", NULL); // used
+		SLOT(slotGoRight()), "window_go_right", NULL); // renew
 		
 	// Settings menu
 	KStandardAction::preferences(m_pWindow, SLOT(slotConfigure()), m_pCollection);
@@ -190,25 +186,25 @@ void KScopeActions::init()
 		m_pWindow, SLOT(slotShowWelcome()), "help_welcome", NULL);  //used
 	
 	// Query widget popup menu
-	addAction(i18n("&New"), "filenew", NULL,
+	addAction(i18n("&New query"), "tab-new", NULL,
 		(QWidget *)m_pWindow->m_pQueryWidget,
 		SLOT(slotNewQueryPage()),
-		"query_new", SIGNAL(toggleProject(bool))); // used
+		"query_new", SIGNAL(toggleProject(bool))); // renew
 	
-	addAction(i18n("&Refresh"), "reload", NULL,
+	addAction(i18n("&Refresh query"), "view-refresh", NULL,
 		(QWidget *)m_pWindow->m_pQueryWidget,
 		SLOT(slotRefreshCurrent()),
-		"query_refresh", SIGNAL(toggleProject(bool))); // used
+		"query_refresh", SIGNAL(toggleProject(bool))); // renew
 		
-	m_pLockAction = addToggle(i18n("&Lock/Unlock"), "encrypted",
+	m_pLockAction = addToggle(i18n("&Lock/Unlock query"), "object-locked",
 		NULL, (QWidget *)m_pWindow->m_pQueryWidget,
 		SLOT(slotLockCurrent()), "query_toggle_locked",
-		SIGNAL(toggleProject(bool))); // used
+		SIGNAL(toggleProject(bool))); // renew
 		
-	addAction(i18n("&Close"), "fileclose", NULL,
+	addAction(i18n("&Close query"), "tab-close", NULL,
 		(QWidget *)m_pWindow->m_pQueryWidget,
 		SLOT(slotCloseCurrent()), "query_close",
-		SIGNAL(toggleProject(bool))); // used
+		SIGNAL(toggleProject(bool))); // renew
 	
 	m_pExtEditAction->setEnabled(Config().useExtEditor());
 }

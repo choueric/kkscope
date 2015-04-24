@@ -112,19 +112,23 @@
 	<Action name="file_close"/>
 </Menu>
 <ToolBar fullWidth="true" name="mainToolBar">
+	<Separator/>
 	<Action name="file_close"/>
 </ToolBar>
 <ToolBar fullWidth="true" name="projectToolBar"><text>Project</text>
+	<Separator/>
 	<Action name="project_open"/>
 	<Action name="cscope_rebuild"/>
 </ToolBar>
 <ToolBar fullWidth="true" name="navigateToolBar"><text>Navigation</text>
+	<Separator/>
 	<Action name="go_prev_pos"/>
 	<Action name="go_next_pos"/>
 	<Action name="go_history"/>
 	<Action name="go_bookmarks"/>
 </ToolBar>
 <ToolBar fullWidth="true" name="queryToolBar"><text>Query</text>
+	<Separator/>
 	<Action name="query_new"/>
 	<Action name="query_refresh"/>
 	<Action name="query_toggle_locked"/>
@@ -134,6 +138,7 @@
 	<Action name="go_next_result"/>
 </ToolBar>
 <ToolBar fullWidth="true" name="workspaceToolBar"><text>Workspace</text>
+	<Separator/>
     <Action name="view_toggle_tag_list"/>
 	<Action name="view_toggle_query_dock"/>
     <Action name="view_toggle_filelist_dock"/>
