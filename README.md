@@ -4,6 +4,11 @@ A porting of kscope 1.6.2 using Qt4 and KDE4.
 
 #Build#
 
+request:
+- build-essential
+- kdelibs-dev
+- bison, flex
+
 1. make a build direcotry, such as "./build", and go into it.
     ```shell
     $ mkdir build
