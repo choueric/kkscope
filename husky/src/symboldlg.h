@@ -54,7 +54,7 @@ private:
 private slots:
 	void slotHintClicked();
 	void slotHintDataReady(FrontendToken*);
-	void slotHintItemSelected(QTreeWidgetItem*);
+	void slotHintItemSelected(QTreeWidgetItem*, QTreeWidgetItem*);
 	void slotHintOptionChanged(bool);
 	void slotHintProgress(int, int);
 	void slotHintFinished(uint);

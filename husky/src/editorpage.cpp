@@ -372,7 +372,7 @@ QString EditorPage::getSuggestedText()
 	sText = getSelection();
 	if (sText == QString::null)
 		sText = getWordUnderCursor();
-	
+
 	return sText;	
 }
 

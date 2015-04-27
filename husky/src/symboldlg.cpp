@@ -1,3 +1,4 @@
+#include <QtGui>
 #include <qlabel.h>
 #include <QTreeWidget>
 #include <qpushbutton.h>
@@ -51,13 +52,13 @@ SymbolDlg::SymbolDlg(QWidget* pParent) :
 		SLOT(slotTypeChanged(int)));
 		
 	// Selecting an item in the hint list sets it as the current text	
-	connect(m_pHintList, SIGNAL(selectionChanged(QTreeWidgetItem*)), this,
-		SLOT(slotHintItemSelected(QTreeWidgetItem*)));
+	connect(m_pHintList, SIGNAL(currentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*)), this,
+		SLOT(slotHintItemSelected(QTreeWidgetItem*, QTreeWidgetItem*)));
 	
 	// Double-clicking an item in the hint list accepts that item as the
 	// result of the query (i.e., the item is selcted and the dialogue is
 	// closed)
-	connect(m_pHintList, SIGNAL(doubleClicked(QTreeWidgetItem*, int)), this,
+	connect(m_pHintList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this,
 		SLOT(accept()));
 		
 	// Refresh the hint list when the hint options change
@@ -96,7 +97,7 @@ void SymbolDlg::setType(uint nType)
  */
 void SymbolDlg::setSymbol(const QString& sSymbol)
 {
-	m_pSymbolHC->setCurrentItem(sSymbol);
+	m_pSymbolHC->setCurrentItem(sSymbol, true);
 }
 
 /**
@@ -257,7 +258,7 @@ void SymbolDlg::slotHintDataReady(FrontendToken* pToken)
  * This slot is connected to the doubleClicked() signal of the hint list-view.
  * @param	pItem	The clicked list item
  */
-void SymbolDlg::slotHintItemSelected(QTreeWidgetItem* pItem)
+void SymbolDlg::slotHintItemSelected(QTreeWidgetItem* pItem, QTreeWidgetItem*)
 {
 	m_pSymbolHC->setCurrentItem(pItem->text(0));
 }
