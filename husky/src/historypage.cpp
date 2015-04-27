@@ -14,6 +14,9 @@ HistoryPage::HistoryPage(QWidget* pParent) :
 	m_nPageID(++s_nMaxPageID)
 {
 	m_pView = new HistoryView(this);
+    m_pLayout = new QHBoxLayout(this);
+    m_pLayout->addWidget(m_pView);
+    setLayout(m_pLayout);
 	
 	connect(m_pView, SIGNAL(lineRequested(const QString&, uint)), this,
 		SIGNAL(lineRequested(const QString&, uint)));
@@ -69,10 +72,10 @@ void HistoryPage::addRecord(const QString& sFile, uint nLine,
  * @param	sLine	The line number
  * @param	sText	The contents of the line
  */
-void HistoryPage::addRecord(const QString&, const QString& sFile,
+void HistoryPage::addRecord(const QString& sFunc, const QString& sFile,
 	const QString& sLine, const QString& sText)
 {
-	m_pView->addRecord("", sFile, sLine, sText, NULL);
+	m_pView->addRecord(sFunc, sFile, sLine, sText, NULL);
 }
 
 /**

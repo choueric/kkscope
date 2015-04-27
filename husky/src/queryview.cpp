@@ -31,8 +31,8 @@ QueryView::QueryView(QWidget* pParent) :
     setRootIsDecorated(false);
     setSortingEnabled(true);
 
-	//setTextAlignment(2, Qt::AlignRight);
-	//setShowSortIndicator(true);
+    setSortingEnabled(false);
+    header()->setResizeMode(QHeaderView::ResizeToContents);
 	
 	// A record is selected if it is either double-clicked, or the ENTER
 	// key is pressed while the record is highlighted
@@ -283,8 +283,8 @@ void QueryView::slotRecordSelected(QTreeWidgetItem* pItem)
 	QString sFileName, sLine;
 
 	// Get the file name and line number
-	sFileName = pItem->text(1);
-	sLine = pItem->text(2);
+	sFileName = pItem->text(QUERY_FILE_COL);
+	sLine = pItem->text(QUERY_LINE_COL);
 
 	// Do not process the "No results" item
 	if (!sLine.isEmpty())

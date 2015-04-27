@@ -97,6 +97,7 @@ class QueryView : public QTreeWidget
 	Q_OBJECT
 	
 public:
+    enum { QUERY_FUNC_COL, QUERY_FILE_COL, QUERY_LINE_COL, QUERY_TEXT_COL };
 	QueryView(QWidget* pParent = 0);
 	~QueryView();
 	

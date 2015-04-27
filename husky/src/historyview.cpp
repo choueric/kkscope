@@ -1,3 +1,4 @@
+#include <QtGui>
 #include "historyview.h"
 
 /**
@@ -9,11 +10,9 @@ HistoryView::HistoryView(QWidget* pParent) :
 	QueryView(pParent)
 {
 	// Disable sorting
-	// setSortColumn(-1);
+    setSortingEnabled(false);
 	
-	// Don't show the "Function" column
-	// setColumnWidthMode(0, Manual);  // TODO
-	setColumnWidth(0, 0);
+    header()->setResizeMode(QHeaderView::ResizeToContents);
 }
 
 /**
@@ -30,13 +29,13 @@ HistoryView::~HistoryView()
  * @param	sLine	The line number in the above file
  * @param	sText	The line's text
  */
-void HistoryView::addRecord(const QString& /* sFunc */, const QString& sFile,
+void HistoryView::addRecord(const QString& sFunc, const QString& sFile,
 	const QString& sLine, const QString& sText, QTreeWidgetItem*)
 {
 	HistoryItem* pItem;
 
     QStringList s;
-    s << sFile << sLine << sText;
+    s << sFunc << sFile << sLine << sText;
 	
 	pItem = new HistoryItem(this, s);
     setCurrentItem(pItem);
