@@ -4,9 +4,6 @@
 #include <QPixmap>
 #include <kiconloader.h>
 
-// TODO: just for debug 
-#define ICON_PREFIX "/home/zhs/workspace/kkscope/husky/ui/pics/"
-
 #define GET_PIXMAP(_pix) \
 	Pixmaps().getPixmap(KScopePixmaps::_pix)
 

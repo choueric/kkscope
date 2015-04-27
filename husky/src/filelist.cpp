@@ -23,7 +23,7 @@
  */
 FileList::FileList(QWidget* pParent) :
 	SearchList(FILE_LIST_NAME_COL, pParent),
-	m_sRoot("/")
+	m_sRoot(qgetenv("HOME"))
 {
 	// Set the list's columns
     m_pList->setColumnCount(FILE_LIST_COL_NUM);

@@ -218,6 +218,7 @@ void KScope::initMainWindow()
 
 	// Create the query window dock
     m_pQueryDock->setObjectName("querydock");
+    m_pQueryDock->setTitleBarWidget(new QWidget()); // remove title bar
     m_pQueryDock->setAllowedAreas(Qt::BottomDockWidgetArea); 
     m_pQueryDock->setFeatures(QDockWidget::NoDockWidgetFeatures | QDockWidget::DockWidgetMovable); 
 	m_pQueryDock->setWidget(m_pQueryWidget);
@@ -225,6 +226,7 @@ void KScope::initMainWindow()
 
 	// Create the file view dock
     m_pFileViewDock->setObjectName("fileviewdock");
+    m_pFileViewDock->setTitleBarWidget(new QWidget()); // remove title bar
     m_pFileViewDock->setAllowedAreas(Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea); 
     m_pFileViewDock->setFeatures(QDockWidget::NoDockWidgetFeatures | QDockWidget::DockWidgetMovable); 
 	m_pFileViewDock->setWidget(m_pFileView);
