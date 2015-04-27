@@ -90,7 +90,7 @@ private:
  * @param	szName	The widget's name
  */
 CtagsList::CtagsList(QWidget* pParent) :
-	SearchList(0, pParent),
+	SearchList(HEADER_NAME, pParent),
 	m_arrLines(16),
 	m_nItems(0),
 	m_nCurItem(0),

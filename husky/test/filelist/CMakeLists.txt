@@ -4,13 +4,18 @@ find_package (Qt4 REQUIRED)
 include (KDE4Defaults)
 include (${QT_USE_FILE})
 include_directories (${KDE4_INCLUDES})
-include_directories (${PROJECT_SOURCE_DIR}/../../)
+include_directories (${PROJECT_SOURCE_DIR}/../../src)
+
+MESSAGE(STATUS "source dir is : " ${PROJECT_SOURCE_DIR})
+
 add_definitions(-DTESTCASE)
+
 set (husky_SRCS 
     main.cpp 
     mainwin.cpp
-    ../../filelist.cpp
-    ../../searchlist.cpp)
+    ../../src/filelist.cpp
+    ../../src/searchlist.cpp)
+
 kde4_add_executable (husky_test ${husky_SRCS})
 target_link_libraries (husky_test ${KDE4_KDEUI_LIBS} ${KDE4_KPARTS_LIBS} ${QT_LIBRARIES})
 install(TARGETS husky_test ${INSTALL_TARGETS_DEFAULT_ARGS})

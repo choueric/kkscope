@@ -44,7 +44,7 @@ SearchList::SearchList(int nSearchCol, QWidget* pParent) :
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(m_pEdit);
     layout->addWidget(m_pList);
-    this->setLayout(layout);
+    setLayout(layout);
 	
 	connect(m_pEdit, SIGNAL(textChanged(const QString&)), this,
 		SLOT(slotFindItem(const QString&)));
@@ -84,19 +84,22 @@ void SearchList::slotSetFocus()
 void SearchList::slotFindItem(const QString& sText)
 {
 	QList<QTreeWidgetItem *> items;
+#if 1
+    Qt::MatchFlags matchFlags = Qt::MatchContains;
+#else
+    Qt::MatchFlags matchFlags = Qt::MatchExactly | Qt::MatchStartsWith| Qt::MatchContains;
+#endif
 	
-	// Try to find an item that contains this text
-	// Priority to exactly matched, 
-	// then try to find line begins with the text,
-	// and if not found, then try to find the line contains the text
-	items = m_pList->findItems(sText, 
-            Qt::MatchExactly | Qt::MatchStartsWith| Qt::MatchContains);
+	items = m_pList->findItems(sText, matchFlags, m_nSearchCol);
 
 	// Select this item
 	if (!items.isEmpty()) {
 		m_pList->setCurrentItem(items.first(), QItemSelectionModel::Select);
 		m_pList->scrollToItem(items.first());
 	}
+
+    // TODO: to do the filter, we should use Model/View instead of QTreeWidget with
+    // QSortFilterProxyModel.
 }
 
 /**
@@ -105,7 +108,7 @@ void SearchList::slotFindItem(const QString& sText)
  * This slot is connected to the doubleClicked() and returnPressed()
  * signals of the list widget.
  */
-void SearchList::slotItemSelected(QTreeWidgetItem *item, int column)
+void SearchList::slotItemSelected(QTreeWidgetItem *item, int)
 {
 	processItemSelected(item);
 }

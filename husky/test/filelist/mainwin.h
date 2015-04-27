@@ -2,7 +2,7 @@
 #define _NOTEPAD_H
 
 #include <QtGui>
-#include "../../../filelist.h"
+#include "../../../src/filelist.h"
 
 class Mainwin: public QMainWindow
 {
