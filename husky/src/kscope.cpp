@@ -29,7 +29,7 @@
 #include "kscope.h"
 #include "kscopeconfig.h"
 #include "editortabs.h"
-#include "filelist.h"
+#include "filelistwidget.h"
 #include "fileview.h"
 #include "projectmanager.h"
 #include "querywidget.h"
@@ -86,7 +86,7 @@ KScope::KScope(QWidget* pParent) :
 	m_pEditTabs = new EditorTabs(this);
 	m_pQueryWidget = new QueryWidget(this);
 	m_pFileView = new FileView(this);
-	m_pFileList = m_pFileView->getFileList();
+	m_pFileListWidget = m_pFileView->getFileListWidget();
 	m_pMsgDlg = new CscopeMsgDlg(this);
 	m_pQueryDock = new QDockWidget("Query Window", this);
 	m_pFileViewDock = new QDockWidget("File List Window", this);
@@ -638,10 +638,10 @@ void KScope::slotProjectFilesChanged()
 	QStringList slArgs;
 	
 	// Refresh the file list
-	m_pFileList->setUpdatesEnabled(false);
-	m_pFileList->clear();
-	m_pProjMgr->curProject()->loadFileList(m_pFileList);
-	m_pFileList->setUpdatesEnabled(true);
+	m_pFileListWidget->setUpdatesEnabled(false);
+	m_pFileListWidget->clear();
+	m_pProjMgr->curProject()->loadFileList(m_pFileListWidget);
+	m_pFileListWidget->setUpdatesEnabled(true);
 	
 	// Rebuild the symbol database
 	if (isAutoRebuildEnabled())
@@ -661,7 +661,7 @@ void KScope::slotFilesAdded(const QStringList& slFiles)
 
 	// Add the file paths to the project's file list
 	for (itr = slFiles.begin(); itr != slFiles.end(); ++itr)
-		m_pFileList->addItem(*itr);
+		m_pFileListWidget->addItem(*itr);
 	
 	// Rebuild the database
 	if (isAutoRebuildEnabled())
@@ -758,9 +758,9 @@ void KScope::openProject(const QString& sDir)
 	}
 	
 	// Fill the file list with all files in the project. 
-	m_pFileList->setUpdatesEnabled(false);
-	pProj->loadFileList(m_pFileList);
-	m_pFileList->setUpdatesEnabled(true);
+	m_pFileListWidget->setUpdatesEnabled(false);
+	pProj->loadFileList(m_pFileListWidget);
+	m_pFileListWidget->setUpdatesEnabled(true);
 	
 	// Restore the last session
 	restoreSession();
@@ -811,9 +811,9 @@ bool KScope::openCscopeOut(const QString& sFilePath)
 	m_pActions->slotEnableProjectActions(true);
 	
 	// Fill the file list with all files in the project. 
-	m_pFileList->setUpdatesEnabled(false);
-	pProj->loadFileList(m_pFileList);
-	m_pFileList->setUpdatesEnabled(true);
+	m_pFileListWidget->setUpdatesEnabled(false);
+	pProj->loadFileList(m_pFileListWidget);
+	m_pFileListWidget->setUpdatesEnabled(true);
 	
 	return true;
 }
@@ -1668,7 +1668,7 @@ void KScope::slotBuildAborted()
 void KScope::slotApplyPref()
 {
 	m_pQueryWidget->applyPrefs();
-	m_pFileList->applyPrefs();
+	m_pFileListWidget->applyPrefs();
 	m_pEditTabs->applyPrefs();
 	m_pEditMgr->applyPrefs();
 
@@ -1738,7 +1738,7 @@ void KScope::slotFileSaved(const QString& sPath, bool bIsNew)
 			}
 			
 			// Add the path to the file list widget
-			m_pFileList->addItem(sPath);
+			m_pFileListWidget->addItem(sPath);
 			
 			// Rebuild immediately
 			slotRebuildDB();
@@ -1755,7 +1755,7 @@ void KScope::slotFileSaved(const QString& sPath, bool bIsNew)
 		
 	// Check if the file is included in the project (external files should
 	// not trigger the timer)
-	if (!m_pFileList->findFile(sPath))
+	if (!m_pFileListWidget->findFile(sPath))
 		return;
 	
 	// Rebuild immediately for a time set to 0

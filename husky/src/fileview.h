@@ -26,7 +26,7 @@ public:
 	/**
 	 * @return	The file list widget which is a child of this widget.
 	 */
-	FileList* getFileList() { return m_pFileList; }
+	FileListWidget* getFileListWidget() { return m_pFileList; }
 	
 	void setRoot(const QString&);
 	void clear();

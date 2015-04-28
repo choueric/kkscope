@@ -1,0 +1,18 @@
+#ifndef _STRINGLISTMODEL_H_
+#define _STRINGLISTMODEL_H_
+
+#include <QtGui>
+
+class StringListModel : public QStandardItemModel
+{
+    Q_OBJECT
+
+    public:
+        StringListModel(int columns, QObject *parent = 0);
+        void setHeader(const QStringList &item);
+        void addItem(const QStringList &item);
+
+    private:
+};
+
+#endif

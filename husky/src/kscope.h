@@ -11,7 +11,7 @@
 class ProjectManager;
 class EditorTabs;
 class FileView;
-class FileList;
+class FileListWidget;
 class QueryWidget;
 class EditorManager;
 class CscopeFrontend;
@@ -56,7 +56,7 @@ private:
 	FileView* m_pFileView;
 	
 	/** Pointer to the file list part of the FileView widget. */
-	FileList* m_pFileList;
+	FileListWidget* m_pFileListWidget;
 	
 	/** The query results tabbed window. */
 	QueryWidget* m_pQueryWidget;

@@ -40,7 +40,7 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="FileList" name="m_pFileList" native="true">
+        <widget class="FileListWidget" name="m_pFileList" native="true">
          <property name="toolTip">
           <string>Project File List</string>
          </property>
@@ -71,13 +71,13 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>FileList</class>
+   <class>FileListWidget</class>
    <extends>QWidget</extends>
-   <header>filelist.h</header>
+   <header>filelistwidget.h</header>
   </customwidget>
  </customwidgets>
  <includes>
-  <include location="local">filelist.h</include>
+  <include location="local">filelistwidget.h</include>
  </includes>
  <resources/>
  <connections/>

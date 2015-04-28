@@ -32,7 +32,7 @@ void KScopeActions::init()
 	KStandardAction::quit(m_pWindow, SLOT(slotClose()), m_pCollection);
 
 	addAction(i18n("Go to File List"), NULL, "Ctrl+Shift+O",
-		(QWidget *)m_pWindow->m_pFileList, SLOT(slotSetFocus()),
+		(QWidget *)m_pWindow->m_pFileListWidget, SLOT(slotSetFocus()),
 		"file_open_file_from_list", SIGNAL(toggleProject(bool)));
 	
 	addAction(i18n("Save Al&l"), "save_all", "Ctrl+L",
