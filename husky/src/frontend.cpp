@@ -241,7 +241,7 @@ void Frontend::parseStderr(const QString& sText)
 /**
  * Deletes the process object upon the process' exit.
  */
-void Frontend::slotFinished(int exitCode, ExitStatus exitStatus)
+void Frontend::slotFinished(int, ExitStatus)
 {
 	// Allow specialised clean-up by inheriting classes
 	finalize();
