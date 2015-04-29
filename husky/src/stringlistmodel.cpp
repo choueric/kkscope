@@ -5,16 +5,20 @@ StringListModel::StringListModel(int columns, QObject *parent):
 {
 }
 
-void StringListModel::addItem(const QStringList &item)
+void StringListModel::addItem(const QStringList &item, int row)
 {
     if (item.size() != columnCount())
         return;
-    insertRow(0);
+    insertRow(row);
     for (int i = 0; i < item.size(); i++)
         setData(index(0, i), item.at(i));
 }
-
         
+void StringListModel::setIcon(int row, int col, QIcon &icon)
+{
+    setData(index(row, col), icon, Qt::DecorationRole);
+}
+
 void StringListModel::setHeader(const QStringList &item)
 {
     if (item.size() != columnCount())

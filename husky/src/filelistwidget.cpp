@@ -17,21 +17,18 @@ FileListWidget::FileListWidget(QWidget* pParent) :
 	SearchListView(FILE_LIST_NAME_COL, pParent),
 	m_sRoot(qgetenv("HOME"))
 {
-	// Set the list's columns
-
     m_pModel = new StringListModel(FILE_LIST_COL_NUM, this);
     QStringList header;
     header << i18n("Type") << i18n("File") << i18n("Path");
     m_pModel->setHeader(header);
 
     m_pView->header()->setResizeMode(QHeaderView::ResizeToContents);
+	m_pView->setAllColumnsShowFocus(true);
     setSourceModel(m_pModel);
 	
 	// Sort only when asked to by the user
 	if (Config().getAutoSortFiles())
 		m_pView->sortByColumn(FILE_LIST_NAME_COL, Qt::AscendingOrder);
-	
-	m_pView->setAllColumnsShowFocus(true);
 	
 	// Set colours and font
 	applyPrefs();
@@ -143,16 +140,11 @@ void FileListWidget::processItemSelected(const QModelIndex &index)
  */
 void FileListWidget::applyPrefs()
 {
-    qDebug() << "TODO: " << __FUNCTION__;
-    // see void QueryPageBase::applyPrefs()
-#if 0
-	// Apply colour settings
-	m_pView->setPaletteBackgroundColor(Config().getColor(
-		KScopeConfig::FileListBack));
-	m_pView->setPaletteForegroundColor(Config().getColor(
-		KScopeConfig::FileListFore));
-	m_pView->setFont(Config().getFont(KScopeConfig::FileListWidget));
-#endif
+    QPalette pe = m_pView->palette();
+    pe.setColor(QPalette::Background, Config().getColor(KScopeConfig::FileListBack));
+    pe.setColor(QPalette::Foreground, Config().getColor(KScopeConfig::FileListFore));
+    m_pView->setPalette(pe);
+	m_pView->setFont(Config().getFont(KScopeConfig::FileList));
 }
 
 /**
@@ -195,7 +187,8 @@ void FileListWidget::setRoot(const QString& sRoot)
  */
 bool FileListWidget::getTip(QModelIndex &index, QString &sTip)
 {
-	sTip = m_pModel->item(index.row(), FILE_LIST_PATH_COL)->data().toString();
+    QModelIndex newIndex = m_proxyModel->index(index.row(), FILE_LIST_PATH_COL);
+	sTip = m_proxyModel->data(newIndex).toString();
 	return true;
 }
 

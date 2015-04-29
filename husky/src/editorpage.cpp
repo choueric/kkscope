@@ -42,12 +42,12 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu, QTabWidget* pP
 
 	// Create the child widgets
 	m_pSplit = new QSplitter(Qt::Horizontal, this);
-	m_pCtagsList = new CtagsList(m_pSplit);
+	m_pCtagsListWidget = new CtagsListWidget(m_pSplit);
 	m_pView = m_pDoc->createView(m_pSplit);
 
-    m_pSplit->addWidget(m_pCtagsList);
+    m_pSplit->addWidget(m_pCtagsListWidget);
     m_pSplit->addWidget(m_pView);
-	//m_pSplit->setResizeMode(m_pCtagsList, QSplitter::KeepSize);
+	//m_pSplit->setResizeMode(m_pCtagsListWidget, QSplitter::KeepSize);
 
     layout->addWidget(m_pSplit);
 	
@@ -61,18 +61,18 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu, QTabWidget* pP
 	
 	// Store the sizes of the child windows when the tag list is resized
 	// (since it may imply a move of the splitter divider)
-	connect(m_pCtagsList, SIGNAL(resized()), this, SLOT(slotChildResized()));
+	connect(m_pCtagsListWidget, SIGNAL(resized()), this, SLOT(slotChildResized()));
 
 	// Go to a symbol's line if it is selected in the tag list
-	connect(m_pCtagsList, SIGNAL(lineRequested(uint)), this,
+	connect(m_pCtagsListWidget, SIGNAL(lineRequested(uint)), this,
 		SLOT(slotGotoLine(uint)));
 
 	// Add Ctag records to the tag list
-	connect(&m_ctags, SIGNAL(dataReady(FrontendToken*)), m_pCtagsList,
+	connect(&m_ctags, SIGNAL(dataReady(FrontendToken*)), m_pCtagsListWidget,
 		SLOT(slotDataReady(FrontendToken*)));
 		
 	// Monitor Ctags' operation
-	connect(&m_ctags, SIGNAL(finished(uint)), m_pCtagsList, 
+	connect(&m_ctags, SIGNAL(finished(uint)), m_pCtagsListWidget, 
 		SLOT(slotCtagsFinished(uint)));
 		
 	// Set the context menu
@@ -228,7 +228,7 @@ void EditorPage::applyPrefs()
 		m_pDoc->setReadWrite(!Config().getReadOnlyMode());
 	
 	// Apply preferences to the tag list of this window
-	m_pCtagsList->applyPrefs();
+	m_pCtagsListWidget->applyPrefs();
 }
 
 /**
@@ -249,7 +249,7 @@ void EditorPage::setEditorFocus()
  */
 void EditorPage::setTagListFocus()
 {
-	m_pCtagsList->slotSetFocus();
+	m_pCtagsListWidget->slotSetFocus();
 }
 
 /**
@@ -416,7 +416,7 @@ void EditorPage::slotGotoLine(uint nLine)
 		return;
 
 	// Update Ctags view
-	m_pCtagsList->gotoLine(nLine);
+	m_pCtagsListWidget->gotoLine(nLine);
 
 	// Set the focus to the selected line
 	m_pView->setFocus();
@@ -472,7 +472,7 @@ void EditorPage::setLayout(bool bShowTagList, const SPLIT_SIZES& si)
 	m_bSaveNewSizes = false;
 	
 	// Adjust the layout
-	m_pCtagsList->setShown(bShowTagList);
+	m_pCtagsListWidget->setShown(bShowTagList);
 	if (bShowTagList)
 		m_pSplit->setSizes(si);
 }
@@ -643,7 +643,7 @@ void EditorPage::slotFileOpened()
 	m_pDoc->setReadWrite(!Config().getReadOnlyMode() && m_bWritable);
 	
 	// Refresh the tag list
-	m_pCtagsList->clear();
+	m_pCtagsListWidget->clear();
 	m_ctags.run(m_pDoc->url().path());
 
 	// Check if this is a modified file that has just been saved
@@ -727,7 +727,7 @@ void EditorPage::slotCursorPosChange(KTextEditor::View *view, const KTextEditor:
 	
 	// Select the relevant symbol in the tag list
 	if (Config().getAutoTagHl() && (m_nLine != nLine)) {
-		m_pCtagsList->gotoLine(nLine);
+		m_pCtagsListWidget->gotoLine(nLine);
 		m_nLine = nLine;
 	}
 	

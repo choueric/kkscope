@@ -11,7 +11,7 @@
 #include <KTextEditor/MarkInterface>
 
 #include "ctagsfrontend.h"
-#include "ctagslist.h"
+#include "ctagslistwidget.h"
 #include "kscopeconfig.h"
 #include "projectbase.h"
 
@@ -143,7 +143,7 @@ private:
 	QSplitter* m_pSplit;
 	
 	/** A list view for displaying Ctags results. */
-	CtagsList* m_pCtagsList;
+	CtagsListWidget* m_pCtagsListWidget;
 	
 	/** The document part of the editor. */
 	KTextEditor::Document* m_pDoc;

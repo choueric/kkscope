@@ -10,7 +10,8 @@ class StringListModel : public QStandardItemModel
     public:
         StringListModel(int columns, QObject *parent = 0);
         void setHeader(const QStringList &item);
-        void addItem(const QStringList &item);
+        void addItem(const QStringList &item, int row = 0);
+        void setIcon(int row, int col, QIcon &icon);
 
     private:
 };
