@@ -1,5 +1,70 @@
 #include "searchlistview.h"
 
+ListTreeView::ListTreeView(QWidget *parent) :
+    QTreeView(parent)
+{
+}
+
+ListTreeView::~ListTreeView()
+{
+}
+
+/**
+ * Handles double-click events over the view.
+ * @param	pEvent	Event description object
+ */
+void ListTreeView::mouseDoubleClickEvent(QMouseEvent *pEvent)
+{
+	// Handle only left button double-clicks
+	if (pEvent == NULL || pEvent->button() != Qt::LeftButton)
+		return;
+		
+	// Find the clicked item
+    QModelIndex index = indexAt(pEvent->pos());
+
+	// Emit the doubleClicked() signal
+	emit doubleClicked(index);
+}
+
+// to handle Return Press Event 
+void ListTreeView::keyPressEvent(QKeyEvent *pEvent)
+{
+    if (pEvent->key() != Qt::Key_Return 
+            && pEvent->key() != Qt::Key_Enter) {
+        QTreeView::keyPressEvent(pEvent);
+        return;
+    }
+
+    emit enterPressed(currentIndex());
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+ListLineEdit::ListLineEdit(QWidget *parent) :
+    QLineEdit(parent)
+{
+}
+
+ListLineEdit::~ListLineEdit()
+{
+}
+
+// to handle up/down Press Event 
+void ListLineEdit::keyPressEvent(QKeyEvent *pEvent)
+{
+    int is_up;
+
+    if (pEvent->key() == Qt::Key_Up) {
+        is_up = 1;
+        emit upDownPressed(is_up);
+    } else if (pEvent->key() == Qt::Key_Down) {
+        is_up = 0;
+        emit upDownPressed(is_up);
+    } else
+        QLineEdit::keyPressEvent(pEvent);
+}
+
+////////////////////////////////////////////////////////////////////////////////
         
 SearchListView::SearchListView(int searchCol, QWidget *parent) :
     QWidget(parent),
@@ -8,12 +73,12 @@ SearchListView::SearchListView(int searchCol, QWidget *parent) :
     m_proxyModel = new QSortFilterProxyModel;
     m_proxyModel->setFilterKeyColumn(m_searchCol);
 
-    m_pView = new QTreeView(this);
+    m_pView = new ListTreeView(this);
     m_pView->setRootIsDecorated(false);
     m_pView->setSortingEnabled(true);
     m_pView->setModel(m_proxyModel);
 
-    m_pEdit = new QLineEdit(this);
+    m_pEdit = new ListLineEdit(this);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(m_pEdit);
@@ -26,16 +91,14 @@ SearchListView::SearchListView(int searchCol, QWidget *parent) :
 	connect(m_pView, SIGNAL(doubleClicked(const QModelIndex &)), 
             this, SLOT(slotItemSelected(const QModelIndex &)));
 
-#if 0
-	connect(m_pView, SIGNAL(keyPressed(QKeyEvent*)),
-            this, SLOT(slotViewKeyPressed(QKeyEvent*)));
-#endif
+	connect(m_pView, SIGNAL(enterPressed(const QModelIndex &)),
+            this, SLOT(slotViewEnterPressed(const QModelIndex &)));
 
 	connect(m_pEdit, SIGNAL(returnPressed()), 
             this, SLOT(slotItemSelected()));
 
-	connect(m_pEdit, SIGNAL(keyPressed(QKeyEvent*)), 
-            this, SLOT(slotEditKeyPressed(QKeyEvent*)));
+	connect(m_pEdit, SIGNAL(upDownPressed(int)), 
+            this, SLOT(slotEditUpDownPressed(int)));
 }
         
 void SearchListView::setSourceModel(QAbstractItemModel *model)
@@ -79,16 +142,14 @@ void SearchListView::slotItemSelected()
  * This slot is connected to the keyPressed() signal of the edit widget.
  * @param	pKey	The key evant passed by the edit box
  */
-void SearchListView::slotEditKeyPressed(QKeyEvent* pKey)
+void SearchListView::slotEditUpDownPressed(int)
 {
-    qDebug() << "TODO:" << __FUNCTION__;
-    QApplication::sendEvent(m_pView, pKey);
+    m_pView->setFocus();
 }
 
-void SearchListView::slotViewKeyPressed(QKeyEvent* pKey)
+void SearchListView::slotViewEnterPressed(const QModelIndex &index)
 {
-    qDebug() << "TODO:" << __FUNCTION__;
-    QApplication::sendEvent(m_pView, pKey);
+	processItemSelected(index);
 }
 
 /**
@@ -98,3 +159,4 @@ void SearchListView::slotSetFocus()
 {
 	m_pEdit->setFocus();
 }
+

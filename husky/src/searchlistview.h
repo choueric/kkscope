@@ -3,6 +3,37 @@
 
 #include <QtGui>
 
+class ListTreeView : public QTreeView
+{
+    Q_OBJECT
+
+    public:
+        ListTreeView(QWidget *parent = 0);
+        ~ListTreeView();
+
+    signals:
+        void enterPressed(const QModelIndex &);
+
+    protected:
+        void mouseDoubleClickEvent(QMouseEvent*);
+        void keyPressEvent(QKeyEvent *pEvent);
+};
+
+class ListLineEdit : public QLineEdit
+{
+    Q_OBJECT
+
+    public:
+        ListLineEdit(QWidget *parent = 0);
+        ~ListLineEdit();
+
+    signals:
+        void upDownPressed(int);
+
+    protected:
+        void keyPressEvent(QKeyEvent *pEvent);
+};
+
 class SearchListView: public QWidget
 {
     Q_OBJECT
@@ -21,12 +52,12 @@ class SearchListView: public QWidget
         void slotFindItem();
         void slotItemSelected(const QModelIndex &);
         void slotItemSelected();
-        void slotEditKeyPressed(QKeyEvent*);
-        void slotViewKeyPressed(QKeyEvent*);
+        void slotEditUpDownPressed(int);
+        void slotViewEnterPressed(const QModelIndex &index);
 
     protected:
-        QTreeView *m_pView;
-        QLineEdit *m_pEdit;
+        ListTreeView *m_pView;
+        ListLineEdit *m_pEdit;
         QSortFilterProxyModel *m_proxyModel;
         int m_searchCol;
 
@@ -36,6 +67,8 @@ class SearchListView: public QWidget
          * @param	pItem	The selected list item
          */
         virtual void processItemSelected(const QModelIndex &) = 0;
+        //void MousePressEvent(QMouseEvent *pEvent);
+        //void keyPressEvent(QKeyEvent *pEvent);
 };
 
 #endif
