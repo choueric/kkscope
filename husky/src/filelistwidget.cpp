@@ -114,17 +114,25 @@ void FileListWidget::clear()
  */
 void FileListWidget::processItemSelected(const QModelIndex &index)
 {
-	QString sPath;
     QString sFile;
+	QString sPath;
 
-    sFile = m_pModel->item(index.row(), FILE_LIST_NAME_COL)->data().toString();
+    QModelIndex newIndex = m_proxyModel->index(index.row(), FILE_LIST_NAME_COL);
+    sFile = m_proxyModel->data(newIndex).toString();
 
 	// Get the file path (replace the root symbol, if required)
-	sPath = m_pModel->item(index.row(), FILE_LIST_PATH_COL)->data().toString();
+    newIndex = m_proxyModel->index(index.row(), FILE_LIST_PATH_COL);
+	sPath = m_proxyModel->data(newIndex).toString();
+
 	if (sPath.startsWith("$"))
 		sPath.replace("$", m_sRoot);
     sPath += sFile;
 	m_pEdit->setText("");
+
+    if (sPath.isEmpty()) {
+        qDebug() << __FUNCTION__ << "sPath is empty!";
+        return;
+    }
 		
 	// Submit a request to open the file for editing
 	emit fileRequested(sPath, 0);

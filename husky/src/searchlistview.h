@@ -12,11 +12,6 @@ class SearchListView: public QWidget
         ~SearchListView();
 
         void setSourceModel(QAbstractItemModel *model);
-        void slotItemSelected(const QModelIndex &index);
-        void slotItemSelected();
-        void slotEditKeyPressed(QKeyEvent*);
-        void slotViewKeyPressed(QKeyEvent*);
-	
         virtual bool getTip(QModelIndex &index, QString& sTip) = 0;
 
     public slots:
@@ -24,6 +19,10 @@ class SearchListView: public QWidget
 
     private slots:
         void slotFindItem();
+        void slotItemSelected(const QModelIndex &);
+        void slotItemSelected();
+        void slotEditKeyPressed(QKeyEvent*);
+        void slotViewKeyPressed(QKeyEvent*);
 
     protected:
         QTreeView *m_pView;
