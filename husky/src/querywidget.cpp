@@ -158,6 +158,8 @@ void QueryWidget::savePages(const QString& sProjPath, QStringList& slFiles)
 void QueryWidget::addHistoryRecord(const QString& sFile, uint nLine, 
 	const QString& sText)
 {
+    QString name(sFile);
+
 	// Validate file name and line number
 	if (sFile.isEmpty() || nLine == 0)
 		return;
@@ -168,9 +170,11 @@ void QueryWidget::addHistoryRecord(const QString& sFile, uint nLine,
 
 	// Make sure there is an active history page	
 	findHistoryPage();
-			
+
+    if (m_sRoot != "/")
+        name.replace(m_sRoot, "$");
 	// Add the position entry to the active page
-	m_pHistPage->addRecord(sFile, nLine, sText);
+	m_pHistPage->addRecord(name, nLine, sText);
 }
 
 /**
@@ -404,7 +408,6 @@ void QueryWidget::slotCurrentChanged(int index)
         return;
 	QueryPage* pPage = qobject_cast<QueryPage *>(m_pQueryTabs->widget(index));
     if (pPage == NULL) {
-        qDebug() << "invalid pPage pointer";
         return;
     }
 	
