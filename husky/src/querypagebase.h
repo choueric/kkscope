@@ -25,11 +25,10 @@ public:
     ~QueryPageBase();
 
 	void applyPrefs();
-	bool load(const QString&, const QString&);
+	bool load(const QString&, const QString&, const QString &srcRoot);
 	bool save(const QString&, QString&);
 	void selectNext();
 	void selectPrev();
-	
 	
 	/**
 	 * Determines whether this page can be locked.

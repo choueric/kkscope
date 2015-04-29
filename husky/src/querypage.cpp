@@ -187,4 +187,9 @@ void QueryPage::writeHeader(QTextStream& str)
 	str << m_sName << "\n" << m_nType << "\n" << m_sText << "\n";
 }
 
+void QueryPage::setRoot(QString &root)
+{
+    m_pDriver->setRoot(root);
+}
+
 #include "querypage.moc"

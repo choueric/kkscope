@@ -49,14 +49,9 @@
 #include "queryviewdlg.h"
 #include "graphwidget.h"
 #include "makedlg.h"
-// #include "ui_welcomedlg.h"
 #include "bookmarksdlg.h"
 #include "kscopeactions.h"
-
 #include "symboldlg.h"
-#if 0  // TODO
-#include "symbolcompletion.h"
-#endif
 
 /**
  * Class constructor.
@@ -424,17 +419,12 @@ void KScope::slotProjectProps()
 	// Reset the CscopeFrontend class and the builder object
 	initCscope();
 	
-#if 0 // TODO
-	// Set auto-completion parameters
-	SymbolCompletion::initAutoCompletion(opt.bACEnabled, opt.nACMinChars,
-		opt.nACDelay, opt.nACMaxEntries);
-#endif
-	
 	// Set per-project command-line arguments for Ctags
 	CtagsFrontend::setExtraArgs(opt.sCtagsCmd);
 	
 	// Set the source root
 	m_pFileView->setRoot(pProj->getSourceRoot());
+    m_pQueryWidget->setRoot(pProj->getSourceRoot());
 }
 
 /**
@@ -729,16 +719,13 @@ void KScope::openProject(const QString& sDir)
 
 	// Set the root of the file tree
 	m_pFileView->setRoot(pProj->getSourceRoot());
-	
+    m_pQueryWidget->setRoot(pProj->getSourceRoot());
+
 	// Initialise Cscope and create a builder object
 	initCscope();
 	
 	// Set auto-completion parameters
 	pProj->getOptions(opt);
-#if 0 // TODO
-	SymbolCompletion::initAutoCompletion(opt.bACEnabled, opt.nACMinChars,
-		opt.nACDelay, opt.nACMaxEntries);
-#endif
 	
 	// Set per-project command-line arguments for Ctags
 	CtagsFrontend::setExtraArgs(opt.sCtagsCmd);
@@ -799,6 +786,7 @@ bool KScope::openCscopeOut(const QString& sFilePath)
 	
 	// Set the root folder in the file tree
 	m_pFileView->setRoot(pProj->getSourceRoot());
+    m_pQueryWidget->setRoot(pProj->getSourceRoot());
 	
 	// Initialise Cscope and create a builder object
 	initCscope();

@@ -24,6 +24,7 @@ public:
     ~QueryViewDriver();
 
 	void query(uint, const QString&, bool bCase, QTreeWidgetItem* pItem = NULL);
+    void setRoot(QString &root);
 	
 	/**
 	 * @return	true if a query is currently running, false otherwise
@@ -46,6 +47,8 @@ private:
 	/** This flag is set to true when a query is executed, and back to false
 		when the the CscopeFrontend object emits the finished() signal. */
 	bool m_bRunning;
+
+    QString m_sRoot;
 	
 private slots:
 	void slotDataReady(FrontendToken*);

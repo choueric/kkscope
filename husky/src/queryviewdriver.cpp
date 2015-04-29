@@ -1,3 +1,4 @@
+#include "husky.h"
 #include <klocale.h>
 #include "queryviewdriver.h"
 #include "queryview.h"
@@ -14,7 +15,8 @@ QueryViewDriver::QueryViewDriver(QueryView* pView, QObject* pParent) :
 	m_pView(pView),
 	m_pItem(NULL),
 	m_progress(pView),
-	m_bRunning(false)
+	m_bRunning(false),
+    m_sRoot("/")
 {
 	m_pCscope = new CscopeFrontend();	
 		
@@ -77,6 +79,8 @@ void QueryViewDriver::slotDataReady(FrontendToken* pToken)
 	// Get the file name
 	sFile = pToken->getData();
 	pToken = pToken->getNext();
+	if (m_sRoot != "/")
+		sFile.replace(m_sRoot, "$");
 
 	// Get the function name
 	sFunc = pToken->getData();
@@ -148,6 +152,11 @@ void QueryViewDriver::slotViewClosed()
 {
 	m_pView = NULL;
 	m_pCscope->kill();
+}
+
+void QueryViewDriver::setRoot(QString &root)
+{
+    m_sRoot = root;
 }
 
 #include "queryviewdriver.moc"

@@ -33,6 +33,7 @@ public:
 	void selectActiveHistory();
 	void setPageMenu(QMenu*, KToggleAction*);
 	void getBookmarks(FileLocationList&);
+	void setRoot(const QString&);
 	
 	/**
 	 * Enables/disables new history items.
@@ -68,6 +69,7 @@ signals:
 	void newQuery();
 	
 private:
+	QString m_sRoot;
 	/** A menu with query page commands (new query, lock/unlock, close
 		query, etc.). */
 	QMenu* m_pPageMenu;

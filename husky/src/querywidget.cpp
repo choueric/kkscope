@@ -118,7 +118,7 @@ void QueryWidget::loadPages(const QString& sProjPath,
 		}
 
 		// Load a query file to this page, and lock the page
-		if (pPage->load(sProjPath, *itr)) {
+		if (pPage->load(sProjPath, *itr, m_sRoot)) {
 			setPageCaption(pPage);
 			setPageLocked(pPage, true);
 		}
@@ -195,6 +195,7 @@ void QueryWidget::addQueryPage()
 
 	// Create the page
 	pPage = new QueryPage(this);
+    pPage->setRoot(m_sRoot);
 
 	// Add the page, and set it as the current one
     // QIcon icon("project_new");
@@ -378,12 +379,15 @@ void QueryWidget::setPageMenu(QMenu* pMenu, KToggleAction* pAction)
  */
 void QueryWidget::slotRequestLine(const QString& sFileName, uint nLine)
 {
+    QString sFile(sFileName);
 	// Disable history if the request came from the active history page
 	if (currentPage() == m_pHistPage)
 		m_bHistEnabled = false;
 		
+	if (sFile.startsWith("$"))
+		sFile.replace("$", m_sRoot);
 	// Emit the signal
-	emit lineRequested(sFileName, nLine);
+	emit lineRequested(sFile, nLine);
 	
 	// Re-enable history
 	if (currentPage() == m_pHistPage)
@@ -583,6 +587,22 @@ void QueryWidget::findHistoryPage()
 	// this page
 	connect(m_pHistPage, SIGNAL(lineRequested(const QString&, uint)), this, 
 		SLOT(slotRequestLine(const QString&, uint)));
+}
+
+/**
+ * Sets a new common root path
+ * @param	sRoot	The full path of the new root
+ */
+void QueryWidget::setRoot(const QString& sRoot)
+{
+	// Nothing to do if the given root is the same as the old one
+	if (sRoot == m_sRoot)
+		return;
+	
+	m_sRoot = sRoot;
+	
+	// TODO: Update the query pages
+	//m_pFileList->setRoot(sRoot);
 }
 
 #include "querywidget.moc"

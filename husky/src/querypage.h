@@ -27,6 +27,7 @@ public:
 	void refresh();
 	void clear();
 	bool isRunning();
+    void setRoot(QString &root);
 	
 	virtual QString getCaption(bool bBrief = false) const;
 

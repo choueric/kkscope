@@ -45,7 +45,8 @@ void QueryPageBase::applyPrefs()
  * @param	sFileName	The name of the query file to load
  * @return	true if successful, false otherwise
  */
-bool QueryPageBase::load(const QString& sProjPath, const QString& sFileName)
+bool QueryPageBase::load(const QString& sProjPath, const QString& sFileName, 
+        const QString &srcRoot)
 {
 	QString sTemp, sFile, sFunc, sLine, sText;
 	int nState;
@@ -79,6 +80,8 @@ bool QueryPageBase::load(const QString& sProjPath, const QString& sFileName)
 			// File path
 			case 0:
 				sFile = sTemp;
+                if (srcRoot != "/")
+                    sFile.replace(srcRoot, "$");
 				break;
 				
 			// Function name
