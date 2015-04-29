@@ -5,7 +5,6 @@
 #include <QTabWidget>
 #include <kfiledialog.h>
 #include "fileview.h"
-#include "filelist.h"
 #include "kscopepixmaps.h"
 
 /**

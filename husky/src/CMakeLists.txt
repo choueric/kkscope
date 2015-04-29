@@ -89,17 +89,14 @@ set (husky_SRCS
     ${PROJECT_SOURCE_DIR}/searchresultsdlg.cpp
     ${PROJECT_SOURCE_DIR}/frontend.cpp
     ${PROJECT_SOURCE_DIR}/ctagsfrontend.cpp
-    ${PROJECT_SOURCE_DIR}/ctagslist.cpp   # to remove
     ${PROJECT_SOURCE_DIR}/ctagslistwidget.cpp
     ${PROJECT_SOURCE_DIR}/cscopefrontend.cpp
     ${PROJECT_SOURCE_DIR}/configfrontend.cpp
     ${PROJECT_SOURCE_DIR}/fileview.cpp
-    ${PROJECT_SOURCE_DIR}/filelist.cpp   # to remove
     ${PROJECT_SOURCE_DIR}/filelistwidget.cpp
     ${PROJECT_SOURCE_DIR}/stringlistmodel.cpp
     ${PROJECT_SOURCE_DIR}/kscopeconfig.cpp
     ${PROJECT_SOURCE_DIR}/kscopepixmaps.cpp
-    ${PROJECT_SOURCE_DIR}/searchlist.cpp   # to remove
     ${PROJECT_SOURCE_DIR}/searchlistview.cpp
     )
 

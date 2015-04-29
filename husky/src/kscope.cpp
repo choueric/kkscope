@@ -35,7 +35,6 @@
 #include "querywidget.h"
 #include "editormanager.h"
 #include "cscopefrontend.h"
-#include "ctagslist.h"
 #include "newprojectdlg.h"
 #include "openprojectdlg.h"
 #include "preferencesdlg.h"
