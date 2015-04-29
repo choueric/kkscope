@@ -40,6 +40,7 @@ public:
 public slots:
 	void slotRemovePage(QWidget*);
 	void slotToggleTagList();
+	void slotGotoTagList();
 	void slotSaveAll();
 	void slotGoLeft();
 	void slotGoRight();

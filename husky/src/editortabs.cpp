@@ -419,6 +419,16 @@ void EditorTabs::slotToggleTagList()
 	}
 }
 
+void EditorTabs::slotGotoTagList()
+{
+	EditorPage* pPage;
+	
+	// Apply for the current page, if any
+	if ((pPage = (EditorPage*)currentWidget()) != NULL) {
+        pPage->focusOnTaglist();
+	}
+}
+
 /**
  * Handles drag events over an empty tab widget, or over the tab bar.
  * The event is accepted if the dragged object is a list of file paths.

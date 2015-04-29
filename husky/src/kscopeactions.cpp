@@ -7,6 +7,7 @@
 #include "kscopeconfig.h"
 
 #define KEYSHORT_GO_TO_FILE_LIST "Ctrl+Alt+F"
+#define KEYSHORT_GO_TO_TAG_LIST "Ctrl+Alt+C"
 
 KScopeActions::KScopeActions(KScope* pWindow) : QObject(),
 		m_pWindow(pWindow),
@@ -35,7 +36,11 @@ void KScopeActions::init()
 
 	addAction(i18n("Go to File List"), NULL, KEYSHORT_GO_TO_FILE_LIST,
 		(QWidget *)m_pWindow->m_pFileListWidget, SLOT(slotSetFocus()),
-		"file_open_file_from_list", SIGNAL(toggleProject(bool)));
+		"nav_goto_filelist", SIGNAL(toggleProject(bool)));
+
+	addAction(i18n("Go to Tag List"), NULL, KEYSHORT_GO_TO_TAG_LIST,
+		(QWidget *)m_pWindow->m_pEditTabs, SLOT(slotGotoTagList()),
+        "nav_goto_taglist", SIGNAL(toggleProject(bool)));
 	
 	addAction(i18n("Save Al&l"), "save_all", "Ctrl+L",
 		(QWidget *)m_pWindow->m_pEditTabs,

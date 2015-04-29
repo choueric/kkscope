@@ -320,3 +320,8 @@ void CtagsListWidget::slotSortChanged(int nSection)
 		break;
 	}
 }
+
+void CtagsListWidget::focusOnEdit()
+{
+    m_pEdit->setFocus();
+}

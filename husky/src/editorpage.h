@@ -62,6 +62,8 @@ public:
 	void setTabWidth(uint);
 
     void aboutCommand();
+
+    void focusOnTaglist();
 	
 	virtual QString getWordUnderCursor(uint* pPosInWord = NULL);
 

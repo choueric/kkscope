@@ -27,6 +27,7 @@ public:
 	void applyPrefs();
 	void gotoLine(uint);
 	void clear();
+    void focusOnEdit();
 	
     virtual bool getTip(QModelIndex &index, QString& sTip);
 	
@@ -74,4 +75,3 @@ private slots:
 };
 
 #endif
-

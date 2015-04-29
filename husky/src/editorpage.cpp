@@ -736,4 +736,10 @@ void EditorPage::slotCursorPosChange(KTextEditor::View *view, const KTextEditor:
 	//m_pCompletion->abort();
 }
 
+void EditorPage::focusOnTaglist()
+{
+    m_pCtagsListWidget->focusOnEdit();
+}
+    
+
 #include "editorpage.moc"
