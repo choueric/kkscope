@@ -65,12 +65,40 @@ void ListLineEdit::keyPressEvent(QKeyEvent *pEvent)
 }
 
 ////////////////////////////////////////////////////////////////////////////////
+ListSortFilterProxyModel::ListSortFilterProxyModel(QObject *parent) :
+    QSortFilterProxyModel(parent),
+    m_bSortByInt(false),
+    m_nSortCol(-1)
+{
+}
+
+ListSortFilterProxyModel::~ListSortFilterProxyModel()
+{
+}
+
+void ListSortFilterProxyModel::setSortByInt(int col, bool sortByInt)
+{
+    m_nSortCol = col;
+    m_bSortByInt = sortByInt;
+}
         
+bool ListSortFilterProxyModel::lessThan(const QModelIndex &left, 
+        const QModelIndex &right) const
+{
+    if (left.column() == m_nSortCol && m_bSortByInt) {
+        uint iLeft = sourceModel()->data(left).toString().toUInt();
+        uint iRight = sourceModel()->data(right).toString().toUInt();
+        return iLeft < iRight;
+    }
+    return QSortFilterProxyModel::lessThan(left, right);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 SearchListView::SearchListView(int searchCol, QWidget *parent) :
     QWidget(parent),
     m_searchCol(searchCol)
 {
-    m_proxyModel = new QSortFilterProxyModel;
+    m_proxyModel = new ListSortFilterProxyModel;
     m_proxyModel->setFilterKeyColumn(m_searchCol);
 
     m_pView = new ListTreeView(this);

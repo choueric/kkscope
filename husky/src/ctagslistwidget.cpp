@@ -28,6 +28,7 @@ CtagsListWidget::CtagsListWidget(QWidget* pParent) :
     header << i18n("Name") << i18n("Line") << i18n("Type");
     m_pModel->setHeader(header);
     setSourceModel(m_pModel);
+    m_proxyModel->setSortByInt(HEADER_LINE, true);
 
     m_pView->header()->setResizeMode(QHeaderView::ResizeToContents);
 
@@ -294,7 +295,6 @@ void CtagsListWidget::slotCtagsFinished(uint nRecords)
  */
 void CtagsListWidget::slotSortChanged(int nSection)
 {
-    // TODO: Line column cann't sort rightly
 	// Determine whether the new order is ascending or descending
     QHeaderView *pHeader = m_pView->header();
     Qt::SortOrder order = pHeader->sortIndicatorOrder(); 

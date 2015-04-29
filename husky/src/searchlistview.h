@@ -34,6 +34,23 @@ class ListLineEdit : public QLineEdit
         void keyPressEvent(QKeyEvent *pEvent);
 };
 
+class ListSortFilterProxyModel : public QSortFilterProxyModel
+{
+    Q_OBJECT
+
+    public:
+        ListSortFilterProxyModel(QObject *parent = 0);
+        ~ListSortFilterProxyModel();
+        void setSortByInt(int, bool);
+
+    protected:
+        virtual bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
+
+    private:
+        bool m_bSortByInt;
+        int m_nSortCol;
+};
+
 class SearchListView: public QWidget
 {
     Q_OBJECT
@@ -58,7 +75,7 @@ class SearchListView: public QWidget
     protected:
         ListTreeView *m_pView;
         ListLineEdit *m_pEdit;
-        QSortFilterProxyModel *m_proxyModel;
+        ListSortFilterProxyModel *m_proxyModel;
         int m_searchCol;
 
         /**
