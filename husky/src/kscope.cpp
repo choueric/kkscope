@@ -14,6 +14,7 @@
 #include <QMimeData>
 #include <KToolBar>
 #include <KProcess>
+#include <kstandarddirs.h>
 
 #include "kscopeconfig.h"
 #include <qfile.h>
@@ -93,10 +94,13 @@ KScope::KScope(QWidget* pParent) :
 	// Show a toolbar show/hide menu
 	setStandardToolBarMenuEnabled(true);
 
-    // TODO: install to /usr/share/apps/
-    setupGUI(Default, "/home/zhs/workspace/kkscope/husky/src/ui/kscopeui.rc");
-	
 	// Create the initial GUI (no active part)
+    // TODO: install to /usr/share/apps/.
+    // use "kde4-config --path data" to find out the standard path.
+    // the path used here is defined in CMakeLists.txt.
+    QString path(qgetenv("PWD"));
+    path += "/_install/share/apps/husky/kscopeui.rc";
+    setupGUI(Default, path);
 	
 	// Create all child widgets
 	initMainWindow();

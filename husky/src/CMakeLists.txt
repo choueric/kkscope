@@ -35,10 +35,10 @@ set (husky_FORMS
     ${PROJECT_SOURCE_DIR}/ui/projectfileslayout.ui
     ${PROJECT_SOURCE_DIR}/ui/welcomedlg.ui
     ${PROJECT_SOURCE_DIR}/ui/symbollayout.ui
-    ${PROJECT_SOURCE_DIR}/ui/bookmarkslayout.ui)
+    ${PROJECT_SOURCE_DIR}/ui/bookmarkslayout.ui
+    )
 
-QT4_WRAP_UI(husky_FORMS_HEADERS
-    ${husky_FORMS})
+QT4_WRAP_UI(husky_FORMS_HEADERS ${husky_FORMS})
 
 set (husky_SRCS 
     ${PROJECT_SOURCE_DIR}/main.cpp 
@@ -99,15 +99,22 @@ set (husky_SRCS
     ${PROJECT_SOURCE_DIR}/searchlistview.cpp
     )
 
+kde4_add_ui_files(husky_SRCS ${PROJECT_SOURCE_DIR}/ui/kscopeui.rc)
+
 FLEX_TARGET(dotscan ${PROJECT_SOURCE_DIR}/yacc/dotscan.lpp ${PROJECT_BINARY_DIR}/dotscan.cpp)
 BISON_TARGET(dotparse ${PROJECT_SOURCE_DIR}/yacc/dotparse.ypp ${PROJECT_BINARY_DIR}/dotparse.cpp)
 add_flex_bison_dependency(dotscan dotparse)
 
 kde4_add_executable (husky ${husky_SRCS} ${husky_FORMS_HEADERS} ${BISON_dotparse_OUTPUTS} ${FLEX_dotscan_OUTPUTS})
+
+# see techbase.kde.org/Development/CMake/Addons_for_KDE for more libraries
 target_link_libraries (husky ${KDE4_KDEUI_LIBS}
     ${KDE4_KPARTS_LIBS}
     ${KDE4_KFILE_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS})
+
 install(TARGETS husky ${INSTALL_TARGETS_DEFAULT_ARGS})
 
-# see techbase.kde.org/Development/CMake/Addons_for_KDE for more libraries
+install(FILES ${PROJECT_SOURCE_DIR}/ui/kscopeui.rc DESTINATION ${DATA_INSTALL_DIR}/husky)
+
+kde4_install_icons(${PROJECT_SOURCE_DIR}/ui/pics ${ICON_INSTALL_DIR})
