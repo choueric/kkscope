@@ -27,6 +27,7 @@ private:
 	
 private slots:
 	void slotShowTabList();
+	void setCurrentTab(QAction *);
 };
 
 #endif

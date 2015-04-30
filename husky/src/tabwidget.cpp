@@ -16,7 +16,7 @@ TabWidget::TabWidget(QWidget* pParent) :
 	m_pMenu = new QMenu(this);
 	
 	// Set the current tab based on the menu selection
-	connect(m_pMenu, SIGNAL(activated(int)), this, SLOT(setCurrentPage(int)));
+	connect(m_pMenu, SIGNAL(triggered(QAction *)), this, SLOT(setCurrentTab(QAction *)));
 	
 	// Create a button at the top-right corner of the tab widget
 	m_pButton = new QToolButton(this);
@@ -48,11 +48,18 @@ void TabWidget::slotShowTabList()
 	m_pMenu->clear();
 
 	// Create and populate the menu	
-	for (i = 0; i < count(); i++)
-		m_pMenu->addAction(tabText(i));
+	for (i = 0; i < count(); i++) {
+		m_pMenu->addAction(tabText(i))->setData(i);
+    }
 		
 	// Show the menu
 	m_pMenu->popup(mapToGlobal(m_pButton->pos()));
+}
+	
+void TabWidget::setCurrentTab(QAction *action)
+{
+    int index = action->data().toInt();
+    setCurrentIndex(index);
 }
 
 #include "tabwidget.moc"
