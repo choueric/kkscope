@@ -236,6 +236,9 @@ void CtagsListWidget::applyPrefs()
  */
 void CtagsListWidget::gotoLine(uint nLine)
 {
+	int nFrom, nTo, nItem, nDiff;
+    uint mLine;
+
 	// Wait until Ctags finishes
 	if (!m_bReady) {
 		m_nPendLine = nLine;
@@ -245,19 +248,57 @@ void CtagsListWidget::gotoLine(uint nLine)
 	// Do nothing if no tags are available
 	if (m_nItems == 0)
 		return;
-
-    //m_pEdit->setText("");
-    QString sLine;
-    sLine.setNum(nLine);
-    QList<QStandardItem *> l;
-    l = m_pModel->findItems(sLine, Qt::MatchExactly, HEADER_LINE);
-
-    if (l.isEmpty())
-        return;
-
-    QStandardItem *pItem = l[0];
-    m_pView->setCurrentIndex(pItem->index());
 	
+	// Calculate the difference from the current line
+	nDiff = (int)(nLine - m_nCurLine);
+	m_nCurLine = nLine;
+		
+	// In most cases, all the user does is move to the next or prevuious lines
+	// Handle these simple cases first
+	if (nDiff == -1) {
+		if ((m_nCurItem < m_nItems - 1) && 
+			(getLine(m_nCurItem) > nLine)) {
+			m_nCurItem++;
+		} else {
+			return; // New line corresponds to the same tag
+		}
+	} else if (nDiff == 1) {
+		if ((m_nCurItem > 0) && 
+			(getLine(m_nCurItem - 1) == nLine)) {
+			m_nCurItem--;
+		} else {
+			return; // New line corresponds to the same tag
+		}
+	} else {
+		// Initialise binary search
+		nFrom = m_nItems - 1;
+		nTo = 0;
+		m_nCurItem = 0; // use the first item if nothing else works
+		
+		// Perform a binary search
+		// This algorithm finds the greatest line that is smaller or equal to
+		// the requested line
+		do {
+			nItem = (nFrom + nTo) / 2;
+            mLine = getLine(nItem);
+
+			if (mLine == nLine) {
+				m_nCurItem = nItem;
+				break;
+			} else if (nLine > mLine) {
+				m_nCurItem = nItem;
+				nFrom = nItem - 1;
+			} else {
+				nTo = nItem + 1;
+			}
+		} while (nFrom >= nTo);
+	}
+
+	// Mark the selected item
+	nItem = m_nCurItem;
+
+    QModelIndex index = m_proxyModel->mapFromSource(m_pModel->index(nItem, HEADER_NAME));
+    setCurrentRow(index);
 	m_nPendLine = 0;
 }
 
@@ -324,4 +365,10 @@ void CtagsListWidget::slotSortChanged(int nSection)
 void CtagsListWidget::focusOnEdit()
 {
     m_pEdit->setFocus();
+}
+
+    
+uint CtagsListWidget::getLine(int row)
+{
+    return m_pModel->getString(row, HEADER_LINE).toInt();
 }

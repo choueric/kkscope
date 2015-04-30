@@ -61,6 +61,7 @@ class SearchListView: public QWidget
 
         void setSourceModel(QAbstractItemModel *model);
         virtual bool getTip(QModelIndex &index, QString& sTip) = 0;
+        void setCurrentRow(QModelIndex &index);
 
     public slots:
         void slotSetFocus();

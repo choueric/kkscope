@@ -33,9 +33,6 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu, QTabWidget* pP
 {
     QHBoxLayout *layout = new QHBoxLayout(this);
 	
-	// Create code-completion objects (will be deleted by QObject destructor)
-	//m_pCompletion = new SymbolCompletion(this, this);
-	
 	// Set read-only mode, if required
 	if (Config().getReadOnlyMode())
 		m_pDoc->setReadWrite(false);
@@ -79,8 +76,10 @@ EditorPage::EditorPage(KTextEditor::Document* pDoc, QMenu* pMenu, QTabWidget* pP
     m_pView->setContextMenu(pMenu);
 
 	// Emit a signal whenever the cursor's position changes
-    connect(m_pView, SIGNAL(cursorPositionChanged(KTextEditor::View *, const KTextEditor::Cursor &)), 
-                this, SLOT(slotCursorPosChange(KTextEditor::View *, const KTextEditor::Cursor &)));
+    connect(m_pView, SIGNAL(cursorPositionChanged(KTextEditor::View *, 
+                    const KTextEditor::Cursor &)), 
+                this, SLOT(slotCursorPosChange(KTextEditor::View *, 
+                        const KTextEditor::Cursor &)));
 
     setShowLinenum(Config().getShowLinenum());
 }
@@ -610,9 +609,10 @@ void EditorPage::aboutCommand()
     KTextEditor::Command *pcmd = iface->queryCommand(cmd);
     QStringList list = pcmd->cmds();
 
+#if 0
     for (int i = 0; i < list.size(); i++)
         qDebug("cmd: %s", list[i].toAscii().data());
-
+#endif
 
     if (pcmd) {
         pcmd->help(m_pView, cmd, msg);
@@ -689,9 +689,6 @@ void EditorPage::slotSetModified(KTextEditor::Document *pDoc)
 		if (iface)
 			iface->slotModifiedOnDisk(m_pView);
 	}
-	
-	// Start/restart the auto-completion timer
-	//m_pCompletion->slotAutoComplete();
 }
 
 /**
@@ -713,15 +710,18 @@ void EditorPage::slotUndoChanged()
  * Handles changes in the cursor position.
  * Emits a signal with the new line and column numbers.
  */
-void EditorPage::slotCursorPosChange(KTextEditor::View *view, const KTextEditor::Cursor &newPosition)
+void EditorPage::slotCursorPosChange(KTextEditor::View *view, 
+        const KTextEditor::Cursor &newPosition)
 {
 	int nLine, nCol;
 
     if (view == NULL)
         return;
-	
+
 	// Find the new line and column number, and emit the signal
     newPosition.position(nLine, nCol);
+    nLine++;
+    nCol++;
 
 	emit cursorPosChanged(nLine, nCol);
 	
@@ -730,10 +730,7 @@ void EditorPage::slotCursorPosChange(KTextEditor::View *view, const KTextEditor:
 		m_pCtagsListWidget->gotoLine(nLine);
 		m_nLine = nLine;
 	}
-	
-	// Abort code completion on cursor changes during the completion
-	// process
-	//m_pCompletion->abort();
+    m_pView->setFocus();
 }
 
 void EditorPage::focusOnTaglist()

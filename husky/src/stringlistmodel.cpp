@@ -26,3 +26,8 @@ void StringListModel::setHeader(const QStringList &item)
     for (int i = 0; i < item.size(); i++)
         setHeaderData(i, Qt::Horizontal, item.at(i));
 }
+
+QString StringListModel::getString(int row, int col)
+{
+    return data(index(row, col)).toString();
+}

@@ -12,6 +12,7 @@ class StringListModel : public QStandardItemModel
         void setHeader(const QStringList &item);
         void addItem(const QStringList &item, int row = 0);
         void setIcon(int row, int col, QIcon &icon);
+        QString getString(int row, int col);
 
     private:
 };

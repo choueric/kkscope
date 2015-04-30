@@ -105,6 +105,7 @@ SearchListView::SearchListView(int searchCol, QWidget *parent) :
     m_pView->setRootIsDecorated(false);
     m_pView->setSortingEnabled(true);
     m_pView->setModel(m_proxyModel);
+    m_pView->setSelectionMode(QAbstractItemView::SingleSelection);
 
     m_pEdit = new ListLineEdit(this);
 
@@ -188,3 +189,11 @@ void SearchListView::slotSetFocus()
 	m_pEdit->setFocus();
 }
 
+/*
+ * @index: index in proxyModel
+ */
+void SearchListView::setCurrentRow(QModelIndex &index)
+{
+    m_pView->setCurrentIndex(index);
+    m_pView->setFocus();
+}

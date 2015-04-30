@@ -174,9 +174,6 @@ private:
 	/** The current line position of the cursor. */
 	int m_nLine;
 	
-	/** Provides symbol completion. */
-	//SymbolCompletion* m_pCompletion;
-	
 	/** Determines whether size changes in the child widgets should be
 		stored in the global configuration file. 
 		Needs to be explicitly set to false before _each_ operation that

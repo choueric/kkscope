@@ -28,6 +28,7 @@ public:
 	void gotoLine(uint);
 	void clear();
     void focusOnEdit();
+    uint getLine(int row);
 	
     virtual bool getTip(QModelIndex &index, QString& sTip);
 	
