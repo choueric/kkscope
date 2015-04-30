@@ -41,7 +41,6 @@ QT4_WRAP_UI(husky_FORMS_HEADERS
     ${husky_FORMS})
 
 set (husky_SRCS 
-    #${PROJECT_SOURCE_DIR}/symbolcompletion.cpp
     ${PROJECT_SOURCE_DIR}/main.cpp 
     ${PROJECT_SOURCE_DIR}/kscope.cpp 
     ${PROJECT_SOURCE_DIR}/projectmanager.cpp
