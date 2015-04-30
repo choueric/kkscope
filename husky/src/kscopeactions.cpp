@@ -8,6 +8,8 @@
 
 #define KEYSHORT_GO_TO_FILE_LIST "Ctrl+Alt+F"
 #define KEYSHORT_GO_TO_TAG_LIST "Ctrl+Alt+C"
+#define KEYSHORT_QUERY_REF "Ctrl+/"
+#define KEYSHORT_QUERY_DEF "Ctrl+1"
 
 KScopeActions::KScopeActions(KScope* pWindow) : QObject(),
 		m_pWindow(pWindow),
@@ -69,7 +71,7 @@ void KScopeActions::init()
 		SLOT(slotChangeSHowStateQueryDock()), "view_toggle_query_dock", NULL); // renew
 
 	m_pToggleFileViewAction = addToggle(i18n("Toggle File List"),
-		"view-sidetree", "Ctrl+/", m_pWindow,
+		"view-sidetree", NULL, m_pWindow,
 		SLOT(slotChangeShowStateFileViewDock()), "view_toggle_filelist_dock", NULL); // renew
 
 	// Project menu
@@ -107,11 +109,11 @@ void KScopeActions::init()
 		SLOT(slotRebuildDB()), "cscope_rebuild",
 		SIGNAL(toggleProject(bool))); // renew
 		
-	addAction(i18n("&References..."), NULL, "Ctrl+0", m_pWindow,
+	addAction(i18n("&References..."), NULL, KEYSHORT_QUERY_REF, m_pWindow,
 		SLOT(slotQueryReference()), "cscope_references",
 		SIGNAL(toggleProject(bool))); // used
 		
-	addAction(i18n("&Definition..."), NULL, "Ctrl+1", m_pWindow,
+	addAction(i18n("&Definition..."), NULL, KEYSHORT_QUERY_DEF, m_pWindow,
 		SLOT(slotQueryDefinition()), "cscope_definition",
 		SIGNAL(toggleProject(bool))); // used
 	
