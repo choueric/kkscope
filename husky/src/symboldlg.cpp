@@ -25,6 +25,8 @@ SymbolDlg::SymbolDlg(QWidget* pParent) :
     setupUi(this);
 	// Create a persistent Cscope process
 	m_pCscope = new CscopeFrontend();
+
+    m_pSymbolHC->setFocus();
 	
 	// Initialise the hint list (hidden by default)
 	m_pHintList->setColumnCount(1);
