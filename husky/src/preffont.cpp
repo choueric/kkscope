@@ -148,5 +148,3 @@ void PrefFont::slotItemSelected(QTreeWidgetItem* pItem)
 		emit modified();
 	}
 }
-
-#include "preffont.moc"

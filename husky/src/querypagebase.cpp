@@ -168,5 +168,3 @@ void QueryPageBase::selectPrev()
 {
 	m_pView->selectPrev();
 }
-
-#include "querypagebase.moc"

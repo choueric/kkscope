@@ -1115,5 +1115,3 @@ void GraphWidget::slotOpenCall()
 	if (pEdge != NULL && pEdge->getFile() != "")
 		emit lineRequested(pEdge->getFile(), pEdge->getLine());
 }
-
-#include "graphwidget.moc"

@@ -313,5 +313,3 @@ void SymbolCompletion::slotAutoCompleteTimeout()
 		complete(sPrefix, s_nACMaxEntries);
 	}
 }
-
-#include "symbolcompletion.moc"

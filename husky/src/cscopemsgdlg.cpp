@@ -35,6 +35,3 @@ void CscopeMsgDlg::addText(const QString& sText)
 	m_pMsgText->append(sText);
 	show();
 }
-
-#include "cscopemsgdlg.moc"
-

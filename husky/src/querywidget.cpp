@@ -607,5 +607,3 @@ void QueryWidget::setRoot(const QString& sRoot)
 	// TODO: Update the query pages
 	//m_pFileList->setRoot(sRoot);
 }
-
-#include "querywidget.moc"

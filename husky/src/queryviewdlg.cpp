@@ -84,5 +84,3 @@ QueryView::Iterator QueryViewDlg::getIterator()
 {
 	return m_pView->getIterator();
 }
-
-#include "queryviewdlg.moc"

@@ -130,5 +130,3 @@ void QueryResultsMenu::slotRemove()
 	if (m_pItem != NULL)
 		emit remove(m_pItem);
 } 
-
-#include "queryresultsmenu.moc"

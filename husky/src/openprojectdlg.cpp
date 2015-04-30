@@ -102,5 +102,3 @@ void OpenProjectDlg::loadRecent()
 	for (itr = slProjects.begin(); itr != slProjects.end(); ++itr)
 		m_pRecentList->addItem(*itr);
 }
-
-#include "openprojectdlg.moc"

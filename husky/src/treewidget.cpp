@@ -239,5 +239,3 @@ void TreeWidget::slotShowAll(QTreeWidgetItem* pParent)
 		pItem = topLevelItem(indexOfTopLevelItem(pItem) + 1);
 	}
 }
-
-#include "treewidget.moc"

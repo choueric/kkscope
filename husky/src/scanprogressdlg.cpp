@@ -53,5 +53,3 @@ void ScanProgressDlg::addFiles(int nFiles)
 		m_nCurFiles = m_nFiles;
 	}
 }
-
-#include "scanprogressdlg.moc"

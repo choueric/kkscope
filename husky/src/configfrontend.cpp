@@ -155,5 +155,3 @@ Frontend::ParseResult ConfigFrontend::parseStdout(QString& sToken,
 	
 	return DiscardToken;
 }
-
-#include "configfrontend.moc"

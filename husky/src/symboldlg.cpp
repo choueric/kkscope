@@ -312,5 +312,3 @@ void SymbolDlg::slotTypeChanged(int nType)
 	else
 		m_pHintButton->setEnabled(true);
 }
-
-#include "symboldlg.moc"

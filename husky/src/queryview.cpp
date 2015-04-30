@@ -450,5 +450,3 @@ QString QueryView::Iterator::getText()
 		
 	return m_pItem->text(3);
 }
-
-#include "queryview.moc"

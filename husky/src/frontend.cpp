@@ -355,5 +355,3 @@ void Frontend::slotReadStderr2()
 {
     qDebug() << "TODO:" << __FUNCTION__;
 }
-
-#include "frontend.moc"

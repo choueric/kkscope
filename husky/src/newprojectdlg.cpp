@@ -330,6 +330,3 @@ void AutoCompletionDlg::accept()
 	// Close the dialogue, indicating acceptance
 	QDialog::accept();
 }
-
-
-#include "newprojectdlg.moc"

@@ -74,5 +74,3 @@ void EditorManager::applyPrefs()
 		Config().getWarnModifiedOnDisk());
 #endif
 }
-
-#include "editormanager.moc"

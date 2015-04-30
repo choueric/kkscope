@@ -29,6 +29,3 @@ void BookmarksDlg::slotLineRequested(const QString& sPath, uint nLine)
 	m_nLine = nLine;
 	accept();
 }
-
-#include "bookmarksdlg.moc"
-

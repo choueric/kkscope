@@ -208,5 +208,3 @@ void PrefFrontend::slotAutoConfigResult(uint nType, const QString& sResult)
 		break;
 	}
 }
-
-#include "preffrontend.moc"

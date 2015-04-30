@@ -99,5 +99,3 @@ void HistoryView::slotRemoveItem(QTreeWidgetItem* pItem)
 	
 	delete pCurItem;
 }
-
-#include "historyview.moc"

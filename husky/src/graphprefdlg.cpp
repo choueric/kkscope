@@ -51,6 +51,3 @@ void GraphPrefDlg::slotColorClicked()
 	
 	dlg.exec();
 }
-
-#include "graphprefdlg.moc"
-

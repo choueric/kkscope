@@ -199,5 +199,3 @@ void PreferencesDlg::slotModified()
 {
 	enableButtonApply(true);
 }
-
-#include "preferencesdlg.moc"

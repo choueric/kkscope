@@ -139,5 +139,3 @@ void PrefColor::slotItemSelected(QTreeWidgetItem* pItem)
 		emit modified();
 	}
 }
-
-#include "prefcolor.moc"

@@ -162,5 +162,3 @@ Frontend::ParseResult CtagsFrontend::parseStdout(QString& sToken,
 
 	return result;
 }
-
-#include "ctagsfrontend.moc"

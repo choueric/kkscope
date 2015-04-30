@@ -158,5 +158,3 @@ void QueryViewDriver::setRoot(QString &root)
 {
     m_sRoot = root;
 }
-
-#include "queryviewdriver.moc"

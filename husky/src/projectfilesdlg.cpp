@@ -416,5 +416,3 @@ void ProjectFilesDlg::slotCancelDirScan()
 {
 	m_pScanner->cancel();
 }
-
-#include "projectfilesdlg.moc"

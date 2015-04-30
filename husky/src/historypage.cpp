@@ -96,5 +96,3 @@ QString HistoryPage::getFileName(const QString&) const
 {
 	return QString("History_") + QString::number(m_nPageID);
 }
-
-#include "historypage.moc"

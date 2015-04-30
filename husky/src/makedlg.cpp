@@ -240,5 +240,3 @@ void MakeDlg::slotAddError(const QString& sFile, const QString& sLine,
 	sUniText = QTextCodec::codecForLocale()->toUnicode(sText.toAscii());
 	m_pErrorView->addRecord("", sFile, sLine, sUniText);
 }
-	
-#include "makedlg.moc"

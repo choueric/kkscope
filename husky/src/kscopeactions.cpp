@@ -327,5 +327,3 @@ KToggleAction* KScopeActions::addToggle(const QString& sCaption,
 
 	return pAction;
 }
-
-#include "kscopeactions.moc"

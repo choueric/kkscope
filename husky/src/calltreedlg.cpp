@@ -319,5 +319,3 @@ void CallTreeDlg::slotViewChanged(int nView)
 	
 	Config().setDefGraphView(nView);
 }
-
-#include "calltreedlg.moc"

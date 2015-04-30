@@ -191,5 +191,3 @@ bool FileListWidget::getTip(QModelIndex &index, QString &sTip)
 	sTip = m_proxyModel->data(newIndex).toString();
 	return true;
 }
-
-//#include "filelistwidget.moc"

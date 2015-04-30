@@ -109,5 +109,3 @@ void PrefOpt::apply()
 		break;
 	}
 }
-
-#include "prefopt.moc"

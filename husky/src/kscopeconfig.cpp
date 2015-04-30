@@ -263,7 +263,7 @@ void KScopeConfig::store()
  * Stores the layout of the main window.
  * @param	pMainWindow	Pointer to the main docking window
  */
-void KScopeConfig::storeWorkspace(KMainWindow *pMainWindow)
+void KScopeConfig::storeWorkspace(KMainWindow *)
 {
 	// pMainWindow->writeDockConfig(kapp->config(), "Workspace");
     // QMainWindow::restoreState(), saveState()
@@ -745,5 +745,3 @@ KScopeConfig& Config()
 	static KScopeConfig conf;
 	return conf;
 }
-
-#include "kscopeconfig.moc"

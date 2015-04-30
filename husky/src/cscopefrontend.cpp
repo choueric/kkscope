@@ -503,5 +503,3 @@ void CscopeVerifier::slotFinished()
 	emit done(m_bResult, m_nArgs);
 	delete this;
 }
-
-#include "cscopefrontend.moc"

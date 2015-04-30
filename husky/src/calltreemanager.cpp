@@ -104,6 +104,3 @@ void CallTreeManager::slotRemoveDialog(const CallTreeDlg* pDlg)
 {
 	m_lstDialogs.removeOne((CallTreeDlg *)pDlg);
 }
-
-#include "calltreemanager.moc"
-

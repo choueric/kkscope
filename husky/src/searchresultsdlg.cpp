@@ -130,6 +130,3 @@ void SearchResultsDlg::accept()
 	// Close the dialogue
 	QDialog::accept();
 }
-
-#include "searchresultsdlg.moc"
-

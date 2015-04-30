@@ -270,5 +270,3 @@ Frontend::ParseResult DotFrontend::parseStdout(QString& sToken,
 
 	return result;
 }
-
-#include "dotfrontend.moc"

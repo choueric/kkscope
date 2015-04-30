@@ -84,5 +84,3 @@ void ProgressDlg::slotShowBusy()
 	// Set the value of the progress-bar
 	progressBar()->setValue(m_nIdleValue);
 }
-
-#include "progressdlg.moc"

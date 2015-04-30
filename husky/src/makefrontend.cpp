@@ -103,5 +103,3 @@ Frontend::ParseResult MakeFrontend::parseStdout(QString& sToken, ParserDelim)
 
 	return RecordReady;
 }
-
-#include "makefrontend.moc"

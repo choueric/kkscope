@@ -740,6 +740,3 @@ void EditorPage::focusOnTaglist()
 {
     m_pCtagsListWidget->focusOnEdit();
 }
-    
-
-#include "editorpage.moc"

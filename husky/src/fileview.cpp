@@ -96,5 +96,3 @@ void FileView::slotTreeItemSelected(const QModelIndex & index)
 		emit fileRequested(info.absoluteFilePath(), 0);
     }
 }
-
-#include "fileview.moc"

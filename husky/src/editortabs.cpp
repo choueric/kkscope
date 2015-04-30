@@ -626,5 +626,3 @@ bool EditorTabs::removePageTab(QWidget* pPage, bool bForce)
 	emit editorRemoved(pEditPage);
 	return true;
 }
-
-#include "editortabs.moc"

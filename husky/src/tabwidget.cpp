@@ -61,5 +61,3 @@ void TabWidget::setCurrentTab(QAction *action)
     int index = action->data().toInt();
     setCurrentIndex(index);
 }
-
-#include "tabwidget.moc"

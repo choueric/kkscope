@@ -191,5 +191,3 @@ void QueryPage::setRoot(QString &root)
 {
     m_pDriver->setRoot(root);
 }
-
-#include "querypage.moc"
