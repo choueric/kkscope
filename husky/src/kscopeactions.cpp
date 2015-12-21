@@ -9,7 +9,7 @@
 #define KEYSHORT_GO_TO_FILE_LIST "Ctrl+Alt+F"
 #define KEYSHORT_GO_TO_TAG_LIST "Ctrl+Alt+C"
 #define KEYSHORT_QUERY_REF "Ctrl+/"
-#define KEYSHORT_QUERY_DEF "Ctrl+1"
+#define KEYSHORT_QUERY_DEF "F4"
 
 KScopeActions::KScopeActions(KScope* pWindow) : QObject(),
 		m_pWindow(pWindow),
