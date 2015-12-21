@@ -6,8 +6,11 @@ A porting of kscope 1.6.2 using Qt4 and KDE4.
 
 request:
 - build-essential
+- cmake
 - kdelibs-dev
 - bison, flex
+- cscope
+- ctags
 
 1. make a build direcotry, such as "./build", and go into it.
     ```shell
