@@ -5,6 +5,8 @@
 #include "openprojectdlg.h"
 #include "kscopeconfig.h"
 
+#include <QtDebug>
+
 /**
  * Class constructor.
  * @param	pParent	The parent widget
@@ -16,6 +18,9 @@ OpenProjectDlg::OpenProjectDlg(QWidget* pParent):
     setupUi(this);
 	loadRecent();
 	m_pProjPathRequester->setFilter("cscope.proj");
+
+	connect(m_pRecentList, SIGNAL(itemClicked(QListWidgetItem *)),
+            this, SLOT(slotSelectRecent(QListWidgetItem*)));	
 }
 
 /**
@@ -41,6 +46,7 @@ QString OpenProjectDlg::getPath() const
 void OpenProjectDlg::slotProjectSelected(const QString& sProjPath)
 {
 	QFileInfo fi(sProjPath);
+    qDebug() << "slot select" << fi.absolutePath();
 	m_pProjPathRequester->setUrl(KUrl(fi.absolutePath()));
 }
 
@@ -70,8 +76,9 @@ void OpenProjectDlg::slotRemoveRecent()
  */
 void OpenProjectDlg::slotSelectRecent(QListWidgetItem* pItem)
 {
-	if (pItem != NULL)
+	if (pItem != NULL) {
 		m_pProjPathRequester->setUrl(KUrl(pItem->text()));
+    }
 }
 
 /**
