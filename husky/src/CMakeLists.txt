@@ -12,6 +12,10 @@ include_directories(${PROJECT_BINARY_DIR})
 include_directories(${PROJECT_SOURCE_DIR})
 add_definitions(-DTESTCASE)
 
+set (CMAKE_BUILD_TYPE "Debug")
+SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
+SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")  
+
 MESSAGE(STATUS "BINARY dir is : " ${PROJECT_BINARY_DIR})
 MESSAGE(STATUS "SOURCE dir is : " ${PROJECT_SOURCE_DIR})
 
@@ -113,8 +117,10 @@ target_link_libraries (husky ${KDE4_KDEUI_LIBS}
     ${KDE4_KFILE_LIBS}
     ${KDE4_KTEXTEDITOR_LIBS})
 
+MESSAGE(STATUS "bin dir is : " ${INSTALL_TARGETS_DEFAULT_ARGS})
+MESSAGE(STATUS "ui.rc dir is : " ${DATA_INSTALL_DIR})
+MESSAGE(STATUS "icon install dir is : " ${ICON_INSTALL_DIR})
+
 install(TARGETS husky ${INSTALL_TARGETS_DEFAULT_ARGS})
-
 install(FILES ${PROJECT_SOURCE_DIR}/ui/kscopeui.rc DESTINATION ${DATA_INSTALL_DIR}/husky)
-
 kde4_install_icons(${PROJECT_SOURCE_DIR}/ui/pics ${ICON_INSTALL_DIR})
