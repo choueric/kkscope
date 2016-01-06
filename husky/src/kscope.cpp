@@ -1093,17 +1093,23 @@ bool KScope::slotCloseProject()
 void KScope::slotExtEdit()
 {
 	QString sCmdLine;
-	KProcess proc;
+    QStringList sCmdList;
+	KProcess *proc = new KProcess(this);
+
+    /*
+     * for vim, start at line number L of file F, the command is like:
+     * $ vim F +L
+     */
 
 	// Create the command line for the external editor	
 	sCmdLine = Config().getExtEditor();
 	sCmdLine.replace("%F", m_sCurFilePath);
 	sCmdLine.replace("%L", QString::number(m_nCurLine));
+    sCmdList = sCmdLine.split(" ", QString::SkipEmptyParts);
 	
 	// Run the external editor
-	//proc.setUseShell(true); // TODO
-	proc << sCmdLine;
-	proc.start();
+	*proc << sCmdList;
+	proc->startDetached();
 }
 
 /**
