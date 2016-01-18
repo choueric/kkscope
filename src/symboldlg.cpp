@@ -99,6 +99,7 @@ void SymbolDlg::setType(uint nType)
  */
 void SymbolDlg::setSymbol(const QString& sSymbol)
 {
+	m_pSymbolHC->reset();
 	m_pSymbolHC->setCurrentItem(sSymbol, true);
 }
 
