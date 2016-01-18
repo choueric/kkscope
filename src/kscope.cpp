@@ -134,7 +134,7 @@ KScope::KScope(QWidget* pParent) :
 	
 	// Display the symbol dialogue when the user opens a new query page
 	connect(m_pQueryWidget, SIGNAL(newQuery()), 
-		this, SLOT(slotQueryReference()));
+		this, SLOT(slotQueryDefinition()));
 
 	// Rebuild the project database after a certain time period has elapsed
 	// since the last save
