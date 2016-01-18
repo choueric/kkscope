@@ -1,8 +1,10 @@
-#husky#
+# kscope-4 #
 
 A porting of kscope 1.6.2 using Qt4 and KDE4.
 
-#Build#
+The name of executable file is *husky*
+
+# Build #
 
 request:
 - build-essential
@@ -12,16 +14,19 @@ request:
 - cscope
 - ctags
 
-1. make a build direcotry, such as "./build", and go into it.
+1. Make a build direcotry, such as "./build", and go into it.
     ```shell
     $ mkdir build
     $ cd ./build
     ```
 
-2. use cmake to build project, and install to a temporary path (etc. `./install`). 
-   `../husky/src`, for example, is the directory of CMakefile.
+2. Use cmake to build project, and install to a temporary path (etc. `./install`). 
+   If you don't specify the variable `CMAKE_INSTALL_PREFIX`, the default install
+   path would be `/usr/local/bin`.
+   `../src`, according to the build directory, for example, is the directory of
+   CMakefile.
     ```shell
-    $ cmake ../husky/src -DCMAKE_INSTALL_PREFIX=`pwd`/_install
+    $ cmake ../src -DCMAKE_INSTALL_PREFIX=`pwd`/_install
     $ make
     $ make install
     ```
