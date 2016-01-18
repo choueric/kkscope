@@ -101,6 +101,7 @@ set (husky_SRCS
     ${PROJECT_SOURCE_DIR}/kscopeconfig.cpp
     ${PROJECT_SOURCE_DIR}/kscopepixmaps.cpp
     ${PROJECT_SOURCE_DIR}/searchlistview.cpp
+    ${PROJECT_SOURCE_DIR}/shortcuts.h
     )
 
 kde4_add_ui_files(husky_SRCS ${PROJECT_SOURCE_DIR}/ui/kscopeui.rc)
