@@ -2,7 +2,7 @@
 
 A porting of kscope 1.6.2 using Qt4 and KDE4.
 
-The name of executable file is *husky*
+The name of executable file is **husky**
 
 # Build #
 
