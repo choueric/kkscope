@@ -11,6 +11,8 @@
 #include "cscopefrontend.h"
 #include "kscopeconfig.h"
 
+#define MAX_COUNT 20
+
 QStringList SymbolDlg::s_slHistory;
 
 /**
@@ -27,6 +29,7 @@ SymbolDlg::SymbolDlg(QWidget* pParent) :
 	m_pCscope = new CscopeFrontend();
 
     m_pSymbolHC->setFocus();
+	m_pSymbolHC->setMaxCount(MAX_COUNT);
 	
 	// Initialise the hint list (hidden by default)
 	m_pHintList->setColumnCount(1);
@@ -99,6 +102,9 @@ void SymbolDlg::setType(uint nType)
  */
 void SymbolDlg::setSymbol(const QString& sSymbol)
 {
+	QStringList sList = m_pSymbolHC->historyItems();
+	if (sList.size() >= MAX_COUNT)
+		m_pSymbolHC->clearHistory();
 	m_pSymbolHC->reset();
 	m_pSymbolHC->setCurrentItem(sSymbol, true);
 }
