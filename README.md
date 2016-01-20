@@ -19,23 +19,29 @@ request:
 Below are instructions to build and use.
 
 1. Make a build direcotry, such as "./build", and go into it.
+
     ```shell
     $ mkdir build
     $ cd ./build
     ```
 
-2. Use cmake to build project, and install to a temporary path (etc. `./install`). 
-   If you don't specify the variable `CMAKE_INSTALL_PREFIX`, the default install
-   path would be `/usr/local/bin`.
+2. Use cmake to build project. The default install path would be `/usr/local/bin`.
 
    `../src`, according to the build directory, for example, is the directory of
    CMakefile.
+
     ```shell
     $ cmake ../src -DCMAKE_INSTALL_PREFIX=`pwd`/_install
     $ make
     $ make install
     ```
-    
+
+   If you want to install *husky* to another path (etc. `./install`), specify
+   the variable `CMAKE_INSTALL_PREFIX`:
+
+	```shell
+    $ cmake ../src -DCMAKE_INSTALL_PREFIX=`pwd`/_install
+	```
 3. run the programe.
     ```shell
     $ ./husky
