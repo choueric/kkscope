@@ -10,8 +10,8 @@
 #include <KTextEditor/Editor>
 #include <KTextEditor/EditorChooser>
 
-#include "../../querywidget.h"
-#include "../../queryview.h"
+#include "../../src/querywidget.h"
+#include "../../src/queryview.h"
 
 
 class Mainwin: public QMainWindow
