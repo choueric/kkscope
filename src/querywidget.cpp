@@ -411,7 +411,8 @@ void QueryWidget::slotCurrentChanged(int index)
         return;
     }
 	
-	m_pLockAction->setChecked(pPage->isLocked());
+	if (m_pLockAction)
+		m_pLockAction->setChecked(pPage->isLocked());
 }
 
 /**
