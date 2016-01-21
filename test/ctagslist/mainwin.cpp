@@ -18,7 +18,7 @@ Mainwin::Mainwin()
 
     setWindowTitle(tr("Mainwin"));
 
-    m_pCtagsList = new CtagsList(this);
+    m_pCtagsList = new CtagsListWidget(this);
 
     connect(&m_ctags, SIGNAL(dataReady(FrontendToken *)), m_pCtagsList,
             SLOT(slotDataReady(FrontendToken *)));

@@ -2,8 +2,8 @@
 #define _NOTEPAD_H
 
 #include <QtGui>
-#include "../../../ctagsfrontend.h"
-#include "../../../ctagslist.h"
+#include "../../src/ctagsfrontend.h"
+#include "../../src/ctagslistwidget.h"
 
 class Mainwin: public QMainWindow
 {
@@ -24,7 +24,7 @@ class Mainwin: public QMainWindow
         QMenu *fileMenu;
 
         CtagsFrontend m_ctags;
-        CtagsList *m_pCtagsList;
+        CtagsListWidget *m_pCtagsList;
 };
 
 #endif
