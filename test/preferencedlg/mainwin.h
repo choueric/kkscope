@@ -10,7 +10,7 @@
 #include <KTextEditor/Editor>
 #include <KTextEditor/EditorChooser>
 
-#include "../../preferencesdlg.h"
+#include "../../src/preferencesdlg.h"
 
 
 class Mainwin: public QMainWindow
