@@ -2,7 +2,7 @@
 #define _NOTEPAD_H
 
 #include <QtGui>
-#include "../../../src/filelist.h"
+#include "../../../src/filelistwidget.h"
 
 class Mainwin: public QMainWindow
 {
@@ -22,7 +22,7 @@ class Mainwin: public QMainWindow
         QAction *exitAction;
         QMenu *fileMenu;
 
-        FileList *pFileList;
+        FileListWidget *pFileList;
 };
 
 #endif
