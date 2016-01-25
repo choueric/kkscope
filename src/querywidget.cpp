@@ -23,6 +23,8 @@ QueryWidget::QueryWidget(QWidget* pParent) :
     setupUi(this);
 	// Pages can be closed by clicking their tabs
 	m_pQueryTabs->setHoverCloseButton(true);
+	m_pQueryTabs->setTabShape(QTabWidget::Triangular);
+	m_pQueryTabs->setStyleSheet("QTabBar::tab { height: 20px }");
 	
 	// Change the lock action state according to the current page
 	connect(m_pQueryTabs, SIGNAL(currentChanged(int)), this,
