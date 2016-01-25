@@ -23,7 +23,7 @@ public:
 		QTreeWidgetItem(pList),
 		m_fe(fe) {
         setText(0, Config().getFontName(fe));
-        setText(1, "");
+        setText(1, "Sample");
 		setFont(Config().getFont(fe));
 	}
 	
@@ -34,36 +34,9 @@ public:
 	
 	/**
 	 * Changes the font associated with this item.
-	 * The function a sample text on a pixmap using this font, and then
-	 * assigns the pixmap to the list item.
-	 * The font set by this function is returned by getFont().
-	 * @param	font	The font to set
 	 */
-    // TODO: it dosen't seem nice.
 	void setFont(QFont font) {
-		QFontMetrics fm(font);
-		QPainter painter;
-		QRect rc;
-		
-		// Remember the font
-		m_font = font;
-		
-		// Set the pixmap's size so it can contain the sample text
-		rc = fm.boundingRect(i18n("Sample"));
-		rc.moveTopLeft(QPoint(0, 0));
-		QPixmap pix(rc.width(), rc.height());
-		
-		// Draw on the pixmap
-		pix.fill();
-		painter.begin(&pix);
-		painter.setFont(font);
-		painter.setPen(QColor("black"));
-		painter.drawText(rc, Qt::AlignHCenter | Qt::AlignVCenter,
-			i18n("Sample"));
-		painter.end();
-		
-		// Set the pixmap to the item
-		setIcon(1, pix);
+		QTreeWidgetItem::setFont(1, font);
 	}
 	
 	/**
