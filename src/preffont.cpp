@@ -90,6 +90,8 @@ PrefFont::PrefFont(QWidget* pParent):
     setupUi(this);
 	// Set initial values
 	load();
+	connect(m_pList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, 
+		SLOT(slotItemSelected(QTreeWidgetItem*)));
 }
 
 /**
