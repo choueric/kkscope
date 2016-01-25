@@ -3,6 +3,7 @@
 ListTreeView::ListTreeView(QWidget *parent) :
     QTreeView(parent)
 {
+	setAlternatingRowColors(true);
 }
 
 ListTreeView::~ListTreeView()
@@ -68,6 +69,8 @@ void ListLineEdit::keyPressEvent(QKeyEvent *pEvent)
 ListSortFilterProxyModel::ListSortFilterProxyModel(QObject *parent) :
     QSortFilterProxyModel(parent),
     m_bSortByInt(false),
+	m_bgColor(Qt::white),
+	m_fgColor(Qt::black),
     m_nSortCol(-1)
 {
 }
@@ -91,6 +94,29 @@ bool ListSortFilterProxyModel::lessThan(const QModelIndex &left,
         return iLeft < iRight;
     }
     return QSortFilterProxyModel::lessThan(left, right);
+}
+
+void ListSortFilterProxyModel::setBgColor(QColor color)
+{
+	m_bgColor = color;
+}
+
+void ListSortFilterProxyModel::setFgColor(QColor color)
+{
+	m_fgColor = color;
+}
+
+QVariant ListSortFilterProxyModel::data(const QModelIndex & index, int role) const
+{
+	if (role == Qt::BackgroundRole) {
+		QBrush brush(m_bgColor);
+		return brush;
+	} else if (role == Qt::ForegroundRole) {
+		QBrush brush(m_fgColor);
+		return brush;
+	} else {
+		return QSortFilterProxyModel::data(index, role);
+	}
 }
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -221,13 +221,10 @@ bool CtagsListWidget::getTip(QModelIndex &index, QString& sTip)
  */
 void CtagsListWidget::applyPrefs()
 {
-	// Apply colour settings
-    QPalette pe = m_pView->palette();
-    pe.setColor(QPalette::Background, Config().getColor(KScopeConfig::TagListBack));
-    pe.setColor(QPalette::Foreground, Config().getColor(KScopeConfig::TagListFore));
-    m_pView->setPalette(pe);
-
+	m_proxyModel->setBgColor(Config().getColor(KScopeConfig::TagListBack));
+	m_proxyModel->setFgColor(Config().getColor(KScopeConfig::TagListFore));
 	m_pView->setFont(Config().getFont(KScopeConfig::TagList));
+	m_pView->show();
 }
 
 /**
