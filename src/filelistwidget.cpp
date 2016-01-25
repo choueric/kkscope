@@ -140,11 +140,10 @@ void FileListWidget::processItemSelected(const QModelIndex &index)
  */
 void FileListWidget::applyPrefs()
 {
-    QPalette pe = m_pView->palette();
-    pe.setColor(QPalette::Background, Config().getColor(KScopeConfig::FileListBack));
-    pe.setColor(QPalette::Foreground, Config().getColor(KScopeConfig::FileListFore));
-    m_pView->setPalette(pe);
+	m_proxyModel->setBgColor(Config().getColor(KScopeConfig::FileListBack));
+	m_proxyModel->setFgColor(Config().getColor(KScopeConfig::FileListFore));
 	m_pView->setFont(Config().getFont(KScopeConfig::FileList));
+	m_pView->show();
 }
 
 /**

@@ -18,8 +18,16 @@ Mainwin::Mainwin()
 
     setWindowTitle(tr("Mainwin"));
 
-    pFileList = new FileList(this);
+    pFileList = new FileListWidget(this);
     setCentralWidget(pFileList);
+
+	QPalette Pal(palette());
+
+	// set black background
+	Pal.setColor(QPalette::Background, Qt::black);
+	pFileList->setAutoFillBackground(true);
+	pFileList->setPalette(Pal);
+	pFileList->show();
 
     pFileList->addItem("first");
     pFileList->addItem("second");

@@ -1,3 +1,4 @@
+#include <QtDebug>
 #include <qlayout.h>
 #include <klocale.h>
 #include <kiconloader.h>
@@ -38,20 +39,16 @@ PreferencesDlg::PreferencesDlg(QWidget* pParent, uint nPage) :
     
     setCaption(i18n("Preferences"));
 
-    // iconName refer to standards.freedesktop.org/icon-naming-spec
-    // or look up in /usr/share/icons/
-
 	// Create and add the "Frontend" page
 	pLayout = new QVBoxLayout;
 	m_pPrefFrontend = new PrefFrontend(this);
 	pLayout->addWidget(m_pPrefFrontend);
 	pFrame = addPage(m_pPrefFrontend, i18n("Programmes"));
-	pFrame->setHeader(i18n("Paths to back-end programmes"));
+	pFrame->setHeader(i18n("Paths to backend programmes"));
     pFrame->setIcon(KIcon("system-run"));
     if (nPage == index++)
         pCur = pFrame;
 
-	
 	// Create and add the "Colours" page
 	pLayout = new QVBoxLayout;
 	m_pPrefColor = new PrefColor(this);
@@ -87,8 +84,7 @@ PreferencesDlg::PreferencesDlg(QWidget* pParent, uint nPage) :
 	enableButtonApply(false);
 		
 	// Enable the "Apply" button when a parameter changes its value
-	connect(m_pPrefFrontend, SIGNAL(modified()), this, 
-		SLOT(slotModified()));
+	connect(m_pPrefFrontend, SIGNAL(modified()), this, SLOT(slotModified()));
 	connect(m_pPrefColor, SIGNAL(modified()), this, SLOT(slotModified()));
 	connect(m_pPrefFont, SIGNAL(modified()), this, SLOT(slotModified()));
 	connect(m_pPrefOpt, SIGNAL(modified()), this, SLOT(slotModified()));

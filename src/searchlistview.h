@@ -42,12 +42,17 @@ class ListSortFilterProxyModel : public QSortFilterProxyModel
         ListSortFilterProxyModel(QObject *parent = 0);
         ~ListSortFilterProxyModel();
         void setSortByInt(int, bool);
+		void setBgColor(QColor color);
+		void setFgColor(QColor color);
+		virtual QVariant data(const QModelIndex & index, int role = Qt::DisplayRole) const;
 
     protected:
         virtual bool lessThan(const QModelIndex &left, const QModelIndex &right) const;
 
     private:
         bool m_bSortByInt;
+		QColor m_bgColor;
+		QColor m_fgColor;
         int m_nSortCol;
 };
 

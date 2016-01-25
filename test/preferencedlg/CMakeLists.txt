@@ -4,69 +4,71 @@ find_package (Qt4 REQUIRED)
 include (KDE4Defaults)
 include (${QT_USE_FILE})
 include_directories (${KDE4_INCLUDES})
-include_directories (${PROJECT_SOURCE_DIR}/../../)
+include_directories (${PROJECT_SOURCE_DIR}/../../src)
 add_definitions(-DTESTCASE)
 
 set (husky_FORMS
-    ../../ui/graphpreflayout.ui
+    ../../src/ui/graphpreflayout.ui
 
-    ../../ui/prefcolorlayout.ui
-    ../../ui/preffontlayout.ui
-    ../../ui/prefoptlayout.ui
-    ../../ui/preffrontendlayout.ui
+    ../../src/ui/prefcolorlayout.ui
+    ../../src/ui/preffontlayout.ui
+    ../../src/ui/prefoptlayout.ui
+    ../../src/ui/preffrontendlayout.ui
 
-    ../../ui/querywidgetlayout.ui
-    ../../ui/openprojectlayout.ui
-    ../../ui/queryviewlayout.ui
-    ../../ui/autocompletionlayout.ui
-    ../../ui/newprojectlayout.ui
-    ../../ui/searchresultslayout.ui
-    ../../ui/fileviewlayout.ui
-    ../../ui/bookmarkslayout.ui)
+    ../../src/ui/querywidgetlayout.ui
+    ../../src/ui/openprojectlayout.ui
+    ../../src/ui/queryviewlayout.ui
+    ../../src/ui/autocompletionlayout.ui
+    ../../src/ui/newprojectlayout.ui
+    ../../src/ui/searchresultslayout.ui
+    ../../src/ui/fileviewlayout.ui
+    ../../src/ui/bookmarkslayout.ui)
 QT4_WRAP_UI(husky_FORMS_HEADERS
     ${husky_FORMS})
 
 set (husky_SRCS 
-     ../../dotfrontend.cpp
-     ../../graphnode.cpp
-     ../../graphedge.cpp
-     ../../graphwidget.cpp
-     ../../graphprefdlg.cpp
-     ../../encoder.cpp
-     ../../progressdlg.cpp
+     ../../src/dotfrontend.cpp
+     ../../src/graphnode.cpp
+     ../../src/graphedge.cpp
+     ../../src/graphwidget.cpp
+     ../../src/graphprefdlg.cpp
+     ../../src/encoder.cpp
+     ../../src/progressdlg.cpp
 
-    ../../prefcolor.cpp
-    ../../preffont.cpp
-    ../../prefopt.cpp
-    ../../preffrontend.cpp
-    ../../preferencesdlg.cpp
+	 ../../src/stringlistmodel.cpp
 
-    ../../querywidget.cpp
-    ../../querypagebase.cpp
-    ../../historyview.cpp
-    ../../historypage.cpp
-    ../../tabwidget.cpp
-    ../../querypage.cpp
-    ../../openprojectdlg.cpp
-    ../../newprojectdlg.cpp
+    ../../src/prefcolor.cpp
+    ../../src/preffont.cpp
+    ../../src/prefopt.cpp
+    ../../src/preffrontend.cpp
+    ../../src/preferencesdlg.cpp
+
+    ../../src/querywidget.cpp
+    ../../src/querypagebase.cpp
+    ../../src/historyview.cpp
+    ../../src/historypage.cpp
+    ../../src/tabwidget.cpp
+    ../../src/querypage.cpp
+    ../../src/openprojectdlg.cpp
+    ../../src/newprojectdlg.cpp
     main.cpp 
     mainwin.cpp
-    ../../bookmarksdlg.cpp
-    ../../queryview.cpp
-    ../../queryresultsmenu.cpp
-    ../../queryviewdriver.cpp
-    ../../queryviewdlg.cpp
-    ../../searchresultsdlg.cpp
-    ../../frontend.cpp
-    ../../ctagsfrontend.cpp
-    ../../cscopefrontend.cpp
-    ../../configfrontend.cpp
-    ../../projectbase.cpp
-    ../../fileview.cpp
-    ../../filelist.cpp
-    ../../kscopeconfig.cpp
-    ../../kscopepixmaps.cpp
-    ../../searchlist.cpp)
+    ../../src/bookmarksdlg.cpp
+    ../../src/queryview.cpp
+    ../../src/queryresultsmenu.cpp
+    ../../src/queryviewdriver.cpp
+    ../../src/queryviewdlg.cpp
+    ../../src/searchresultsdlg.cpp
+    ../../src/frontend.cpp
+    ../../src/ctagsfrontend.cpp
+    ../../src/cscopefrontend.cpp
+    ../../src/configfrontend.cpp
+    ../../src/projectbase.cpp
+    ../../src/fileview.cpp
+    ../../src/filelistwidget.cpp
+    ../../src/kscopeconfig.cpp
+    ../../src/kscopepixmaps.cpp
+    ../../src/searchlistview.cpp)
 kde4_add_executable (husky_test ${husky_SRCS} ${husky_FORMS_HEADERS})
 target_link_libraries (husky_test ${KDE4_KDEUI_LIBS}
     ${KDE4_KPARTS_LIBS}
