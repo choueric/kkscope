@@ -78,6 +78,9 @@ PrefColor::PrefColor(QWidget* pParent):
 	
 	// Set initial values
 	load();
+
+	connect(m_pList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, 
+		SLOT(slotItemSelected(QTreeWidgetItem*)));
 }
 
 /**
@@ -108,7 +111,7 @@ void PrefColor::load()
 void PrefColor::apply()
 {
 	ColorListItem* pItem;
-	
+
 	// Create a list item for every GUI element
     QTreeWidgetItem *p;
     QTreeWidgetItemIterator it(m_pList);
@@ -131,7 +134,7 @@ void PrefColor::slotItemSelected(QTreeWidgetItem* pItem)
 {
 	ColorListItem* pClrItem;
 	QColor clr;
-	
+
 	pClrItem = (ColorListItem*)pItem;
 	if (KColorDialog::getColor(clr, pClrItem->getColor()) == 
 		QDialog::Accepted) {
