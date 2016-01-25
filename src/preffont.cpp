@@ -1,3 +1,4 @@
+#include <QDebug>
 #include <QTreeWidget>
 #include <qpainter.h>
 #include <kfontdialog.h>
@@ -36,6 +37,7 @@ public:
 	 * Changes the font associated with this item.
 	 */
 	void setFont(QFont font) {
+		m_font = font;
 		QTreeWidgetItem::setFont(1, font);
 	}
 	
@@ -101,6 +103,7 @@ void PrefFont::apply()
         p = *it;
         pItem = (FontListItem *)p;
 		Config().setFont(pItem->getElement(), pItem->getFont());
+		qDebug() << "set font" << pItem->getFont();
     }
 }
 
@@ -120,6 +123,7 @@ void PrefFont::slotItemSelected(QTreeWidgetItem* pItem)
 	font = pFontItem->getFont();
 	if (KFontDialog::getFont(font) == QDialog::Accepted) {
 		pFontItem->setFont(font);
+		qDebug() << "set font" << font;
 		emit modified();
 	}
 }
