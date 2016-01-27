@@ -49,6 +49,10 @@ void KScopeActions::init()
 	m_pExtEditAction = addAction(i18n("Edit in E&xternal Editor"),
 		"accessories-text-editor", "Ctrl+E", m_pWindow, SLOT(slotExtEdit()),
 		"edit_external_editor", SIGNAL(toggleFile(bool))); // renew
+
+	m_pCopyFilePathAction = addAction(i18n("Copy &file Path"),
+		"copy-file-path", NULL, m_pWindow, SLOT(slotCopyFilePath()),
+		"copy_file_path", SIGNAL(toggleFile(bool)));
 		
 	addAction(i18n("Go To Tag"),
 		"go-jump-definition", "Ctrl+Shift+T", m_pWindow, SLOT(slotGotoTag()),

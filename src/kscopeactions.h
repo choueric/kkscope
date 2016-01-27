@@ -55,6 +55,9 @@ private:
 
 	/** The "Edit in External Editor" menu command. */
 	KAction* m_pExtEditAction;
+
+	/** The "Copy File Path" menu command. */
+	KAction* m_pCopyFilePathAction;
 	
 	/** The "Show/Hide File View" menu command. */
 	KToggleAction* m_pToggleFileViewAction;

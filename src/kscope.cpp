@@ -1112,6 +1112,21 @@ void KScope::slotExtEdit()
 	proc->startDetached();
 }
 
+/*
+ * copy the file path in current editor page to system clipboard
+ */
+void KScope::slotCopyFilePath()
+{
+	EditorPage* pPage;
+
+	pPage = m_pEditTabs->getCurrentPage();
+	if (pPage != NULL) {
+		QString path = pPage->getFilePath();
+		QClipboard *clipboard = QApplication::clipboard();
+		clipboard->setText(path);
+	}
+}
+
 /**
  * Handles the "Edit->Complete Symbol" menu command.
  * Creates a list of possible completions for the symbol currently under the

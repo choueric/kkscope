@@ -160,6 +160,7 @@ private slots:
 	void slotConfigure();
 	void slotCloseAllWindows();
 	void slotExtEdit();
+	void slotCopyFilePath();
 	void slotCompleteSymbol();
 	void slotShowWelcome();
 	void slotGotoTag();
