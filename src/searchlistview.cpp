@@ -61,6 +61,8 @@ void ListLineEdit::keyPressEvent(QKeyEvent *pEvent)
     } else if (pEvent->key() == Qt::Key_Down) {
         is_up = 0;
         emit upDownPressed(is_up);
+    } else if (pEvent->key() == Qt::Key_Delete) {
+		clear();
     } else
         QLineEdit::keyPressEvent(pEvent);
 }
