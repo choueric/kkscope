@@ -875,7 +875,8 @@ void KScope::restoreSession()
 
 	// Set the active editor (or choose a default one)
 	if (m_pEditTabs->findEditorPage(sess.sLastFile, true) == NULL)
-		m_pEditTabs->findEditorPage(sess.fllOpenFiles.last()->m_sPath, true);
+		if (sess.sLastFile.size() != 0)
+			m_pEditTabs->findEditorPage(sess.fllOpenFiles.last()->m_sPath, true);
 	
 	// Reload bookmarks
 	m_pEditTabs->setBookmarks(sess.fllBookmarks);	
