@@ -1,6 +1,6 @@
 # kscope-4 #
 
-A porting of kscope 1.6.2 using Qt4 and KDE4.
+A porting of kscope 1.6.2 based on Qt4 and KDE4.
 
 The name of executable file is **husky**
 
@@ -15,6 +15,13 @@ request:
 - flex
 - ctags
 - cscope
+
+In Ubuntu 14.04, do:
+
+```sh
+sudo apt install build-essential cmake kde-developer-sdk bison flex \
+  exuberant-ctags cscope
+```
 
 Below are instructions to build and use.
 
@@ -31,7 +38,7 @@ Below are instructions to build and use.
    CMakefile.
 
     ```shell
-    $ cmake ../src -DCMAKE_INSTALL_PREFIX=`pwd`/_install
+    $ cmake ../src
     $ make
     $ make install
     ```
