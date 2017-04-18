@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>539</width>
+    <width>542</width>
     <height>395</height>
    </rect>
   </property>
@@ -29,7 +29,7 @@
          <item row="1" column="0">
           <widget class="QLabel" name="textLabel2">
            <property name="text">
-            <string>Path</string>
+            <string>Project Path</string>
            </property>
            <property name="wordWrap">
             <bool>false</bool>
@@ -39,7 +39,7 @@
          <item row="0" column="0">
           <widget class="QLabel" name="textLabel1">
            <property name="text">
-            <string>Name</string>
+            <string>Project Name</string>
            </property>
            <property name="wordWrap">
             <bool>false</bool>
@@ -61,26 +61,17 @@ The name must conform to the file system's naming conventions for directories (e
 KScope will create a directory with the given name under this project, and populate it with the project configuration and database files.
 This does not need to be the path in which the source files reside.</string>
            </property>
+           <zorder></zorder>
           </widget>
          </item>
         </layout>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="m_pHiddenDirCheck">
-         <property name="text">
-          <string>&amp;Use a hidden folder under the source root directory</string>
-         </property>
-         <property name="shortcut">
-          <string>Alt+U</string>
-         </property>
-        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout">
          <item>
           <widget class="QLabel" name="textLabel1_2">
            <property name="text">
-            <string>Source Root (Optional)</string>
+            <string>Source Root</string>
            </property>
            <property name="wordWrap">
             <bool>false</bool>
@@ -93,20 +84,12 @@ This does not need to be the path in which the source files reside.</string>
         </layout>
        </item>
        <item>
-        <widget class="QLabel" name="textLabel1_3">
+        <widget class="QCheckBox" name="m_pHiddenDirCheck">
          <property name="text">
-          <string>&lt;blockquote&gt;A project consists of several files located in a directory
- with the given name and path. The project's name needs to be a valid directory
-name and must not contain any whitespace.&lt;/blockquote&gt;
-&lt;br&gt;
-&lt;blockquote&gt;The Source Root is a convinient way to specify a common
-path for all source files, but is not required.&lt;/blockquote&gt;</string>
+          <string>&amp;Use a hidden folder under the source root directory</string>
          </property>
-         <property name="alignment">
-          <set>Qt::AlignVCenter</set>
-         </property>
-         <property name="wordWrap">
-          <bool>true</bool>
+         <property name="shortcut">
+          <string>Alt+U</string>
          </property>
         </widget>
        </item>
@@ -587,11 +570,11 @@ path for all source files, but is not required.&lt;/blockquote&gt;</string>
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>m_pNameEdit</tabstop>
-  <tabstop>m_pHiddenDirCheck</tabstop>
   <tabstop>m_pAddButton</tabstop>
   <tabstop>m_pRemoveButton</tabstop>
   <tabstop>m_pKernelCheck</tabstop>
