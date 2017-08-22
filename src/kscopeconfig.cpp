@@ -6,6 +6,7 @@
 #include <kglobalsettings.h>
 
 #include "kscopeconfig.h"
+#include "husky.h"
 
 // NOTE:
 // This configuration file entry controls whether the welcome dialogue is
@@ -36,10 +37,6 @@ const ElementInfo eiColors[] = {
 	{ "Tag List (Background)", "TagListBack" },
 	{ "Query Window (Foreground)", "QueryListFore" },
 	{ "Query Window (Background)", "QueryListBack" },
-	{ "Call Graph (Background)", "GraphBack" },
-	{ "Call Graph (Nodes)", "GraphNode" },
-	{ "Call Graph (Text)", "GraphText" },
-	{ "Call Graph (Multi-Call Nodes)", "GraphMultiCall" } 
 };
 
 /**
@@ -49,7 +46,6 @@ const ElementInfo eiFonts[] = {
 	{ "File List", "FileList" },
 	{ "Tag List", "TagList" },
 	{ "Query Page", "QueryList" },
-	{ "Call Graph", "Graph" }
 };
 
 #define COLOR_NAME(_i)	eiColors[_i].szName
@@ -60,7 +56,6 @@ const ElementInfo eiFonts[] = {
 KScopeConfig::ConfParams KScopeConfig::s_cpDef = {
 	"/usr/bin/cscope", // Cscope path
 	"/usr/bin/ctags", // Ctags path
-	"/usr/bin/dot", // Dot path
 	true, // Show the tag list
 	SPLIT_SIZES(), // Tag list width
 	{
@@ -69,15 +64,10 @@ KScopeConfig::ConfParams KScopeConfig::s_cpDef = {
 		QColor("black"), // Tag list foreground
 		QColor("white"), // Tag list background
 		QColor("black"), // Query page foreground
-		QColor("white"), // Query page background
-		QColor("#c0c0c0"), // Call graph background
-		QColor("#c0ff80"), // Call graph nodes
-		QColor("black"), // Call graph text
-		QColor("#ff8000")
+		QColor("white")  // Query page background
 	},
 	{
 		QFont(), // Font definitions are overriden in load()
-		QFont(),
 		QFont(),
 		QFont()
 	},
@@ -92,9 +82,6 @@ KScopeConfig::ConfParams KScopeConfig::s_cpDef = {
 	"kate --line %L %F", // External editor example
 	Fast, // System profile
 	Embedded, // Editor context menu
-	"TB",  // Call graph orientation
-	10, // Maximum calls per graph node
-	0 // Default graph view
 };
 
 /**
@@ -127,13 +114,11 @@ void KScopeConfig::load()
 	s_cpDef.fonts[FileList] = KGlobalSettings::generalFont();
 	s_cpDef.fonts[TagList] = KGlobalSettings::generalFont();
 	s_cpDef.fonts[QueryWindow] = KGlobalSettings::generalFont();
-	s_cpDef.fonts[Graph] = KGlobalSettings::generalFont();
 	
 	// Read the paths to required executables
     KConfigGroup groupProgram = pConf->group("Programs");
 	m_cp.sCscopePath = groupProgram.readEntry("CScope", "/usr/bin/cscope");
 	m_cp.sCtagsPath = groupProgram.readEntry("CTags", "/usr/bin/ctags");
-	m_cp.sDotPath = groupProgram.readEntry("Dot", "/usr/bin/dot");
 
 	// Read size and position parameters
     KConfigGroup groupGeometry = pConf->group("Geometry");
@@ -175,9 +160,6 @@ void KScopeConfig::load()
 	m_cp.sExtEditor = gOpt.readEntry("ExternalEditor", s_cpDef.sExtEditor);
 	m_cp.profile = (SysProfile)gOpt.readEntry("SystemProfile", (int)s_cpDef.profile);
 	m_cp.popup = (EditorPopup)gOpt.readEntry("EditorPopup", (int)s_cpDef.popup);
-	m_cp.sGraphOrient = gOpt.readEntry("GraphOrientation", s_cpDef.sGraphOrient);
-	m_cp.nGraphMaxNodeDegree = gOpt.readEntry("GraphMaxNodeDegree", s_cpDef.nGraphMaxNodeDegree);
-	m_cp.nDefGraphView = gOpt.readEntry("DefGraphView", s_cpDef.nDefGraphView);
 }
 
 /**
@@ -211,7 +193,6 @@ void KScopeConfig::store()
     KConfigGroup groupProgram = pConf->group("Programs");
 	groupProgram.writeEntry("CScope", m_cp.sCscopePath);
 	groupProgram.writeEntry("CTags", m_cp.sCtagsPath);
-	groupProgram.writeEntry("Dot", m_cp.sDotPath);
 
 	// Write size and position parameters
     KConfigGroup groupGeometry = pConf->group("Geometry");
@@ -249,9 +230,6 @@ void KScopeConfig::store()
 	groupOptions.writeEntry("ExternalEditor", m_cp.sExtEditor);
 	groupOptions.writeEntry("SystemProfile", (uint)m_cp.profile);
 	groupOptions.writeEntry("EditorPopup", (uint)m_cp.popup);
-	groupOptions.writeEntry("GraphOrientation", m_cp.sGraphOrient);
-	groupOptions.writeEntry("GraphMaxNodeDegree", m_cp.nGraphMaxNodeDegree);
-	groupOptions.writeEntry("DefGraphView", m_cp.nDefGraphView);
 	
 	// Do not report it's the first time on the next run
     KConfigGroup groupGeneral = pConf->group("General");
@@ -328,22 +306,6 @@ const QString& KScopeConfig::getCtagsPath() const
 void KScopeConfig::setCtagsPath(const QString& sPath)
 {
 	m_cp.sCtagsPath = sPath;
-}
-
-/**
- * @return	The full path of the Dot executable
- */
-const QString& KScopeConfig::getDotPath() const
-{
-	return m_cp.sDotPath;
-}
-
-/**
- * @param	sPath	The full path of the Dot executable
- */
-void KScopeConfig::setDotPath(const QString& sPath)
-{
-	m_cp.sDotPath = sPath;
 }
 
 /**
@@ -682,54 +644,6 @@ QString KScopeConfig::getEditorPopupName() const
 void KScopeConfig::setEditorPopup(KScopeConfig::EditorPopup popup)
 {
 	m_cp.popup = popup;
-}
-
-/**
- * @return	The default orientation for call graphs
- */
-QString KScopeConfig::getGraphOrientation() const
-{
-	return m_cp.sGraphOrient;
-}
-
-/**
- * @param	sOrient	The default orientation for call graphs
- */
-void KScopeConfig::setGraphOrientation(const QString& sOrient)
-{
-	m_cp.sGraphOrient = sOrient;
-}
-
-/**
- * @return	The maximal number of calls per graph node
- */
-int KScopeConfig::getGraphMaxNodeDegree() const
-{
-	return m_cp.nGraphMaxNodeDegree;
-}
-
-/**
- * @param	nMaxNodeDegree	The maximal number of calls per graph node
- */
-void KScopeConfig::setGraphMaxNodeDegree(int nMaxNodeDegree)
-{
-	m_cp.nGraphMaxNodeDegree = nMaxNodeDegree;
-}
-
-/**
- * @return	The default view in the call graph dialogue
- */
-int KScopeConfig::getDefGraphView() const
-{
-	return m_cp.nDefGraphView;
-}
-
-/**
- * @param	nDefGraphView	The default view in the call graph dialogue
- */
-void KScopeConfig::setDefGraphView(int nDefGraphView)
-{
-	m_cp.nDefGraphView = nDefGraphView;
 }
 
 /**

@@ -48,7 +48,6 @@ void PrefFrontend::load()
 {
 	m_pCscopeURL->lineEdit()->setText(Config().getCscopePath());
 	m_pCtagsURL->lineEdit()->setText(Config().getCtagsPath());
-	m_pDotURL->lineEdit()->setText(Config().getDotPath());
 }
 
 /**
@@ -58,7 +57,6 @@ void PrefFrontend::apply()
 {
 	Config().setCscopePath(m_pCscopeURL->text());
 	Config().setCtagsPath(m_pCtagsURL->text());
-	Config().setDotPath(m_pDotURL->text());
 }
 
 /**

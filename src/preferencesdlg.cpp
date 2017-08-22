@@ -19,8 +19,6 @@
 #include "kscopeconfig.h"
 #include "cscopefrontend.h"
 #include "ctagsfrontend.h"
-#include "dotfrontend.h"
-
 
 /**
  * Class constructor.
@@ -142,9 +140,7 @@ bool PreferencesDlg::updateConfig()
  */
 bool PreferencesDlg::verifyPaths()
 {
-	return (CtagsFrontend::verify(m_pPrefFrontend->m_pCtagsURL->text()) &&
-		DotFrontend::verify(m_pPrefFrontend->m_pDotURL->text()));
-    return false;
+	return (CtagsFrontend::verify(m_pPrefFrontend->m_pCtagsURL->text()));
 }
 
 /**

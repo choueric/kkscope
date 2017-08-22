@@ -41,14 +41,11 @@
 #include "preferencesdlg.h"
 #include "dirscanner.h"
 #include "querypage.h"
-#include "calltreedlg.h"
-#include "calltreemanager.h"
 #include "kscopepixmaps.h"
 #include "progressdlg.h"
 #include "projectfilesdlg.h"
 #include "cscopemsgdlg.h"
 #include "queryviewdlg.h"
-#include "graphwidget.h"
 #include "makedlg.h"
 #include "bookmarksdlg.h"
 #include "kscopeactions.h"
@@ -107,7 +104,6 @@ KScope::KScope(QWidget* pParent) :
 	// Create control objects
 	m_pProjMgr = new ProjectManager();
 	m_pEditMgr = new EditorManager(this);
-	m_pCallTreeMgr = new CallTreeManager(this);
 
 	// Initialise the KscopePixmaps icon manager	
 	Pixmaps().init();
@@ -140,19 +136,12 @@ KScope::KScope(QWidget* pParent) :
 	// since the last save
 	connect(&m_timerRebuild, SIGNAL(timeout()), this, SLOT(slotRebuildDB()));
 
-	// Display a file at a specific line when selected in a call tree dialogue
-	connect(m_pCallTreeMgr, SIGNAL(lineRequested(const QString&, uint)),
-		this, SLOT(slotQueryShowEditor(const QString&, uint)));
-		
 	// Store main window settings when closed
 	setAutoSaveSettings();
     QList<KToolBar *> barList = toolBars();
     for (int i = 0; i < barList.size(); i++) {
         barList[i]->setToolButtonStyle(Qt::ToolButtonIconOnly);
     }
-	
-	// Initialise arrow head drawing
-	GraphWidget::setArrowInfo(20, 15);
 	
 	// Use a maximised window the first time
 	if (Config().isFirstTime())
@@ -181,7 +170,6 @@ KScope::~KScope()
 	Config().store();
 	Config().storeWorkspace(this);
 	
-	delete m_pCallTreeMgr;
 	delete m_pEditMgr;
 	delete m_pCscopeBuild;
 	delete m_pProjMgr;
@@ -559,15 +547,6 @@ void KScope::slotQueryQuickDef()
 }
 
 /**
- * Handles the "Cscope->Call Tree..." menu command.
- * Displays a tree of functions calling the requested function.
- */
-void KScope::slotCallTree()
-{
-	slotQuery(SymbolDlg::CallTree, true);
-}
-
-/**
  * Handles the "Cscope->Rebuild Database..." command.
  * Rebuilds Cscope's database for the current project.
  */
@@ -669,27 +648,18 @@ void KScope::slotFilesAdded(const QStringList& slFiles)
 void KScope::slotQuery(uint nType, bool bPrompt)
 {
 	QString sSymbol;
-	CallTreeDlg* pCallTreeDlg;
 	bool bCase;
 	
 	// Get the requested symbol and query type
 	if (!getSymbol(nType, sSymbol, bCase, bPrompt))
 		return;
 		
-	if (nType == SymbolDlg::CallTree) {
-		// Create and display a call tree dialogue
-		pCallTreeDlg = m_pCallTreeMgr->addDialog();
-		pCallTreeDlg->setRoot(sSymbol);
-		pCallTreeDlg->show();
-	}
-	else {
-		// Run the requested query
-		nType = SymbolDlg::getQueryType(nType);
-		m_pQueryWidget->initQuery(nType, sSymbol, bCase);
-		
-		// Ensure Query Window is visible
-		toggleQueryWindow(true);	
-	}
+	// Run the requested query
+	nType = SymbolDlg::getQueryType(nType);
+	m_pQueryWidget->initQuery(nType, sSymbol, bCase);
+
+	// Ensure Query Window is visible
+	toggleQueryWindow(true);	
 }
 
 /**
@@ -883,7 +853,6 @@ void KScope::restoreSession()
 	
 	// Load previously stored queries and call trees
 	m_pQueryWidget->loadPages(pProj->getPath(), sess.slQueryFiles);
-	m_pCallTreeMgr->loadOpenDialogs(pProj->getPath(), sess.slCallTreeFiles);
 }
 
 /**
@@ -1057,12 +1026,10 @@ bool KScope::slotCloseProject()
 	// Save session information for persistent projects
 	if (!pProj->isTemporary()) {
 		m_pQueryWidget->savePages(pProj->getPath(), sess.slQueryFiles);
-		m_pCallTreeMgr->saveOpenDialogs(pProj->getPath(), sess.slCallTreeFiles);
 	}
 		
 	// Close all query pages and call trees
 	m_pQueryWidget->slotCloseAll();
-	m_pCallTreeMgr->closeAll();
 	
 	// Store session information for persistent projects
 	if (!pProj->isTemporary())

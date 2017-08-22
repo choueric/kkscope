@@ -24,12 +24,12 @@ public:
 
 	/** GUI elements whose colours can be set. */
 	enum ColorElement { FileListFore = 0, FileListBack, TagListFore, 
-		TagListBack, QueryWindowFore, QueryWindowBack, GraphBack,
-		GraphNode, GraphText, GraphMultiCall, LAST_COLOR = GraphMultiCall };
+		TagListBack, QueryWindowFore, QueryWindowBack, 
+		LAST_COLOR = QueryWindowBack};
 	
 	/** GUI elements whose fonts can be set. */
-	enum FontElement { FileList = 0, TagList, QueryWindow, Graph,
-		LAST_FONT = Graph };
+	enum FontElement { FileList = 0, TagList, QueryWindow,
+		LAST_FONT = QueryWindow};
 	
 	/** Sort order values for the tags list. */
 	enum CtagSort { NameAsc = 0, NameDes, LineAsc, LineDes, TypeAsc,
@@ -59,8 +59,6 @@ public:
 	void setCscopePath(const QString&);
 	const QString& getCtagsPath() const;
 	void setCtagsPath(const QString&);
-	const QString& getDotPath() const;
-	void setDotPath(const QString&);
 	const QStringList& getRecentProjects() const;
 	void addRecentProject(const QString&);
 	void removeRecentProject(const QString&);
@@ -98,12 +96,6 @@ public:
 	EditorPopup getEditorPopup() const;
 	QString getEditorPopupName() const;
 	void setEditorPopup(EditorPopup);
-	QString getGraphOrientation() const;
-	void setGraphOrientation(const QString&);
-	int getGraphMaxNodeDegree() const;
-	void setGraphMaxNodeDegree(int);
-	int getDefGraphView() const;
-	void setDefGraphView(int);
 	
 private:
 	/** A list of previously loaded projects. */
@@ -117,9 +109,6 @@ private:
 		
 		/** The full path of the Ctags executable. */
 		QString sCtagsPath;
-		
-		/** The full path of the Dot executable. */
-		QString sDotPath;
 		
 		/** Whether the tag list should be visible. */
 		bool bShowTagList;
@@ -170,15 +159,6 @@ private:
 		
 		/** The type of popup menu to use in the embedded editor. */
 		EditorPopup popup;
-		
-		/** The default orientation of call graphs. */
-		QString sGraphOrient;
-		
-		/** Maximal number of called/calling functions per call graph node. */
-		int nGraphMaxNodeDegree;
-		
-		/** Default view for the call graph dialogue. */
-		int nDefGraphView;
 	};
 
 	/** The current configuration parameters */

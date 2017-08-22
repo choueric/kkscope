@@ -24,7 +24,7 @@ public:
 	~SymbolDlg();
 
 	enum { Reference = 0, Definition, Called, Calling, Text, Pattern,
-		FileName, Including, CallTree };
+		FileName, Including };
 	
 	void setType(uint);
 	void setSymbol(const QString&);

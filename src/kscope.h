@@ -90,9 +90,6 @@ private:
 	/** The line number of the current cursor position. */
 	int m_nCurLine;
 	
-	/** Creates and maintains call tree dialogues. */
-	CallTreeManager* m_pCallTreeMgr;
-	
 	/** A progress dialogue that is displayed when building the database for
 		the first time. */
 	ProgressDlg* m_pProgressDlg;
@@ -153,7 +150,6 @@ private slots:
 	void slotQueryFile();
 	void slotQueryIncluding();
 	void slotQueryQuickDef();
-	void slotCallTree();
 	void slotRebuildDB();
 	void slotHistoryShow();
 	void slotShortcuts();

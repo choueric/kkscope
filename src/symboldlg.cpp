@@ -185,9 +185,6 @@ QString SymbolDlg::promptSymbol(QWidget* pParent, uint& nType,
  */
 uint SymbolDlg::getQueryType(uint nType)
 {
-	if (nType == CallTree)
-		return CscopeFrontend::None;
-		
 	if (nType <= Text)
 		return nType;
 		

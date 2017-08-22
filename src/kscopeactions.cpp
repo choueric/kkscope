@@ -146,10 +146,6 @@ void KScopeActions::init()
 		SLOT(slotQueryQuickDef()), "cscope_quick_def",
 		SIGNAL(toggleProject(bool))); // used
 		
-	addAction(i18n("Call &Graph..."), NULL, "Ctrl+\\", m_pWindow,
-		SLOT(slotCallTree()), "cscope_call_tree",
-		SIGNAL(toggleProject(bool))); // used
-
 	// Go menu
 	addAction(i18n("P&revious Result"), "draw-arrow-up", "Alt+Up", 
 		(QWidget *)m_pWindow->m_pQueryWidget,

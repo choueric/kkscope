@@ -50,16 +50,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QLabel" name="textLabel1_2">
-         <property name="text">
-          <string>Dot path:</string>
-         </property>
-         <property name="wordWrap">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
      <item>
