@@ -95,7 +95,7 @@ KScope::KScope(QWidget* pParent) :
     // TODO: install to /usr/share/apps/.
     // use "kde4-config --path data" to find out the standard path.
     // the path used here is defined in CMakeLists.txt.
-    QString path("/usr/local/share/apps/husky/kscopeui.rc");
+    QString path("/usr/local/share/apps/kscope/kscopeui.rc");
     setupGUI(Default, path);
 	
 	// Create all child widgets
