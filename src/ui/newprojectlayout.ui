@@ -61,7 +61,6 @@ The name must conform to the file system's naming conventions for directories (e
 KScope will create a directory with the given name under this project, and populate it with the project configuration and database files.
 This does not need to be the path in which the source files reside.</string>
            </property>
-           <zorder></zorder>
           </widget>
          </item>
         </layout>
