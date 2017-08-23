@@ -64,5 +64,5 @@ MESSAGE(STATUS "ui.rc dir is : " ${DATA_INSTALL_DIR})
 MESSAGE(STATUS "icon install dir is : " ${ICON_INSTALL_DIR})
 
 install(TARGETS kscope ${INSTALL_TARGETS_DEFAULT_ARGS})
-install(FILES ${PROJECT_SOURCE_DIR}/ui/kscopeui.rc DESTINATION ${DATA_INSTALL_DIR}/kscope)
+install(FILES ${PROJECT_SOURCE_DIR}/src/ui/kscopeui.rc DESTINATION ${DATA_INSTALL_DIR}/kscope)
 kde4_install_icons(${PROJECT_SOURCE_DIR}/ui/pics ${ICON_INSTALL_DIR})
