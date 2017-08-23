@@ -1,14 +1,12 @@
-export QT_SELECT=4
-export TOPDIR=`pwd`
-
+TOPDIR=`pwd`
 BUILD_DIR="$(TOPDIR)/_build"
 
-.PHONY: config, help
+.PHONY: config, build, install, clean, help
 .DEFAULT_GOAL := help
 
 config: ## run cmake in _build
 	@mkdir -p $(BUILD_DIR)
-	@cd $(BUILD_DIR) && cmake ../src
+	@cd $(BUILD_DIR) && cmake ..
 
 build: ## run make
 	@cd $(BUILD_DIR) && make
