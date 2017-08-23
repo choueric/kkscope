@@ -1,6 +1,1 @@
-husky/Session.vim
-husky/build/
-husky/test.rc
-*.swp
-*.o
-build
+_build
