@@ -553,18 +553,18 @@ void KScope::slotQueryQuickDef()
 void KScope::slotRebuildDB()
 {
 	ProjectBase* pProj;
-	
+
 	pProj = m_pProjMgr->curProject();
 	if (!pProj)
 		return;
-	
+
 	if (!pProj->dbExists()) {
 		m_pProgressDlg = new ProgressDlg(i18n("KScope"), i18n("Please wait "
-			"while KScope builds the database"), this);
+					"while KScope builds the database"), this);
 		m_pProgressDlg->setAllowCancel(false);
 		m_pProgressDlg->setValue(0);
 	}
-	
+
 	m_pCscopeBuild->rebuild();
 }
 
