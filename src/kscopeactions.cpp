@@ -168,7 +168,7 @@ void KScopeActions::init()
 	addAction(i18n("Position &History"), "view-history", "Ctrl+h",
 		m_pWindow, SLOT(slotHistoryShow()), "go_history", NULL);  // renew
 		
-	addAction(i18n("Global &Bookmarks"), "bookmark-toolbar", "Ctrl+Shift+G",
+	addAction(i18n("Global &Bookmarks"), "bookmark-toolbar", "Ctrl+Shift+B",
 		m_pWindow, SLOT(slotShowBookmarks()), "go_bookmarks", NULL);  // renew
 
 	// Window menu
