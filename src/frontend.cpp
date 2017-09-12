@@ -341,17 +341,17 @@ void Frontend::slotReadStdout2()
  */
 void Frontend::slotReadStderr(KProcess*, char* pBuffer, int nSize)
 {
-	QString sBuf;
 	
 	// Do nothing if waiting for process to die
 	if (m_bKilled)
 		return;
 
-	sBuf.fromLatin1(pBuffer, nSize);
+	QString sBuf = QString::fromLatin1(pBuffer, nSize);
 	parseStderr(sBuf);
 }
 
 void Frontend::slotReadStderr2()
 {
-    qDebug() << "TODO:" << __FUNCTION__;
+    QByteArray output = this->readAllStandardError();
+    slotReadStderr(this, output.data(), output.size());
 }
