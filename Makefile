@@ -1,7 +1,7 @@
 TOPDIR=`pwd`
 BUILD_DIR="$(TOPDIR)/_build"
 
-.PHONY: config, build, install, clean, help
+.PHONY: config, build, install, clean, help, run
 .DEFAULT_GOAL := help
 
 config: ## run cmake in _build
@@ -13,6 +13,9 @@ build: ## run make
 
 install: ## install 
 	@cd $(BUILD_DIR) && sudo make install
+
+run:  ## execute the kscope program
+	@$(BUILD_DIR)/bin/kscope
 
 clean: ## clean _build
 	@rm -rf $(BUILD_DIR)
