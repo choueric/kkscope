@@ -1,5 +1,6 @@
 #include <kstandarddirs.h>
 #include "configfrontend.h"
+#include "husky.h"
 #include <QProcessEnvironment>
 
 /**
@@ -35,15 +36,12 @@ bool ConfigFrontend::run(const QString& sName, const QStringList& slArgs,
  * @param	sCscopePath		If given, overrides the automatic check for Cscope's
  *							path
  * @param	sCtagsPath		If given, overrides the automatic check for Ctags'
- *							path
- * @param	sDotPath		If given, overrides the automatic check for Dot's
- *							path
- * @param	bCscopeOptsOnly	Only verify cscope's path and options
- * @return	true if successful, false otherwise
+ *							path @param	bCscopeOptsOnly	Only verify cscope's
+ *							path and options @return	true if successful,
+ *							false otherwise
  */
 bool ConfigFrontend::run(const QString& sCscopePath, 
-	const QString& sCtagsPath, const QString& sDotPath,
-	bool bCscopeOptsOnly)
+	const QString& sCtagsPath, bool bCscopeOptsOnly)
 {
 	QStringList slArgs;
 	KStandardDirs sd;
@@ -53,10 +51,13 @@ bool ConfigFrontend::run(const QString& sCscopePath,
 	// setUseShell(true);
 	
 	// Find the configuration script
-    // TODO: husky/script/kscope_config
+	// $HOME/.kde/share/apps/kscope/kscope_config
 	sScript = sd.findResource("data", "kscope/kscope_config");
-	if (sScript.isEmpty())
+		qDebug() << "++" << "config script;" << sScript;
+	if (sScript.isEmpty()) {
+		qDebug() << "++" << "can not find" << sScript;
 		return false;
+	}
 		
 	// Set command line arguments
 	slArgs.append("sh");
@@ -69,7 +70,6 @@ bool ConfigFrontend::run(const QString& sCscopePath,
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
 	env.insert("CSCOPE_PATH", sCscopePath);
 	env.insert("CTAGS_PATH", sCtagsPath);
-	env.insert("DOT_PATH", sDotPath);
     setProcessEnvironment(env);
 	
 	// Parser initialisation
@@ -128,20 +128,6 @@ Frontend::ParseResult ConfigFrontend::parseStdout(QString& sToken,
 		break;
 	
 	case CtagsExub:
-		if (sToken == "ERROR")
-			m_nNextResult = END;
-		else
-			m_nNextResult = DotPath;
-		break;
-		
-	case DotPath:
-		if (sToken == "ERROR")
-			m_nNextResult = END;
-		else
-			m_nNextResult = DotPlain;
-		break;
-	
-	case DotPlain:
 		m_nNextResult = END;
 		break;
 		

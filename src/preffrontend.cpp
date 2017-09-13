@@ -29,8 +29,6 @@ PrefFrontend::PrefFrontend(QWidget* pParent):
 		SIGNAL(modified()));
 	connect(m_pCtagsURL, SIGNAL(textChanged(const QString&)), this,
 		SIGNAL(modified()));
-	connect(m_pDotURL, SIGNAL(textChanged(const QString&)), this,
-		SIGNAL(modified()));
 }
 
 /**
@@ -93,8 +91,7 @@ void PrefFrontend::slotGuessPaths()
 		SLOT(slotAutoConfigResult(uint, const QString&)));
 	
 	// Run the script
-	pConf->run(m_pCscopeURL->text(), m_pCtagsURL->text(),
-		m_pDotURL->text());
+	pConf->run(m_pCscopeURL->text(), m_pCtagsURL->text());
 }
 
 /**
@@ -129,14 +126,6 @@ void PrefFrontend::slotAutoConfigTest(uint nType)
 	case ConfigFrontend::CtagsExub:
 		m_pScriptText->append(i18n("Ctags compatibilty with ctags-exuberant"
 			"..."));
-		break;
-			
-	case ConfigFrontend::DotPath:
-		m_pScriptText->append(i18n("Looking for Dot..."));
-		break;
-					
-	case ConfigFrontend::DotPlain:
-		m_pScriptText->append(i18n("Checking -Tplain..."));
 		break;
 	}
 }
@@ -189,20 +178,6 @@ void PrefFrontend::slotAutoConfigResult(uint nType, const QString& sResult)
 		m_pScriptText->append(sLine);
 		if (sResult == "ERROR")
 			m_pCtagsURL->lineEdit()->setText("");
-		break;
-	
-	case ConfigFrontend::DotPath:
-		m_pScriptText->append(sLine);
-		if (sResult == "ERROR")
-			m_pDotURL->lineEdit()->setText("");
-		else
-			m_pDotURL->lineEdit()->setText(sResult);
-		break;
-	
-	case ConfigFrontend::DotPlain:
-		m_pScriptText->append(sLine);
-		if (sResult == "ERROR")
-			m_pDotURL->lineEdit()->setText("");
 		break;
 	}
 }

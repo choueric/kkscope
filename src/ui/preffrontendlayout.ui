@@ -60,9 +60,6 @@
        <item>
         <widget class="KUrlRequester" name="m_pCtagsURL"/>
        </item>
-       <item>
-        <widget class="KUrlRequester" name="m_pDotURL"/>
-       </item>
       </layout>
      </item>
     </layout>
@@ -120,6 +117,7 @@
    <class>KUrlRequester</class>
    <extends>QFrame</extends>
    <header>kurlrequester.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <includes>

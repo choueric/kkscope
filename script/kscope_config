@@ -136,30 +136,3 @@ else
 	echo ERROR
 	# echo -e "\n *** ERROR *** No Ctags executable found"
 fi
-
-# echo -n Looking for Dot...
-
-if [ -z "$DOT_PATH" ]
-then
-	DOT_PATH=`which dot`
-fi
-
-if [ -n "$DOT_PATH" -a -x "$DOT_PATH" ]
-then	
-	echo $DOT_PATH
-	
-	# echo -n Checking if dot handles the -Tplain option...
-	
-	echo "digraph G {Hello->World}" | $DOT_PATH -Tplain 2>&1 /dev/null
-	if [ $? -eq 0 ]
-	then
-		echo Yes
-	else
-		echo ERROR
-		# echo -e "\n *** ERROR *** The \"dot\" executable does not support -Tplain"
-	fi
-	
-else
-	echo ERROR
-	# echo -e "\n *** ERROR *** No Dot executable found"
-fi

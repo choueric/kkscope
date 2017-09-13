@@ -477,7 +477,7 @@ void CscopeVerifier::verify()
 		SLOT(slotConfigResult(uint, const QString&)));
 	connect(pConf, SIGNAL(finished(uint)), this, SLOT(slotFinished()));
 	
-	pConf->run(Config().getCscopePath(), "", "", true);
+	pConf->run(Config().getCscopePath(), "", true);
 }
 
 void CscopeVerifier::slotConfigResult(uint nType, const QString& sResult)

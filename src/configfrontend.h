@@ -16,7 +16,7 @@ public:
 	ConfigFrontend(bool bAutoDelete = false);
 	~ConfigFrontend();
 	
-	bool run(const QString&, const QString&, const QString&, 
+	bool run(const QString&, const QString&,
 		bool bCscopeOptsOnly = false);
 	bool run(const QString&, const QStringList&,
 		const QString& sWorkDir = "", bool bBlock = false);
@@ -25,7 +25,7 @@ public:
 	 * The types of tests executed by the script.
 	 */
 	enum { CscopePath, CscopeVersion, CscopeVerbose, CscopeSlowPath,
-		CtagsPath, CtagsExub, DotPath, DotPlain, END };
+		CtagsPath, CtagsExub, END };
 	
 signals:
 	/**
