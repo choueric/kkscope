@@ -53,7 +53,7 @@ bool ConfigFrontend::run(const QString& sCscopePath,
 	// Find the configuration script
 	// $HOME/.kde/share/apps/kscope/kscope_config
 	sScript = sd.findResource("data", "kscope/kscope_config");
-		qDebug() << "++" << "config script;" << sScript;
+		qDebug() << "++" << "config script" << sScript;
 	if (sScript.isEmpty()) {
 		qDebug() << "++" << "can not find" << sScript;
 		return false;

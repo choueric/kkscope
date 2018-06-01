@@ -329,13 +329,15 @@ void KScope::slotOpenProject()
 
 	sPath = dlg.getPath();
 
-    qDebug() << "open project:" << sPath;
+    qDebug() << "++ open project:" << sPath;
 	
 	// Check if the path refers to a permanent or temporary project
 	if (QFileInfo(sPath).isDir())
 		openProject(sPath);
-	else // TODO: call this function, there is no respond in GUI.
+	else {
+		qDebug() << "++ TODO: call this function, there is no respond in GUI.";
 		openCscopeOut(sPath);
+	}
 }
 
 /**
@@ -681,6 +683,8 @@ void KScope::openProject(const QString& sDir)
 	if (!slotCloseProject())
 		return;
 
+	qDebug() << "++" << __LINE__ << __LINE__;
+
 	// Open the project in the project manager
 	sProjDir = QDir::cleanPath(sDir);
 	if (!m_pProjMgr->open(sProjDir))
@@ -729,7 +733,7 @@ void KScope::openProject(const QString& sDir)
 		// If Cscope installation was not yet verified, postpone the build
 		// process
 		if (m_bCscopeVerified)
-		slotRebuildDB();
+			slotRebuildDB();
 		else
 			m_bRebuildDB = true;
 	}
@@ -1401,8 +1405,10 @@ void KScope::slotChangeEditor(EditorPage* pOldPage, EditorPage* pNewPage)
 	KXMLGUIFactory* pFactory = guiFactory();
 	
 	// Remove the current GUI
-	if (pOldPage)
+	if (pOldPage) {
+		qDebug() << "++ removeClient" << pOldPage->getView();
 		pFactory->removeClient(pOldPage->getView());
+	}
 
 	// Set the new active part and create its GUI
 	if (m_bUpdateGUI && pNewPage) {

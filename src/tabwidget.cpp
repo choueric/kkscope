@@ -24,7 +24,11 @@ TabWidget::TabWidget(QWidget* pParent) :
 	m_pButton->setToolTip(i18n("Shows a list of all open tabs"));
 	m_pButton->adjustSize();
 	setCornerWidget(m_pButton, Qt::TopRightCorner);
-	
+
+    m_label = new QLabel(this);
+    m_label->setText("Toggle: Ctrl+.");
+    setCornerWidget(m_label, Qt::TopRightCorner);
+
 	// Show the popup-menu when the button is clicked
 	connect(m_pButton, SIGNAL(clicked()), this, SLOT(slotShowTabList()));
 }
@@ -34,6 +38,8 @@ TabWidget::TabWidget(QWidget* pParent) :
  */
 TabWidget::~TabWidget()
 {
+    if (m_label)
+        delete m_label;
 }
 
 /**

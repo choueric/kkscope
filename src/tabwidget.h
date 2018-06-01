@@ -4,6 +4,7 @@
 
 #include <qtoolbutton.h>
 #include <QMenu>
+#include <QLabel>
 #include <ktabwidget.h>
 
 /**
@@ -21,6 +22,9 @@ public:
 private:
 	/** The list button. */
 	QToolButton* m_pButton;
+
+    /** shortcut tip text. */
+    QLabel* m_label;
 	
 	/** A popup-menu containing all tab labels. */
 	QMenu* m_pMenu;
